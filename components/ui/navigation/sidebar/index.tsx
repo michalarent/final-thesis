@@ -165,7 +165,7 @@ export default function SideBar() {
               position: "relative",
               background: "linear-gradient(to bottom, #e43a15, #e65245)",
               borderBottom: "2px solid #e0e0e0",
-              marginBottom: "15px",
+              marginBottom: "1zpx",
             }}
           >
             <motion.img
@@ -177,7 +177,7 @@ export default function SideBar() {
                 padding: "5px",
                 maxWidth: "50px",
                 marginLeft: "25px",
-                marginBottom: "15px",
+                marginBottom: "14px",
                 cursor: "pointer",
               }}
               variants={variantsPhoto}

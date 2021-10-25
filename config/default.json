@@ -1,0 +1,9 @@
+{
+  "DB": {
+    "database": "wound-healing-app",
+    "host": "db",
+    "username": "postgres",
+    "password": "localdev",
+    "port": 5432
+  }
+}

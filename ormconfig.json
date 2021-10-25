@@ -1,0 +1,14 @@
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "dbName": "wound-healing-app",
+    "host": "db",
+    "user": "postgres",
+    "password": "localdev",
+    "entities": ["./db/*.ts"],
+    "cli": {
+      "entitiesDir": "./db"
+    }
+  }
+]

@@ -14,8 +14,9 @@ const Grid = styled(motion.div)`
 
 const AppCanvas = styled.div`
   min-height: calc(100vh - 85px);
-  background-color: ${colors.lightaquamarine};
+  background-color: whitesmoke;
   width: 100%;
+  z-indx: 20000;
   padding: 25px 25px 0 25px;
   margin-top: 85px;
 `;

@@ -13,6 +13,7 @@ export const colors: ColorMap = {
   aquamarine: "#11EAAA",
   lightaquamarine: "#ECFEF8",
   darkblue: "#002E4E",
+  border: "#e0e0e0",
 };
 
 interface ColorMap {
@@ -30,4 +31,5 @@ interface ColorMap {
   lightaquamarine: string;
   yellow: string;
   darkblue: string;
+  border: string;
 }

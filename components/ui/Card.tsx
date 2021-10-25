@@ -8,11 +8,10 @@ const Container = styled.div<{ width; height }>`
   background-color: #fff;
   overflow: scroll;
   padding: 20px;
-
-  &:hover {
-    background-color: #f5f5f5;
-    drop-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-  }
+  transition: all 0.2s linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default function Card({
