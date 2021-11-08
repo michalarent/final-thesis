@@ -3,9 +3,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  IoArrowForwardOutline, IoChevronDownOutline,
+  IoArrowForwardOutline,
+  IoChevronDownOutline,
   IoChevronUpOutline,
-  IoSendOutline
+  IoSendOutline,
 } from "react-icons/io5";
 import { polyfill } from "seamless-scroll-polyfill";
 import styled from "styled-components";
@@ -17,7 +18,6 @@ import { colors } from "../../../theme/colors";
 import { ButtonGrid, NiceButton } from "./ButtonGrid";
 import { Inputs, StepNumber } from "./Inputs";
 import { RENDERERS } from "./renderers/renderers";
-
 
 // kick off the polyfill!
 
@@ -64,13 +64,13 @@ export default function ScrollingForm({
   step,
   formType,
   multi,
+  data,
 }: {
   step?: number;
   formType?: FormType;
   multi?: boolean;
+  data?: any;
 }) {
-  const data = GeneralFormInput;
-
   const {
     handleSubmit,
     register,

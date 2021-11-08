@@ -245,6 +245,7 @@ export const RENDERERS: Record<
             width: "100%",
           }}
         >
+          <b>{param.placeholder}</b>
           <div
             style={{
               display: "grid",
@@ -254,19 +255,21 @@ export const RENDERERS: Record<
             }}
           >
             {param.options.map((option) => (
-              <FormControlLabel
-                key={option.value}
-                value={option.value}
-                control={<Radio />}
-                label={option.label}
-                onChange={onChange}
-                style={{
-                  alignItems: "center",
-                  textAlign: "center",
-                  verticalAlign: "middle",
-                  justifyContent: "center",
-                }}
-              />
+              <>
+                <FormControlLabel
+                  key={option.value}
+                  value={option.value}
+                  control={<Radio />}
+                  label={option.label}
+                  onChange={onChange}
+                  style={{
+                    alignItems: "center",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    justifyContent: "center",
+                  }}
+                />
+              </>
             ))}
           </div>
         </RadioGroup>
@@ -312,8 +315,10 @@ export const RENDERERS: Record<
             }),
             menu: (provided) => ({
               ...provided,
+              zIndex: 9999,
             }),
-            menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
+
+            menuPortal: (provided) => ({ ...provided, zIndex: 999999 }),
           }}
           options={param.options.map((option) => ({
             label: option.label,
@@ -322,10 +327,12 @@ export const RENDERERS: Record<
           components={{
             IndicatorSeparator: () => null,
           }}
+          menuPortalTarget={document.body}
         />
       )}
     />
   ),
+
   MultiSelect_Creatable: (control, errors, param) => (
     <Controller
       name={param.value}
@@ -345,10 +352,12 @@ export const RENDERERS: Record<
               height: "57px",
               minHeight: "",
             }),
+            menuPortal: (provided) => ({ ...provided, zIndex: 999999 }),
             menu: (provided) => ({
               ...provided,
             }),
           }}
+          menuPortalTarget={document.body}
           options={param.options.map((option) => ({
             label: option.label,
             value: option.value,

@@ -4,6 +4,7 @@ import { useUser } from "../hooks/user";
 import AutoForm from "../components/ui/forms/AutoForm";
 import ScrollingForm from "../components/ui/forms/ScrollingForm";
 import Card from "../components/ui/Card";
+import { GeneralFormInput } from "../data/general/general";
 
 export default function Onboarding() {
   const user = useUser();
@@ -16,29 +17,7 @@ export default function Onboarding() {
         background: "linear-gradient(to top, #f0f0f073, #ffffff)",
       }}
     >
-      {/* <div
-        style={{
-          position: "absolute",
-          left: "calc(52% - 160px)",
-          top: "10%",
-        }}
-      >
-        <img
-          src="/wrapit2.png"
-          style={{
-            height: "80px",
-          }}
-        />
-        <img
-          src="https://sklep.pja.edu.pl/wp-content/uploads/2017/03/PJATK_shop-1.png"
-          style={{
-            paddingLeft: "30px",
-            height: "80px",
-          }}
-        />
-      </div> */}
-
-      <ScrollingForm multi />
+      <ScrollingForm multi data={GeneralFormInput} />
     </div>
   );
 }

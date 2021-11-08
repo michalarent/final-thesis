@@ -75,6 +75,18 @@ export const GeneralFormInput: IForm[] = [
         },
       },
       {
+        name: "pesel",
+        label: "Pesel",
+        value: "pesel",
+        type: "Number",
+        placeholder: "PESEL (or passport number)",
+        span: 2,
+        constraints: {
+          required: true,
+          maxLength: 11,
+        },
+      },
+      {
         name: "gender",
         label: "Gender",
         options: [
@@ -101,204 +113,142 @@ export const GeneralFormInput: IForm[] = [
 
   {
     step: 1,
-    label: "Diseases & Allergies",
-    description: "Higlight what illnesses you had during your childhood.",
+    label: "Medical history",
+    description: "Please select the ones that apply:",
     inputs: [
       {
-        name: "maritial_status",
-        label: "Maritial Status",
+        name: "illnesses",
+        label: "Illnesses:",
         options: [
           {
-            value: "single",
-            label: "Single",
+            value: "diabetes",
+            label: "Diabetes",
           },
           {
-            value: "Married",
-            label: "Married",
+            value: "rheumatoid_arthritis",
+            label: "Rheumatoid Arthritis",
           },
           {
-            value: "Divorced",
-            label: "Divorced",
+            value: "motor_or_sensory_deficit",
+            label: "Motor or Sensory Deficit",
           },
           {
-            value: "Widowed",
-            label: "Widowed",
+            value: "cancer",
+            label: "Cancer",
+          },
+          {
+            value: "auto_immune_disease",
+            label: "Auto-immune disease",
+          },
+          {
+            value: "obesity",
+            label: "Obestiy",
+          },
+          {
+            value: "smoker_alcoholic_addict",
+            label: "Smoker/Alcholic/Addict",
           },
         ],
-        value: "Maritial Status",
-        type: "Select",
-        placeholder: "Maritial Status",
-        constraints: {
-          required: true,
-        },
-        span: 3,
-      },
-      {
-        name: "childhood_diseases",
-        label: "Childhood Diseases",
-        options: [
-          {
-            value: "measles",
-            label: "Measles",
-          },
-          {
-            value: "chickenpox",
-            label: "Chickenpox",
-          },
-          {
-            value: "mumps",
-            label: "Mumps",
-          },
-          {
-            value: "rubella",
-            label: "Rubella",
-          },
-          {
-            value: "rheumatic_fever",
-            label: "Rheumatic Fever",
-          },
-          {
-            value: "polio",
-            label: "Polio",
-          },
-        ],
-        value: "Childhood Diseases",
+        value: "Illneses",
         type: "MultiSelect_Creatable",
-        placeholder: "Childhood Diseases",
+        placeholder: "Illnesses",
         span: 3,
       },
       {
         name: "allergies",
         label: "Allergies",
         value: "Allergies",
-        type: "MultiSelect_Creatable",
-        placeholder: "Allergies",
-        options: [
-          {
-            value: "penicillin",
-            label: "Penicillin",
-          },
-        ],
+        type: "MultiLineText",
+        placeholder: "Enter your allergies",
         span: 3,
-      },
-      {
-        name: "medications",
-        label: "Medications",
-        value: "Medications",
-        type: "MultiSelect_Creatable",
-        placeholder: "Medications",
-        options: [
-          {
-            value: "penicillin",
-            label: "Penicillin",
-          },
-          {
-            value: "antibiotics",
-            label: "Antibiotics",
-          },
-        ],
-        span: 3,
-      },
-    ],
-  },
-  {
-    step: 2,
-    label: "Diseases & Allergies",
-    description: "Higlight what illnesses you had during your childhood.",
-    inputs: [
-      {
-        name: "maritial_status",
-        label: "Maritial Status",
-        options: [
-          {
-            value: "single",
-            label: "Single",
-          },
-          {
-            value: "Married",
-            label: "Married",
-          },
-          {
-            value: "Divorced",
-            label: "Divorced",
-          },
-          {
-            value: "Widowed",
-            label: "Widowed",
-          },
-        ],
-        value: "Maritial Status",
-        type: "Select",
-        placeholder: "Maritial Status",
         constraints: {
           required: true,
+          minLength: 100,
         },
+      },
+      {
+        name: "medication",
+        label: "Medication",
+        value: "Medication",
+        type: "MultiLineText",
+        placeholder:
+          "Enter any medication you take regularly or have taken in the past 2 weeks",
+        span: 3,
+        constraints: {
+          required: true,
+          minLength: 100,
+        },
+      },
+      {
+        name: "pregnancy",
+        label: "Preganancy",
+        options: [
+          {
+            value: "yes",
+            label: "Yes",
+          },
+          {
+            value: "no",
+            label: "No",
+          },
+        ],
+        value: "Pregnancy",
+        type: "Radio",
+        placeholder: "Are you currently pregnant",
         span: 3,
       },
       {
-        name: "childhood_diseases",
-        label: "Childhood Diseases",
+        name: "tobacco",
+        label: "Tobacco",
         options: [
           {
-            value: "measles",
-            label: "Measles",
+            value: "yes",
+            label: "Yes",
           },
           {
-            value: "chickenpox",
-            label: "Chickenpox",
-          },
-          {
-            value: "mumps",
-            label: "Mumps",
-          },
-          {
-            value: "rubella",
-            label: "Rubella",
-          },
-          {
-            value: "rheumatic_fever",
-            label: "Rheumatic Fever",
-          },
-          {
-            value: "polio",
-            label: "Polio",
+            value: "no",
+            label: "No",
           },
         ],
-        value: "Childhood Diseases",
-        type: "MultiSelect_Creatable",
-        placeholder: "Childhood Diseases",
+        value: "Tobbacco",
+        type: "Radio",
+        placeholder: "Are you a smoker:",
         span: 3,
       },
       {
-        name: "allergies",
-        label: "Allergies",
-        value: "Allergies",
-        type: "MultiSelect_Creatable",
-        placeholder: "Allergies",
+        name: "alcohol",
+        label: "Alcohol",
         options: [
           {
-            value: "penicillin",
-            label: "Penicillin",
+            value: "yes",
+            label: "Yes",
+          },
+          {
+            value: "no",
+            label: "No",
           },
         ],
+        value: "Alcohol",
+        type: "Radio",
+        placeholder: "Do you consume alchol:",
         span: 3,
       },
       {
-        name: "medications",
-        label: "Medications",
-        value: "Medications",
-        type: "MultiSelect_Creatable",
-        placeholder: "Medications",
+        name: "drugs",
+        label: "Drugs",
         options: [
           {
-            value: "penicillin",
-            label: "Penicillin",
+            value: "yes",
+            label: "Yes",
           },
           {
-            value: "antibiotics",
-            label: "Antibiotics",
+            value: "no",
+            label: "No",
           },
         ],
+        value: "Drugs",
+        type: "Radio",
+        placeholder: "Do you consume any recreational drugs:",
         span: 3,
       },
     ],
