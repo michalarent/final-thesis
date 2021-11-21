@@ -1,4 +1,4 @@
-import { Collection, Entity, OneToMany } from "@mikro-orm/core";
+import { Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
 import { Appointment } from "./Appointment";
 import User from "./User";
 
@@ -6,4 +6,7 @@ import User from "./User";
 export class Doctor extends User {
   @OneToMany(() => Appointment, (app) => app.doctor)
   appointments = new Collection<Appointment>(this);
+
+  @Property({ type: "jsonb" })
+  doctorData: Record<string, any> = {};
 }

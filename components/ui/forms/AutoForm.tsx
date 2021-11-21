@@ -1,21 +1,14 @@
-import { Button, CircularProgress, TextField } from "@material-ui/core";
-import { Controller, useForm } from "react-hook-form";
-import { FormInput, InputType } from "../../../data/types";
-import { useUser } from "../../../hooks/user";
-import Select from "react-select";
-import { countries } from "./countries";
-import DatePicker from "react-datepicker";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import { Button } from "carbon-components-react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
-
+import apiCall from "../../../common/api/ApiCall";
 import { GeneralFormInput } from "../../../data/general/general";
-import { useState } from "react";
-import { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { FormInput } from "../../../data/types";
+import { useUser } from "../../../hooks/user";
 import { colors } from "../../../theme/colors";
+import { RENDERERS } from "./renderers/renderers";
 
 type FormType = "General" | "Wound" | "Appointment";
 
@@ -24,9 +17,9 @@ const FormGrid = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-gap: 50px 20px;
-  margin-top: 40px;
+
   position: relative;
-  height: 214px;
+
   width: 800px;
 `;
 
@@ -116,11 +109,21 @@ export default function AutoForm({
   step,
   formType,
   multi,
+  data,
+  initialData,
+  submitUrl,
 }: {
   step?: number;
   formType?: FormType;
   multi?: boolean;
+  data?: any;
+  initialData?: any;
+  submitUrl?: string;
 }) {
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+
   const {
     handleSubmit,
     register,
@@ -137,386 +140,58 @@ export default function AutoForm({
     shouldUnregister: false,
   });
 
-  const data = GeneralFormInput;
   const user = useUser();
-
-  const [currentStep, setCurrentStep] = useState(0);
-  console.log(currentStep);
-
-  var isCurrentStepValid = data[currentStep].inputs.every(
-    (input) => errors[input.name] === undefined
-  );
-
-  isCurrentStepValid = data[currentStep].inputs.every((input) =>
-    !input.options
-      ? watch(input.name) !== undefined
-      : getValues(input.name)?.values || getValues(input.name) != null || true
-  );
-
-  if (!user) {
-    return <CircularProgress />;
-  }
-
-  //@ts-ignore
-  const RENDERERS: Record<InputType, (param: FormInput) => any> = {
-    OneLineText: (param) => (
-      <Controller
-        defaultValue={""}
-        name={param.name}
-        control={control}
-        rules={param.constraints}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            inputMode="text"
-            defaultValue=""
-            error={errors[param.name] ? true : false}
-            required={param.constraints?.required}
-            style={{ background: "white" }}
-            label={param.label}
-            onChange={onChange}
-            value={value}
-            fullWidth
-            type="text"
-            variant="outlined"
-            size="medium"
-          />
-        )}
-      />
-    ),
-    MultiLineText: (param) => (
-      <Controller
-        name={param.value}
-        control={control}
-        rules={param.constraints}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            label={param.label}
-            required={param.required}
-            onChange={onChange}
-            multiline
-            type="textarea"
-            variant="outlined"
-            rows="3"
-          />
-        )}
-      />
-    ),
-    Number: (param) => (
-      <Controller
-        name={param.value}
-        control={control}
-        rules={param.constraints}
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            label={param.label}
-            required={param.required}
-            onChange={onChange}
-            value={value}
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 10,
-                min: 1,
-                defaultValue: 3,
-              },
-            }}
-            variant="outlined"
-          />
-        )}
-      />
-    ),
-    Country: (param) => (
-      <Controller
-        name={param.name}
-        control={control}
-        rules={param.constraints}
-        render={({ field }) => (
-          <Select
-            label={param.label}
-            placeholder={param.label}
-            required={param.constraints?.required}
-            {...field}
-            styles={{
-              control: (base) => ({
-                ...base,
-                width: "100%",
-                height: "57px",
-                minHeight: "",
-              }),
-              menu: (provided) => ({
-                ...provided,
-                zIndex: 9999,
-              }),
-            }}
-            options={countries.map((option) => ({
-              label: option.label,
-              value: option.code,
-            }))}
-            components={{
-              IndicatorSeparator: () => null,
-            }}
-          />
-        )}
-      />
-    ),
-    Date: (param) => (
-      <Controller
-        defaultValue={undefined}
-        name={param.name}
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <Select
-            styles={{
-              control: (base) => ({
-                ...base,
-                height: 57,
-                minHeight: 57,
-              }),
-            }}
-            {...field}
-            placeholder={param.label}
-            options={generateOptions(
-              new Date().getMonth(),
-              new Date().getFullYear(),
-              param.name
-            )}
-          />
-        )}
-      />
-    ),
-    Radio: (param) => (
-      <Controller
-        name={param.value}
-        control={control}
-        rules={param.constraints}
-        render={({ field: { onChange, value } }) => (
-          <RadioGroup
-            row
-            style={{
-              height: "57px",
-              width: "100%",
-            }}
-          >
-            <div
-              style={{
-                display: "grid",
-
-                gridTemplateColumns: `repeat(${param.options.length}, 1fr)`,
-                width: "100%",
-              }}
-            >
-              {param.options.map((option) => (
-                <FormControlLabel
-                  key={option.value}
-                  value={option.value}
-                  control={<Radio />}
-                  label={option.label}
-                  onChange={onChange}
-                  style={{
-                    alignItems: "center",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                    justifyContent: "center",
-                  }}
-                />
-              ))}
-            </div>
-          </RadioGroup>
-        )}
-      />
-    ),
-    Checkbox: (param) => (
-      <Controller
-        name={param.value}
-        control={control}
-        rules={param.constraints}
-        render={({ field: { onChange, value } }) => (
-          <>
-            {param.options.map((option) => (
-              <Checkbox
-                name={option.label}
-                key={option.value}
-                value={option.value}
-                onChange={onChange}
-              />
-            ))}
-          </>
-        )}
-      />
-    ),
-    Select: (param) => (
-      <Controller
-        name={param.value}
-        control={control}
-        rules={param.constraints}
-        render={({ field }) => (
-          <Select
-            label={param.label}
-            placeholder={param.label}
-            required={param.constraints?.required}
-            {...field}
-            styles={{
-              control: (base) => ({
-                ...base,
-                width: "100%",
-                height: "57px",
-                minHeight: "",
-              }),
-              menu: (provided) => ({
-                ...provided,
-                zIndex: 9999,
-              }),
-            }}
-            options={param.options.map((option) => ({
-              label: option.label,
-              value: option.value,
-            }))}
-            components={{
-              IndicatorSeparator: () => null,
-            }}
-          />
-        )}
-      />
-    ),
-    MultiSelect_Creatable: (param) => (
-      <Controller
-        name={param.value}
-        control={control}
-        rules={param.constraints}
-        render={({ field }) => (
-          <Select
-            label={param.label}
-            isMulti
-            placeholder={param.label}
-            required={param.constraints?.required}
-            {...field}
-            styles={{
-              control: (base) => ({
-                ...base,
-                width: "100%",
-                height: "57px",
-                minHeight: "",
-              }),
-              menu: (provided) => ({
-                ...provided,
-                zIndex: 9999,
-              }),
-            }}
-            options={param.options.map((option) => ({
-              label: option.label,
-              value: option.value,
-            }))}
-            components={{
-              IndicatorSeparator: () => null,
-            }}
-          />
-        )}
-      />
-    ),
-  };
 
   const values: Record<string, string> = { "": "" };
 
-  function renderParam(param: FormInput, step: number, label: String) {
-    return (
-      <AnimatePresence exitBeforeEnter>
-        <InputContainer
-          key={`${currentStep}_${param.name}`}
-          initial={{
-            opacity: step != currentStep ? 1 : 0.4,
-            x: -30,
-            display: step == currentStep ? "block" : "none",
-          }}
-          animate={{
-            opacity: step == currentStep ? 1 : 0,
-            x: 0,
-            display: step == currentStep ? "block" : "none",
-          }}
-          transition={{ duration: 0.2, staggerChildren: 0.1 }}
-          span={param.span}
-          visible={step == currentStep}
-          exit={{
-            x: 30,
-            opacity: step == currentStep ? 0 : 1,
-          }}
-        >
-          {RENDERERS[param.type](param)}
-        </InputContainer>
-      </AnimatePresence>
-    );
+  function renderParam(param: FormInput) {
+    console.log(param);
+    return <AnimatePresence exitBeforeEnter></AnimatePresence>;
+  }
+
+  useEffect(() => {
+    if (initialData) {
+      Object.keys(initialData).forEach((key) => {
+        console.log(initialData);
+
+        setValue(key, initialData[key]);
+      });
+    }
+  }, [initialData]);
+
+  async function onSubmit() {
+    if (isValid) {
+      setSubmitLoading(true);
+      try {
+        await apiCall(submitUrl, "POST", {
+          user: user,
+          data: getValues(),
+        });
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setSubmitLoading(false);
+        setSuccess(true);
+      }
+    }
   }
 
   return (
-    <form key="_form">
+    <form key="_form" onSubmit={handleSubmit(onSubmit)}>
       <Container key={`_container`}>
         {console.log(watch())}
         <FormGrid key="_formgrid">
-          {data.map((step) => (
-            <>
-              <motion.h3
-                key={`_step_${step.step}`}
-                initial={{ opacity: 0, y: -30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 30 }}
-                style={{
-                  display: step.step == currentStep ? "block" : "none",
-                  position: "absolute",
-                  top: "-50px",
-                  left: "0%",
-                }}
-              >
-                {step.label}
-              </motion.h3>
-              {step.inputs.map((input) =>
-                renderParam(input, step.step, step.label)
-              )}
-            </>
+          {data.map((input) => (
+            <InputContainer visible={true} span={input.span}>
+              {RENDERERS[input.type](control, errors, input)}
+            </InputContainer>
           ))}
         </FormGrid>
         <ButtonGrid>
           <>
-            {currentStep > 0 ? (
-              <Button
-                style={{ background: "whitemilk" }}
-                type="button"
-                variant="outlined"
-                onClick={() => setCurrentStep((cur) => cur + -1)}
-              >
-                Back
-              </Button>
-            ) : (
-              <div />
-            )}
-            {currentStep < data.length - 1 ? (
-              <Button
-                style={{ background: isCurrentStepValid && colors.aquamarine }}
-                type="button"
-                variant="outlined"
-                disabled={!isCurrentStepValid}
-                onClick={() => setCurrentStep((cur) => cur + 1)}
-              >
-                Next
-              </Button>
-            ) : (
-              <div />
-            )}
-
-            {isValid ? (
-              <Button
-                type="submit"
-                disabled={!isValid}
-                variant="outlined"
-                style={{
-                  background: isValid ? "blue" : "white",
-                  color: "white",
-                }}
-              >
-                Submit
-              </Button>
-            ) : (
-              <div />
-            )}
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              Submit
+            </Button>
           </>
         </ButtonGrid>
       </Container>

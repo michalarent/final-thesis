@@ -78,9 +78,9 @@ export const GeneralFormInput: IForm[] = [
         name: "pesel",
         label: "Pesel",
         value: "pesel",
-        type: "Number",
+        type: "OneLineText",
         placeholder: "PESEL (or passport number)",
-        span: 2,
+        span: 3,
         constraints: {
           required: true,
           maxLength: 11,
@@ -117,19 +117,19 @@ export const GeneralFormInput: IForm[] = [
     description: "Please select the ones that apply:",
     inputs: [
       {
-        name: "illnesses",
-        label: "Illnesses:",
+        name: "Illnesses",
+        label: "illnesses",
         options: [
           {
-            value: "diabetes",
+            value: "Diabetes",
             label: "Diabetes",
           },
           {
-            value: "rheumatoid_arthritis",
+            value: "Rheumatoid Arthritis",
             label: "Rheumatoid Arthritis",
           },
           {
-            value: "motor_or_sensory_deficit",
+            value: "Motor or Sensory Deficit",
             label: "Motor or Sensory Deficit",
           },
           {
@@ -155,40 +155,92 @@ export const GeneralFormInput: IForm[] = [
         span: 3,
       },
       {
-        name: "allergies",
-        label: "Allergies",
-        value: "Allergies",
-        type: "MultiLineText",
+        name: "Allergies",
+        label: "allergies",
+        value: "allergies",
+        type: "MultiSelect_Creatable",
         placeholder: "Enter your allergies",
         span: 3,
-        constraints: {
-          required: true,
-          minLength: 100,
-        },
+        options: [
+          {
+            value: "Diabetes",
+            label: "Diabetes",
+          },
+          {
+            value: "Rheumatoid Arthritis",
+            label: "Rheumatoid Arthritis",
+          },
+          {
+            value: "Motor or Sensory Deficit",
+            label: "Motor or Sensory Deficit",
+          },
+          {
+            value: "Cancer",
+            label: "Cancer",
+          },
+          {
+            value: "Auto-immune Disease",
+            label: "Auto-immune Disease",
+          },
+          {
+            value: "Obesity",
+            label: "Obestiy",
+          },
+          {
+            value: "Smoker/Alcoholic/Addict",
+            label: "Smoker/Alcoholic/Addict",
+          },
+        ],
       },
       {
-        name: "medication",
-        label: "Medication",
+        name: "Medication",
+        label: "medication",
         value: "Medication",
-        type: "MultiLineText",
+        type: "MultiSelect_Creatable",
         placeholder:
           "Enter any medication you take regularly or have taken in the past 2 weeks",
         span: 3,
-        constraints: {
-          required: true,
-          minLength: 100,
-        },
+        options: [
+          {
+            value: "Diabetes",
+            label: "Diabetes",
+          },
+          {
+            value: "Rheumatoid Arthritis",
+            label: "Rheumatoid Arthritis",
+          },
+          {
+            value: "Motor or Sensory Deficit",
+            label: "Motor or Sensory Deficit",
+          },
+          {
+            value: "cancer",
+            label: "Cancer",
+          },
+          {
+            value: "auto_immune_disease",
+            label: "Auto-immune disease",
+          },
+          {
+            value: "obesity",
+            label: "Obestiy",
+          },
+          {
+            value: "smoker_alcoholic_addict",
+            label: "Smoker/Alcholic/Addict",
+          },
+        ],
       },
       {
         name: "pregnancy",
         label: "Preganancy",
         options: [
           {
-            value: "yes",
+            value: true,
             label: "Yes",
           },
           {
-            value: "no",
+            value: false,
             label: "No",
           },
         ],
@@ -202,11 +254,11 @@ export const GeneralFormInput: IForm[] = [
         label: "Tobacco",
         options: [
           {
-            value: "yes",
+            value: true,
             label: "Yes",
           },
           {
-            value: "no",
+            value: false,
             label: "No",
           },
         ],
@@ -220,11 +272,11 @@ export const GeneralFormInput: IForm[] = [
         label: "Alcohol",
         options: [
           {
-            value: "yes",
+            value: true,
             label: "Yes",
           },
           {
-            value: "no",
+            value: false,
             label: "No",
           },
         ],
@@ -238,11 +290,11 @@ export const GeneralFormInput: IForm[] = [
         label: "Drugs",
         options: [
           {
-            value: "yes",
+            value: true,
             label: "Yes",
           },
           {
-            value: "no",
+            value: false,
             label: "No",
           },
         ],

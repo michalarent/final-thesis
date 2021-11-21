@@ -16,9 +16,6 @@ export default class User {
   @Property()
   name: string;
 
-  @Property({ default: true })
-  new: boolean = true;
-
   @Property({ unique: true })
   authId: string;
 

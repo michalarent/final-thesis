@@ -7,7 +7,9 @@ export type InputType =
   | "Select"
   | "Radio"
   | "Country"
-  | "MultiSelect_Creatable";
+  | "MultiSelect_Creatable"
+  | "MultiImage"
+  | "Image";
 
 export type FormInput = {
   name: string;
@@ -29,6 +31,6 @@ export interface IForm {
 }
 
 export interface SelectOption {
-  value: string;
+  value: string | boolean;
   label: string;
 }

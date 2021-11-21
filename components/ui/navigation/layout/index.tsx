@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
-import SideBar from "../sidebar";
+
 import Topbar from "../topbar";
-import { useSidebar } from "../sidebar/SideBarContext";
+
 import { colors } from "../../../../theme/colors";
 import { useEffect } from "react";
+import { ArentGrid } from "./ArentGrid";
+import { Breadcrumb, BreadcrumbItem } from "carbon-components-react";
 
 const Grid = styled(motion.div)`
   display: grid;
@@ -13,57 +15,39 @@ const Grid = styled(motion.div)`
 `;
 
 const AppCanvas = styled.div`
-  min-height: calc(100vh - 85px);
-  background-color: whitesmoke;
-  width: 100%;
-  z-indx: 20000;
+  min-height: calc(100vh - 45px);
+
   padding: 25px 25px 0 25px;
-  margin-top: 85px;
+  margin-top: 80px;
 `;
 
-const ContentGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
-  column-gap: 25px;
-  row-gap: 25px;
-`;
-
-export default function LayoutBase({ children, title }) {
-  const isOpen = useSidebar();
-
-  const variants = {
-    initial: { width: "100px" },
-    animate: {
-      width: "300px",
-    },
-  };
+export default function LayoutBase({
+  children,
+  title,
+  breadcrumbs,
+}: {
+  children: React.ReactNode;
+  title: string;
+  breadcrumbs: string[];
+}) {
+  const joinBreadcrumbs = (depth: number) =>
+    breadcrumbs
+      .slice(0, depth + 1)
+      .map((b) => b.toLowerCase())
+      .join("/");
 
   return (
     <AnimatePresence initial={false}>
+      <Breadcrumb style={{ top: 60, left: 65, position: "fixed" }}>
+        {breadcrumbs.map((b, index) => (
+          <BreadcrumbItem href={`/${joinBreadcrumbs(index)}`}>
+            {b}
+          </BreadcrumbItem>
+        ))}
+      </Breadcrumb>
+
       <Topbar key="topbar" title={title} />
-      <Grid key="grid">
-        <motion.div
-          key="wrapper_1"
-          initial={!isOpen ? "animate" : "initial"}
-          transition={{ duration: 0.3 }}
-          variants={variants}
-          animate={isOpen ? "animate" : "initial"}
-        >
-          <motion.div
-            key="wrapper_2"
-            initial={!isOpen ? "animate" : "initial"}
-            transition={{ duration: 0.3 }}
-            variants={variants}
-            animate={isOpen ? "animate" : "initial"}
-          >
-            <SideBar />
-          </motion.div>
-        </motion.div>
-        <AppCanvas key="canvas">
-          <ContentGrid>{children}</ContentGrid>
-        </AppCanvas>
-      </Grid>
+      <AppCanvas>{children}</AppCanvas>
     </AnimatePresence>
   );
 }

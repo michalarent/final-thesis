@@ -1,6 +1,6 @@
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button, InlineLoading, Loading, Modal } from "carbon-components-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   IoArrowForwardOutline,
@@ -10,13 +10,14 @@ import {
 } from "react-icons/io5";
 import { polyfill } from "seamless-scroll-polyfill";
 import styled from "styled-components";
-import { GeneralFormInput } from "../../../data/general/general";
+import { getMedicalHistory } from "../../../common/api";
+import apiCall from "../../../common/api/ApiCall";
 import { FormInput } from "../../../data/types";
-import useKeyPress from "../../../hooks/useKeyPress";
 import { useUser } from "../../../hooks/user";
 import { colors } from "../../../theme/colors";
+import { ArentFlex, ArentGrid } from "../navigation/layout/ArentGrid";
 import { ButtonGrid, NiceButton } from "./ButtonGrid";
-import { Inputs, StepNumber } from "./Inputs";
+import { FormContainer, Inputs, StepNumber } from "./Inputs";
 import { RENDERERS } from "./renderers/renderers";
 
 // kick off the polyfill!
@@ -24,39 +25,23 @@ import { RENDERERS } from "./renderers/renderers";
 type FormType = "General" | "Wound" | "Appointment";
 
 const FormGrid = styled.div`
-  padding: 20px 50px;
-  border-radius: 20px;
-  margin-top: 50px;
+  padding: 20px 20px;
+
+  align-items: start;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
+
+  justify-content: start;
+
   min-height: 800px;
-  margin-top: 40px;
 `;
 
-const ActiveIndicator = styled.div<{ current?: boolean }>`
-  position: absolute;
-  cursor: ${(props) => (props.current ? "default" : "pointer")};
-  top: 20px;
-  right: 20px;
-  width: 20px;
-  height: 20px;
-  z-index: 200;
-  border-radius: 50%;
-  pointer-events: auto;
-
-  background-color: ${(props) =>
-    props.current ? colors.aquamarine : "transparent"};
-  > div {
-  }
-`;
 const InputContainer = styled(motion.div)<{ span: number; visible?: boolean }>`
   grid-column: span ${(props) => props.span || "6"};
+  align-self: end;
   //   display: ${(props) => (props.visible ? "block" : "none")};
 `;
 
@@ -71,6 +56,41 @@ export default function ScrollingForm({
   multi?: boolean;
   data?: any;
 }) {
+  const user = useUser();
+
+  async function fetchMedicalHistory(authId) {
+    try {
+      const medicalHistory = await apiCall(
+        "/api/patient/medical_history?user=" + user.authId,
+        "GET"
+      );
+      setInitialData(medicalHistory);
+      console.log(medicalHistory);
+      Object.keys(medicalHistory).forEach((key) => {
+        console.log(medicalHistory);
+
+        setValue(key, medicalHistory[key]);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    if (user.authId && !initialData) {
+      fetchMedicalHistory(user.authId);
+    }
+  }, [user]);
+
+  polyfill();
+  //   smoothscroll.polyfill();
+
+  const [currentStep, setCurrentStep] = useState(0);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [initialData, setInitialData] = useState<any>(null);
+
   const {
     handleSubmit,
     register,
@@ -79,6 +99,7 @@ export default function ScrollingForm({
     watch,
     setValue,
     getValues,
+
     unregister,
     formState: { errors, isDirty, isValid, isSubmitting },
   } = useForm({
@@ -87,19 +108,13 @@ export default function ScrollingForm({
     shouldUnregister: false,
   });
 
-  const user = useUser();
-
-  polyfill();
-  //   smoothscroll.polyfill();
-
-  const [currentStep, setCurrentStep] = useState(0);
-
-  if (!user) {
-    return <CircularProgress />;
-  }
-
   const values: Record<string, string> = { "": "" };
 
+  const isLastStep = (step) => {
+    return step === data?.length - 1;
+  };
+
+  console.log(getValues());
   function renderParam(
     param: FormInput,
     step: number,
@@ -139,14 +154,14 @@ export default function ScrollingForm({
     }
   };
 
-  const handleNextStep = (event, id) => {
+  const handleNextStep = (event) => {
     event?.stopPropagation();
     setCurrentStep((cur) => cur + 1);
     let ref = divRefs[currentStep + 1];
     scrollSmoothHandler(ref);
   };
 
-  const handlePreviousStep = (event, id) => {
+  const handlePreviousStep = (event) => {
     event?.stopPropagation();
     console.log(currentStep);
     setCurrentStep((cur) => cur - 1);
@@ -170,115 +185,128 @@ export default function ScrollingForm({
       setCurrentStepValid(true);
 
       // FIX THIS
-      if (getValues(data[currentStep].inputs[0].name) == undefined) {
-        setCurrentStepValid(false);
-      }
     } else {
       console.log("invalid");
       setCurrentStepValid(false);
     }
   }, [getValues()]);
 
-  useKeyPress("ArrowRight", () => handleNextStep());
-  useKeyPress("ArrowUp", (event) => handlePreviousStep(event));
+  console.log(errors);
+
+  // useKeyPress("ArrowRight", (e) => handleNextStep(e));
+  // useKeyPress("ArrowUp", (e) => handlePreviousStep(e));
 
   console.log(currentStepValid);
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    setSubmitLoading(true);
+    try {
+      await apiCall("/api/patient/medical_history", "POST", {
+        data,
+      });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSubmitLoading(false);
+      setSuccess(true);
+    }
+  };
+
   return (
-    <form key="_form">
-      <Container key={`_container`}>
-        <FormGrid key="_formgrid">
-          {data.map((step, index) => {
-            const newRef = useRef();
-            divRefs.push(newRef);
-            const refId = divRefs.findIndex((id) => id === newRef);
-            const thisStep = step.step;
-            return (
-              <div
-                id={thisStep.toString()}
-                ref={newRef}
-                // onClick={() => scrollSmoothHandler(newRef)}
-                style={{
-                  gridColumn: "span 6",
-                  //   scrollMarginBlock: "20vh 0",
-                  scrollMarginTop:
-                    thisStep == 0 ? "20vh" : `${thisStep * 20}vh`,
-                }}
-              >
-                <Inputs
-                  key={`inputs_${thisStep}`}
-                  style={{ border: "1px solid" }}
-                  initial={{ borderColor: "#F8F8F8" }}
-                  animate={{
-                    borderColor:
-                      step.step == currentStep ? colors.border : "#F8F8F8",
+    <>
+      <form key="_form" onSubmit={handleSubmit(onSubmit)}>
+        <Container key={`_container`}>
+          <FormGrid key="_formgrid">
+            {data.map((step, index) => {
+              const newRef = useRef();
+              divRefs.push(newRef);
+              const refId = divRefs.findIndex((id) => id === newRef);
+              const thisStep = step.step;
+              return (
+                <div
+                  id={thisStep.toString()}
+                  ref={newRef}
+                  // onClick={() => scrollSmoothHandler(newRef)}
+                  style={{
+                    gridColumn: "span 6",
+                    //   scrollMarginBlock: "20vh 0",
+                    scrollMarginTop:
+                      thisStep == 0 ? "20vh" : `${thisStep * 20}vh`,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  exit={{ borderColor: "#F8F8F8" }}
-                  transition={{ duration: 0.4 }}
-                  onClick={() => setCurrentStep(step.step)}
-                  current={step.step == currentStep}
-                  isPrevious={step.step < currentStep}
                 >
-                  <StepNumber current={step.step == currentStep}>
-                    {index + 1}
-                  </StepNumber>
-
-                  <h3>{step.label}</h3>
-                  <p>{step.description}</p>
-                  <ButtonGrid current={step.step == currentStep}>
-                    <>
-                      <div>
-                        {currentStep > 0 ? (
-                          <Button
-                            style={{ cursor: "pointer" }}
-                            onClick={(event) =>
-                              handlePreviousStep(event, refId)
-                            }
-                          >
-                            <IoChevronUpOutline size="30px" />
-                          </Button>
-                        ) : (
-                          <div />
-                        )}
-                      </div>
-                      <div className={"submit"}>
-                        {isValid ? <IoSendOutline /> : <div />}
-                      </div>
-                      <div className="up">
-                        {currentStep < data.length - 1 ? (
-                          <Button
-                            style={{ cursor: "pointer" }}
-                            onClick={(event) => handleNextStep(event, refId)}
-                          >
-                            <IoChevronDownOutline size="30px" />
-                          </Button>
-                        ) : (
-                          <div />
-                        )}
-                      </div>
-                    </>
-                  </ButtonGrid>
-
-                  {step.inputs.map((input) =>
-                    renderParam(
-                      input,
-                      step.step,
-
-                      step.step == currentStep,
-                      step.label
-                    )
-                  )}
-                  <NiceButton
-                    correct={currentStepValid}
-                    onClick={(event) => handleNextStep(event, refId)}
+                  <FormContainer
+                    current={step.step == currentStep}
+                    isPrevious={step.step < currentStep}
+                    onClick={() => setCurrentStep(step.step)}
                   >
-                    Continue <IoArrowForwardOutline />
-                  </NiceButton>
-                </Inputs>
-              </div>
-            );
-          })}
-        </FormGrid>
-      </Container>
-    </form>
+                    <ArentGrid
+                      style={{ marginBottom: 20 }}
+                      columns="auto 1fr"
+                      gap={20}
+                      width="100%"
+                    >
+                      <ArentFlex direction="column" align="start" width="100%">
+                        <h3>{step.label}</h3>
+                        <p>{step.description}</p>
+                      </ArentFlex>
+                    </ArentGrid>
+                    <Inputs
+                      key={`inputs_${thisStep}`}
+                      animate={{
+                        borderColor:
+                          step.step == currentStep ? colors.border : "#F8F8F8",
+                      }}
+                      exit={{ borderColor: "#F8F8F8" }}
+                      transition={{ duration: 0.4 }}
+                      onClick={() => setCurrentStep(step.step)}
+                      current={step.step == currentStep}
+                      isPrevious={step.step < currentStep}
+                    >
+                      {step.inputs.map((input) =>
+                        renderParam(
+                          input,
+                          step.step,
+
+                          step.step == currentStep,
+                          step.label
+                        )
+                      )}
+                    </Inputs>
+                    <div
+                      style={{ position: "absolute", right: 40, bottom: 20 }}
+                    >
+                      <Button
+                        style={{ alignSelf: "end", justifySelf: "end" }}
+                        disabled={step.step != currentStep || !currentStepValid}
+                        type={isLastStep(step.step) ? "submit" : "button"}
+                        onClick={(event) =>
+                          !isLastStep(step.step) && handleNextStep(event)
+                        }
+                      >
+                        {isLastStep(step.step) ? (
+                          submitLoading ? (
+                            <Loading />
+                          ) : (
+                            "Submit"
+                          )
+                        ) : (
+                          "Continue"
+                        )}
+                      </Button>
+                    </div>
+                  </FormContainer>
+                </div>
+              );
+            })}
+          </FormGrid>
+        </Container>
+      </form>
+      {success && <Modal open>Success!</Modal>}
+    </>
   );
 }
