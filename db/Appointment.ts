@@ -8,7 +8,7 @@ import {
   Property,
 } from "@mikro-orm/core";
 import { Doctor } from "./Doctor";
-import { Nurse } from "./Nurse";
+
 import { Treatment } from "./Treatment";
 import { Wound } from "./Wound";
 
@@ -31,7 +31,4 @@ export class Appointment {
 
   @ManyToOne({ entity: () => Doctor })
   doctor: Doctor;
-
-  @ManyToOne({ entity: () => Nurse }, { nullable: true })
-  nurse: Nurse | any;
 }

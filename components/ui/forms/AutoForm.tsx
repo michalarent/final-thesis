@@ -1,5 +1,6 @@
 import { Button } from "carbon-components-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useS3Upload } from "next-s3-upload";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -17,17 +18,18 @@ const FormGrid = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-gap: 50px 20px;
+  align-items: start;
 
   position: relative;
-
+  height: 600px;
   width: 800px;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
+  width: 100%;
   margin: auto;
   height: 800px;
 `;
@@ -121,8 +123,10 @@ export default function AutoForm({
   submitUrl?: string;
 }) {
   const [submitLoading, setSubmitLoading] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+  const { uploadToS3 } = useS3Upload();
 
   const {
     handleSubmit,
@@ -144,6 +148,17 @@ export default function AutoForm({
 
   const values: Record<string, string> = { "": "" };
 
+  const handleFiles = async (files) => {
+    const urls = [];
+
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      const { url } = await uploadToS3(file);
+      urls.push(url);
+    }
+    return urls;
+  };
+
   function renderParam(param: FormInput) {
     console.log(param);
     return <AnimatePresence exitBeforeEnter></AnimatePresence>;
@@ -161,6 +176,14 @@ export default function AutoForm({
 
   async function onSubmit() {
     if (isValid) {
+      if (getValues() && getValues().images) {
+        console.log("*** WILL UPLOAD ***");
+        const files = getValues().images;
+        let imageUrls = await handleFiles(files);
+        console.log(imageUrls);
+        setValue("images", imageUrls);
+      }
+      console.log(getValues());
       setSubmitLoading(true);
       try {
         await apiCall(submitUrl, "POST", {

@@ -3,7 +3,7 @@ import { Options } from "@mikro-orm/core";
 import User from "./User";
 import Patient from "./Patient";
 import { Doctor } from "./Doctor";
-import { Nurse } from "./Nurse";
+
 import { Treatment } from "./Treatment";
 import { Wound } from "./Wound";
 import { Appointment } from "./Appointment";
@@ -16,16 +16,7 @@ const config: Options = {
   user,
   password,
   baseDir: process.cwd(),
-  entities: [
-      User,
-      Patient,
-      Doctor,
-      Nurse,
-      Treatment,
-      Wound,
-      Appointment,
-
-  ],
+  entities: [User, Patient, Doctor, Treatment, Wound, Appointment],
   discovery: {
     disableDynamicFileAccess: false,
     requireEntitiesArray: true,

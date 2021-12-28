@@ -7,6 +7,8 @@ export class Doctor extends User {
   @OneToMany(() => Appointment, (app) => app.doctor)
   appointments = new Collection<Appointment>(this);
 
+  
+
   @Property({ type: "jsonb" })
   doctorData: Record<string, any> = {};
 }

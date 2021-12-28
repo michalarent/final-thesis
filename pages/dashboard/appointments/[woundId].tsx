@@ -3,6 +3,7 @@ import router, { useRouter } from "next/router";
 import AutoForm from "../../../components/ui/forms/AutoForm";
 import LayoutBase from "../../../components/ui/navigation/layout";
 import { CreateOrUpdateAppointment } from "../../../data/appointment/appointment";
+import { Doctor } from "../../../db/Doctor";
 import { useDoctors, useUser, useWounds } from "../../../hooks/user";
 
 export default function Appointment() {
@@ -14,7 +15,9 @@ export default function Appointment() {
 
   if (!doctors) return <Loading />;
 
-  const requestedDoctor = doctors?.find((d) => d?.doctorData?.pesel === doctor);
+  const requestedDoctor: Doctor = doctors?.find(
+    (d) => d?.doctorData?.pesel === doctor
+  );
 
   if (!requestedDoctor) return <Loading />;
 
@@ -33,7 +36,10 @@ export default function Appointment() {
       </h3>
       <AutoForm
         data={CreateOrUpdateAppointment}
-        initialData={[{ requestedDoctor: requestedDoctor, wound: wound }]}
+        submitUrl={`/api/appointment`}
+        initialData={[
+          { requestedDoctor: requestedDoctor.authId, wound: woundId },
+        ]}
       />
     </LayoutBase>
   );

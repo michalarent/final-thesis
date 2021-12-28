@@ -9,7 +9,9 @@ export type InputType =
   | "Country"
   | "MultiSelect_Creatable"
   | "MultiImage"
-  | "Image";
+  | "Image"
+  | "ScheduleDay"
+  | "ScheduleTime";
 
 export type FormInput = {
   name: string;
@@ -21,6 +23,7 @@ export type FormInput = {
   required?: boolean;
   options?: SelectOption[];
   constraints?: Record<string, any>;
+  isS3?: boolean;
 };
 
 export interface IForm {

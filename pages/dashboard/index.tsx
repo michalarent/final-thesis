@@ -6,7 +6,13 @@ import {
   ArentFlex,
   ArentGrid,
 } from "../../components/ui/navigation/layout/ArentGrid";
-import { usePatient, useDoctor, useUser, useWounds } from "../../hooks/user";
+import {
+  usePatient,
+  useDoctor,
+  useUser,
+  useWounds,
+  useAppointments,
+} from "../../hooks/user";
 import router from "next/router";
 
 export default function Home() {
@@ -14,13 +20,15 @@ export default function Home() {
   const patient = usePatient(user?.authId);
   const doctor = useDoctor(user?.authId);
   const wounds = useWounds(user?.authId);
+  const appointments = useAppointments(user?.authId);
 
   console.log("Patient:", wounds);
 
-  if (!user || !patient) {
+  if (!user || !patient || !appointments) {
     return <Loading />;
   }
 
+  console.log(appointments);
   return (
     <LayoutBase title="Dashboard" breadcrumbs={["Dashboard"]}>
       <ArentFlex align="center" width="100%" height="100%" justify="center">
@@ -40,6 +48,25 @@ export default function Home() {
               Welcome, <strong>{user.name}</strong>
             </h2>
           </ArentFlex>
+          {appointments.length && (
+            <ClickableTile
+              onClick={() => router.push("/dashboard/appointments")}
+              style={{ padding: 0, width: "100%", height: "auto" }}
+            >
+              <ArentFlex direction="column" padding="0px" width="100%">
+                <ArentFlex direction="column" padding={"16px"} width="100%">
+                  <small>Appointments</small>
+                  <h4>Go to Appointments</h4>
+                  <br />
+                  <br />
+                  <ArentFlex align="center" gap={10} width="100%">
+                    <strong>Go to appointments</strong>
+                    <ArrowRight16 />
+                  </ArentFlex>
+                </ArentFlex>
+              </ArentFlex>
+            </ClickableTile>
+          )}
           <ArentGrid columns="1fr 1fr" width="100%" gap={20}>
             <ClickableTile
               onClick={() =>
@@ -199,6 +226,8 @@ export default function Home() {
               </ArentFlex>
             </ArentFlex>
           </ClickableTile>
+          {appointments &&
+            appointments.map((app) => <ClickableTile>xD</ClickableTile>)}
         </ArentFlex>
       </ArentFlex>
     </LayoutBase>

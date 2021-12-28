@@ -8,9 +8,8 @@ import apiEndpoint, {
 
 export default apiEndpoint({
   GET: async ({ user }) => {
-    console.log(user);
     const response = await getWounds(user);
-    console.log("Wounds", response);
+
     return response;
   },
   POST: async ({ user, data }) => {

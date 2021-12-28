@@ -10,6 +10,7 @@ import User from "../../db/User";
 import Patient from "../../db/Patient";
 import { Doctor } from "../../db/Doctor";
 import { Wound } from "../../db/Wound";
+import { Appointment } from "../../db/Appointment";
 
 type ApiEndpointEnvironment = {
   req: NextApiRequest;
@@ -48,7 +49,7 @@ export default function apiEndpoint<
     async function (req: NextApiRequest, res: NextApiResponse) {
       if (!handlers[req.method])
         throw new HttpError(HttpResponseCode.METHOD_NOT_ALLOWED);
-      console.log(`${req.method} ${req.url}`);
+
       const request =
         req.method === "GET" ? req.query : { ...req.query, ...req.body };
       try {
@@ -117,7 +118,6 @@ export async function getOrCreateUser(
     return user;
   } else {
     try {
-      console.log(`New user logged in: ${email}. Creating an entity.`);
       const newUser = orm.em.create(User, {
         authId,
         email,
@@ -157,8 +157,7 @@ export async function updateUser(authId: string, userInfo: any) {
   const orm = await getOrm();
   const user = await orm.em.findOne(User, { authId });
   const patient = await getPatient(authId);
-  console.log(userInfo);
-  console.log(user);
+
   if (user) {
     user.name = userInfo["name"];
     patient.name = userInfo["name"];
@@ -207,7 +206,7 @@ export async function updateOrCreateMedicalHistory(
     } else {
       patient.medicalFormData = medicalHistory;
       await orm.em.persistAndFlush(patient);
-      console.log(patient);
+
       return patient.medicalFormData;
     }
   }
@@ -215,7 +214,7 @@ export async function updateOrCreateMedicalHistory(
 
 export async function getMedicalHistory(authId: string): Promise<any> {
   const user = getUser(authId);
-  console.log(user);
+
   if (!user) {
     return "User not found!";
   } else {
@@ -251,13 +250,11 @@ export async function addWound(authId: string, formData: string): Promise<any> {
   return newWound;
 }
 
-export async function getWound(authId: string, woundId: any): Promise<Wound> {
+export async function getWound(woundId: any): Promise<Wound> {
   const orm = await getOrm();
-  const patient = await getPatient(authId);
-  if (!patient) {
-    return null;
-  }
+
   const wound = await orm.em.findOne(Wound, { id: woundId });
+
   return wound;
 }
 
@@ -268,6 +265,81 @@ export async function getWounds(authId: string): Promise<Wound[]> {
     return [];
   }
   const wounds = await orm.em.find(Wound, { patient });
-  console.log(wounds);
+
   return wounds;
+}
+
+export async function getAppointments(authId: string) {
+  const orm = await getOrm();
+  const patient = await getPatient(authId);
+
+  if (!patient) {
+    return null;
+  } else {
+    const wounds = await getWounds(authId);
+
+    let appointments = [];
+    for (var w in wounds) {
+      let app = await orm.em.find(Appointment, {
+        wound: wounds[w],
+      });
+      for (var a in app) {
+        appointments.push(app[a]);
+      }
+    }
+    return appointments;
+  }
+  return [];
+}
+
+export async function getAppointment(appointmentId: string) {
+  const orm = await getOrm();
+
+  if (!appointmentId) {
+    return null;
+  } else {
+    const app = await orm.em.findOneOrFail(Appointment, {
+      id: appointmentId as any,
+    });
+    console.log(app);
+    return app;
+  }
+}
+
+export async function addAppointment(
+  authId: string,
+  woundId: string,
+  doctorId: string,
+  formData: any
+): Promise<any> {
+  const orm = await getOrm();
+
+  const wound = await getWound(woundId);
+  const doctor = await getDoctor(doctorId);
+
+  if (!wound) {
+    return "Wound not found!";
+  } else {
+    try {
+      const newAppointment = orm.em.create(Appointment, {
+        wound,
+        doctor,
+        date: new Date(
+          formData.appointmentDay[0].substring(0, 10) +
+            " " +
+            formData.appointmentTime +
+            ":00"
+        ),
+        info: {
+          urgent: formData.urgent,
+          additionalComments: formData.comment,
+          images: formData.images,
+        },
+      });
+      await orm.em.persistAndFlush(newAppointment);
+      return newAppointment;
+    } catch (e) {
+      return null;
+    }
+  }
 }

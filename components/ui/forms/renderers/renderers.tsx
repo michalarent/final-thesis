@@ -9,6 +9,10 @@ import {
   FileUploaderButton,
   FileUploaderDropContainer,
   FileUploaderItem,
+  DatePicker,
+  DatePickerInput,
+  TimePicker,
+  TimePickerSelect,
 } from "carbon-components-react";
 import Select from "react-select";
 import React from "react";
@@ -17,6 +21,7 @@ import { InputType, FormInput } from "../../../../data/types";
 import { countries } from "../countries";
 
 import { colors } from "../../../../theme/colors";
+import { ArentFlex } from "../../navigation/layout/ArentGrid";
 
 // generate array with number of days for given month
 const getDaysInMonth = (month: number, year: number) => {
@@ -369,20 +374,106 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
       control={control}
       rules={param.constraints}
       render={({ field }) => (
-        <div>
+        <ArentFlex direction="column" align="start" justify="start">
           <label className="bx--label">{param.label}</label>
 
           <FileUploaderDropContainer
             multiple
             accept={[".jpg", ".png"]}
             labelText="Drag and drop"
-            size="xl"
+            onAddFiles={(_, { addedFiles }) => {
+              field.onChange(addedFiles);
+            }}
             name={field.value}
-          >
-            Lol
-          </FileUploaderDropContainer>
-        </div>
+          />
+
+          {console.log(field.value)}
+          {field.value?.length &&
+            field.value.map((file: File) => (
+              <FileUploaderItem
+                status={"complete"}
+                style={{ height: 60 }}
+                name={file.name}
+              />
+            ))}
+        </ArentFlex>
       )}
+    />
+  ),
+  ScheduleDay: (control, errors, param) => (
+    <Controller
+      name={param.value}
+      control={control}
+      rules={param.constraints}
+      render={({ field }) => {
+        function getFormattedDate(date) {
+          let year = date.getFullYear();
+          let month = (1 + date.getMonth()).toString().padStart(2, "0");
+          let day = date.getDate().toString().padStart(2, "0");
+
+          return month + "/" + day + "/" + year;
+        }
+        return (
+          <DatePicker
+            datePickerType="single"
+            onChange={field.onChange}
+            minDate={getFormattedDate(new Date(Date.now()))}
+            defaultValue={getFormattedDate(new Date(Date.now()))}
+          >
+            <DatePickerInput
+              id="date-picker"
+              placeholder="mm/dd/yyyy"
+              labelText={param.label}
+            />
+          </DatePicker>
+        );
+      }}
+    />
+  ),
+  ScheduleTime: (control, errors, param) => (
+    <Controller
+      name={param.name}
+      control={control}
+      rules={param.constraints}
+      render={({ field: { onChange, value } }) => {
+        function generateOptions() {
+          var times = [];
+          for (var i = 9; i < 19; i++) {
+            for (var j = 0; j < 60; j += 15) {
+              if (j === 0) {
+                if (i === 9) {
+                  times.push({ value: "09:00", label: "09:00" });
+                } else times.push({ value: "0" + i + ":00", label: i + ":00" });
+              } else if (i === 9) {
+                times.push({ value: "09:" + j, label: "09:" + j });
+              } else times.push({ value: i + ":" + j, label: i + ":" + j });
+            }
+          }
+          return times;
+        }
+
+        return (
+          <>
+            <label className="bx--label">{param.label}</label>
+            <Select
+              label={param.label}
+              placeholder={param.label}
+              styles={SELECT_STYLES}
+              menuPortalTarget={document.body}
+              value={generateOptions().find((c) => c.label === value)}
+              onChange={(val) => onChange(val.label)}
+              options={generateOptions().map((option) => ({
+                label: option.label,
+                value: option.code,
+              }))}
+              defaultValue={generateOptions()[0]}
+              components={{
+                IndicatorSeparator: () => null,
+              }}
+            />
+          </>
+        );
+      }}
     />
   ),
 };

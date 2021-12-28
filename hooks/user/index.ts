@@ -106,3 +106,20 @@ export function useDoctors() {
 
   return doctors?.data || [];
 }
+
+export function useAppointments(authId: string) {
+  const [appointments, setAppointments] = useState<any>(null);
+
+  async function fetchData(url) {
+    const response = await apiCall(url, "GET");
+    setAppointments(response);
+    return response;
+  }
+  useEffect(() => {
+    if (authId) {
+      fetchData(`/api/appointment?user=${authId}`);
+    }
+  }, [authId]);
+
+  return appointments;
+}
