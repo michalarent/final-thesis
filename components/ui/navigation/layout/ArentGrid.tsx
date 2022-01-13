@@ -45,6 +45,7 @@ export const ArentFlex = styled.div<{
   height: ${(props) => props.height || "auto"};
   padding: ${(props) => props.padding || "0"};
   overflow-x: ${(props) => (props.overflowX ? "auto" : "hidden")};
+  overflow-y: hidden;
 `;
 
 const Overflow = styled.div<{

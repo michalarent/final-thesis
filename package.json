@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "express-pino-logger": "^6.0.0",
     "framer-motion": "^4.1.17",
+    "keen-slider": "^6.6.3",
     "next": "11.1.0",
     "next-s3-upload": "^0.1.7",
     "ramda": "^0.27.1",

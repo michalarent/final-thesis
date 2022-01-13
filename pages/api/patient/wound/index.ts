@@ -1,6 +1,7 @@
 import apiEndpoint, {
   addWound,
   createOrUpdateDoctor,
+  deleteWound,
   getDoctor,
   getWounds,
   updateUser,
@@ -15,5 +16,10 @@ export default apiEndpoint({
   POST: async ({ user, data }) => {
     const response = await addWound(user.authId, data);
     return response;
+  },
+  DELETE: async ({ authId, woundId }) => {
+    console.log(woundId);
+    console.log(authId);
+    await deleteWound(authId, woundId);
   },
 });

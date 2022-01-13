@@ -11,6 +11,9 @@ import Patient from "../../db/Patient";
 import { Doctor } from "../../db/Doctor";
 import { Wound } from "../../db/Wound";
 import { Appointment } from "../../db/Appointment";
+import { MedicalHistoryForm } from "../../data/medical-info";
+import PatientMedicalHistory from "../../db/PatientMedicalHistory";
+import WoundFormData from "../../db/WoundFormData";
 
 type ApiEndpointEnvironment = {
   req: NextApiRequest;
@@ -46,7 +49,7 @@ export default function apiEndpoint<
   options?: ApiEndpointOptions
 ) {
   return (options?.allowAnonymous ? identity : withApiAuthRequired)(
-    async function (req: NextApiRequest, res: NextApiResponse) {
+    async function(req: NextApiRequest, res: NextApiResponse) {
       if (!handlers[req.method])
         throw new HttpError(HttpResponseCode.METHOD_NOT_ALLOWED);
 
@@ -92,14 +95,11 @@ export async function getCurrentUser(
     session.user
   );
 
-  const { email, name, createdAt, imageUrl } = userEntity;
+  const { email, name } = userEntity;
 
   return {
     name,
     email,
-    createdAt,
-    imageUrl,
-    new: userEntity.new,
     authId,
   };
 }
@@ -113,7 +113,6 @@ export async function getOrCreateUser(
   const orm = await getOrm();
   const user = await orm.em.findOne(User, { authId });
   if (user) {
-    user.imageUrl = userInfo.picture;
     await orm.em.persistAndFlush(user);
     return user;
   } else {
@@ -122,7 +121,6 @@ export async function getOrCreateUser(
         authId,
         email,
         name: userInfo?.name || email,
-        imageUrl: userInfo?.picture,
       });
       await orm.em.persistAndFlush(newUser);
 
@@ -141,12 +139,14 @@ async function getUser(authId: string): Promise<User> {
 
 export async function getPatient(authId: string): Promise<Patient> {
   const orm = await getOrm();
+  if (!authId) return null;
   const patient = await orm.em.findOne(Patient, { authId });
 
   return patient;
 }
 
 export async function getDoctor(authId: string): Promise<Doctor> {
+  if (!authId) return null;
   const orm = await getOrm();
   const doctor = await orm.em.findOne(Doctor, { authId });
 
@@ -184,36 +184,54 @@ export async function updateOrCreateMedicalHistory(
   authId: string,
   medicalHistory: any
 ): Promise<any> {
-  const user = getUser(authId);
+  const user = await getUser(authId);
   const orm = await getOrm();
   if (!user) {
     return "User not found!";
   } else {
-    const patient = await getPatient(authId);
+    let patient = await getPatient(authId);
 
     if (!patient) {
       try {
         const newPatient = orm.em.create(Patient, {
-          ...user,
-          medicalFormData: JSON.stringify(medicalHistory),
+          email: user.email,
+          name: user.name,
+          authId,
         });
 
-        await orm.em.persistAndFlush(newPatient);
-        return patient.medicalFormData;
+        const newMedicalHistory = orm.em.create(PatientMedicalHistory, {
+          patient: newPatient,
+          ...medicalHistory,
+        });
+        await orm.em.persistAndFlush(newMedicalHistory);
+
+        const updatePatient = await getPatient(authId);
+        updatePatient.medicalHistory = newMedicalHistory.id as any;
+
+        await orm.em.persistAndFlush(updatePatient);
+
+        return "success";
       } catch (e) {
         throw e;
       }
     } else {
-      patient.medicalFormData = medicalHistory;
+      const newMedicalHistory = orm.em.create(PatientMedicalHistory, {
+        patient: patient,
+        ...medicalHistory,
+      });
+
+      await orm.em.persistAndFlush(newMedicalHistory);
+      patient.medicalHistory = newMedicalHistory;
       await orm.em.persistAndFlush(patient);
 
-      return patient.medicalFormData;
+      return patient.medicalHistory;
     }
   }
 }
 
 export async function getMedicalHistory(authId: string): Promise<any> {
   const user = getUser(authId);
+  const orm = await getOrm();
 
   if (!user) {
     return "User not found!";
@@ -223,8 +241,10 @@ export async function getMedicalHistory(authId: string): Promise<any> {
     if (!patient) {
       return "Patient not found!";
     } else {
-      if (patient.medicalFormData) {
-        return patient.medicalFormData;
+      if (patient.medicalHistory) {
+        return await orm.em.findOne(PatientMedicalHistory, {
+          id: patient.medicalHistory as any,
+        });
       }
     }
   }
@@ -236,7 +256,7 @@ export async function getAllDoctors(): Promise<Doctor[]> {
   return doctors;
 }
 
-export async function addWound(authId: string, formData: string): Promise<any> {
+export async function addWound(authId: string, formData: any): Promise<any> {
   const orm = await getOrm();
   const patient = await getPatient(authId);
   if (!patient) {
@@ -244,10 +264,32 @@ export async function addWound(authId: string, formData: string): Promise<any> {
   }
   const newWound = orm.em.create(Wound, {
     patient,
-    woundFormData: formData,
+    woundData: formData,
   });
   await orm.em.persistAndFlush(newWound);
   return newWound;
+}
+
+export async function deleteWound(authId: string, id: number): Promise<any> {
+  const orm = await getOrm();
+  const patient = await getPatient(authId);
+  if (!patient) {
+    return "Patient not found!";
+  }
+  const wound = await orm.em.findOne(Wound, { id });
+
+  // delete all appointments associated with this wound
+  const appointments = await orm.em.find(Appointment, { wound });
+  appointments.forEach((appointment) => {
+    orm.em.remove(appointment);
+  });
+
+  if (!wound) {
+    return "Wound not found!";
+  }
+
+  await orm.em.removeAndFlush(wound);
+  return "success";
 }
 
 export async function getWound(woundId: any): Promise<Wound> {
@@ -264,9 +306,55 @@ export async function getWounds(authId: string): Promise<Wound[]> {
   if (!patient) {
     return [];
   }
-  const wounds = await orm.em.find(Wound, { patient });
 
-  return wounds;
+  const wounds = await orm.em.find(Wound, {
+    patient,
+  });
+
+  let woundsWithData = [];
+  let apps = [];
+
+  for (var w in wounds) {
+    // get wound data
+    let data = await orm.em.find(WoundFormData, {
+      wound: wounds[w],
+    });
+    // get appointment for wound
+    let appointments = await orm.em.find(Appointment, {
+      wound: wounds[w],
+    });
+
+    appointments = appointments.map((app) => {
+      if (app.wound.id === wounds[w].id) {
+        return app;
+      } else {
+        return null;
+      }
+    });
+
+    for (var a in appointments) {
+      if (appointments[a]) {
+        let doc = await orm.em.findOne(Doctor, {
+          authId: appointments[a].doctor as any,
+        });
+
+        appointments[a].doctor = doc;
+      }
+    }
+
+    console.log(appointments);
+
+    for (var d in data) {
+      woundsWithData.push({
+        woundId: wounds[w].id,
+        woundDataId: data[d].id,
+        appointments: appointments,
+        ...data[d],
+      });
+    }
+  }
+
+  return woundsWithData;
 }
 
 export async function getAppointments(authId: string) {
@@ -301,21 +389,35 @@ export async function getAppointment(appointmentId: string) {
     const app = await orm.em.findOneOrFail(Appointment, {
       id: appointmentId as any,
     });
-    console.log(app);
-    return app;
+
+    const doc = await orm.em.findOne(Doctor, {
+      authId: app.doctor as any,
+    });
+
+    // get associated wound
+    const wound = await orm.em.findOne(Wound, {
+      id: app.wound as any,
+    });
+
+    // get associated wound data
+    const woundData = await orm.em.findOne(WoundFormData, {
+      id: wound.woundData as any,
+    });
+
+    return { appointment: app, doctor: doc, wound: woundData };
   }
 }
 
 export async function addAppointment(
   authId: string,
   woundId: string,
-  doctorId: string,
+  doctorData: any,
   formData: any
 ): Promise<any> {
   const orm = await getOrm();
 
   const wound = await getWound(woundId);
-  const doctor = await getDoctor(doctorId);
+  const doctor = await getDoctor(doctorData.authId);
 
   if (!wound) {
     return "Wound not found!";
@@ -341,5 +443,59 @@ export async function addAppointment(
     } catch (e) {
       return null;
     }
+  }
+}
+
+export async function addImageToAppointmentImages({ appointmendId, data }) {
+  const orm = await getOrm();
+
+  console.log(appointmendId);
+
+  const appointment = await orm.em.findOne(Appointment, {
+    id: appointmendId.appointmentId as any,
+  });
+
+  const images = appointment.info.images;
+  images.push(appointmendId.imageUrl);
+
+  appointment.info.images = images;
+
+  await orm.em.persistAndFlush(appointment);
+  return appointment;
+}
+
+export async function removeImageFromAppointmentImages(
+  appointmentId,
+  imageUrl
+) {
+  const orm = await getOrm();
+
+  const id = appointmentId.appointmentId;
+  const url = id.imageUrl;
+
+  console.log("appointmentId", id);
+
+  const appointment = await orm.em.findOne(Appointment, {
+    id: id as any,
+  });
+
+  const images = appointment.info.images;
+  images.splice(images.indexOf(url), 1);
+
+  appointment.info.images = images;
+
+  await orm.em.persistAndFlush(appointment);
+  return appointment;
+}
+
+export async function postAnnotations(appointmentId: string, annotations: any) {
+  const orm = await getOrm();
+  const appointment = await getAppointment(appointmentId);
+  if (!appointment) {
+    return null;
+  } else {
+    appointment.annotations = annotations;
+    await orm.em.persistAndFlush(appointment);
+    return appointment;
   }
 }

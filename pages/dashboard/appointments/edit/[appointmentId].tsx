@@ -1,23 +1,45 @@
-import { ClickableTile, Loading } from "carbon-components-react";
+import {
+  Button,
+  FileUploaderDropContainer,
+  Loading,
+  Tile,
+} from "carbon-components-react";
+import { useS3Upload } from "next-s3-upload";
+import dynamic from "next/dynamic";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
-import { getAppointment, getDoctor, getWound } from "../../../../common/api";
+import { IoAdd } from "react-icons/io5";
+import { RectangleSelector } from "react-image-annotation/lib/selectors";
 import apiCall from "../../../../common/api/ApiCall";
+import AnnotateImageModal from "../../../../components/AnnotateImageModal";
+import { Avatar } from "../../../../components/DoctorCard";
+import ImageCard, {
+  ImageCardContainer,
+} from "../../../../components/ImageCard";
+import { Container } from "../../../../components/ui/Container";
 import LayoutBase from "../../../../components/ui/navigation/layout";
-import { ArentFlex } from "../../../../components/ui/navigation/layout/ArentGrid";
-import { useAppointments, useDoctors, useUser } from "../../../../hooks/user";
-
-import dynamic from "next/dynamic";
-
-const ReactImageAnnotate = dynamic(() => import("react-image-annotate"), {
-  ssr: false,
-});
+import {
+  ArentFlex,
+  ArentGrid,
+} from "../../../../components/ui/navigation/layout/ArentGrid";
+import WoundSlider from "../../../../components/WoundSlider";
+import { useUser } from "../../../../hooks/user";
+import wound from "../../../api/patient/wound";
 
 export default function EditAppointment() {
   const user = useUser();
   const [appointment, setAppointment] = useState(null);
   const { appointmentId } = router.isReady && router.query;
+  const [removedUrls, setRemovedUrls] = useState([]);
+  const [addedUrls, setAddedUrls] = useState([]);
+  const [currentImage, setCurrentImage] = useState<string>();
+  const [openAnnotationModal, setOpenAnnotationModal] = useState(false);
+  const { uploadToS3 } = useS3Upload();
+
   console.log(appointmentId);
+  const [currentAnnotation, setCurrentAnnotation] = useState({});
+  const [annotations, setAnnotations] = useState([]);
+  const [annotationType, setAnnotationType] = useState("RECTANGLE");
 
   async function assignAppointment() {
     if (!appointmentId) return null;
@@ -26,11 +48,13 @@ export default function EditAppointment() {
         `/api/appointment/${appointmentId}`,
         "GET"
       );
-      if (_appointment) {
+      if (_appointment.appointment) {
         setAppointment(_appointment);
       }
     }
   }
+
+  console.log(appointment);
 
   useEffect(() => {
     if (!appointmentId) return null;
@@ -39,27 +63,145 @@ export default function EditAppointment() {
     }
   }, [appointmentId]);
 
-  if (!appointmentId || !appointment) {
+  if (!appointment) {
     return <Loading />;
   }
 
-  console.log(appointment);
+  const onSubmit = () => {
+    console.log("SUBMIT");
+  };
+
+  const onAddFile = async (files) => {
+    const urls = [];
+
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      const { url } = await uploadToS3(file);
+      const response = apiCall("/api/appointment/images/add", "POST", {
+        appointmentId: appointment.appointment.id,
+        imageUrl: url,
+      });
+      urls.push(url);
+    }
+    setAddedUrls([...addedUrls, ...urls]);
+
+    return urls;
+  };
+
+  const onDelete = async (file) => {
+    setRemovedUrls([...removedUrls, file]);
+    const response = await apiCall("/api/appointment/images/delete", "DELETE", {
+      appointmentId: appointment.appointment.id,
+      imageUrl: file,
+    });
+  };
 
   return (
     <LayoutBase
       title="Your Appointments"
       breadcrumbs={["Dashboard", "Appointments"]}
     >
-      <ArentFlex width="100%" align="center" justify="center">
-        <ReactImageAnnotate
-          regionClsList={["Alpha", "Beta", "Charlie", "Delta"]}
-          regionTagList={["tag1", "tag2", "tag3"]}
-          images={appointment.info.images.map((img, index) => ({
-            src: img,
-            name: "Image " + index + 1,
-          }))}
-        />
-      </ArentFlex>
+      <AnnotateImageModal
+        onClose={() => setOpenAnnotationModal(false)}
+        url={currentImage}
+        visible={openAnnotationModal}
+      />
+      <Container>
+        <ArentFlex direction="column" width="100%" gap={50}>
+          <h2 style={{ marginBottom: -30 }}>Meeting Information</h2>
+          <ArentGrid columns="1fr " gap={20}>
+            <Tile style={{ width: "100%", height: 250 }}>
+              <ArentGrid
+                style={{ height: "100%" }}
+                justify="start"
+                align="center"
+                columns="auto 1fr"
+                gap={30}
+              >
+                <Avatar src="https://thispersondoesnotexist.com/image" />
+                <ArentFlex direction="column" gap={10}>
+                  <small>
+                    Consultation for{" "}
+                    <b>{appointment.wound.woundLocation} wound</b> treatment{" "}
+                  </small>
+                  <h3>{appointment.doctor.name}</h3>
+                  <h4>
+                    {appointment.doctor.doctorData.specialization.label} |{" "}
+                    {appointment.doctor.doctorData.country}
+                  </h4>
+                  <ArentGrid
+                    align="center"
+                    columns="auto 1fr"
+                    gap={30}
+                    justify="start"
+                  >
+                    <h5>Time</h5>
+                    <h4>
+                      {new Date(appointment.appointment.date).toLocaleString()}
+                    </h4>
+                  </ArentGrid>
+                </ArentFlex>
+              </ArentGrid>
+              {/* <small>
+                Consultation for <b>{currentWound.woundLocation} wound</b>{" "}
+                treatment{" "}
+              </small> */}
+            </Tile>
+          </ArentGrid>
+          <h2 style={{ marginBottom: -30 }}>Images</h2>
+          <WoundSlider
+            cards={[
+              ...appointment.appointment.info.images
+                .concat(addedUrls)
+                .filter((img) => !removedUrls.includes(img))
+                .map((img) => (
+                  <ImageCard
+                    onStartAnnotate={() => {
+                      setCurrentImage(img);
+                      setOpenAnnotationModal(true);
+                    }}
+                    onDelete={() => onDelete(img)}
+                    src={img}
+                  />
+                )),
+              <ImageCardContainer>
+                <ArentFlex
+                  width="100%"
+                  height="100%"
+                  align="center"
+                  justify="center"
+                  direction="column"
+                  gap={20}
+                >
+                  <IoAdd size="50px" />
+                  <FileUploaderDropContainer
+                    multiple
+                    accept={[".jpg", ".png"]}
+                    labelText="Drag and drop"
+                    onAddFiles={(_, { addedFiles }) => {
+                      onAddFile(addedFiles);
+                    }}
+                    style={{ width: "100%" }}
+                    // name={field.value}
+                  />
+                </ArentFlex>
+              </ImageCardContainer>,
+            ]}
+            type={"solana"}
+          />
+          <h2 style={{ marginBottom: -30 }}>Messages</h2>
+          <ArentGrid columns="1fr" gap={20}>
+            <Tile style={{ width: "100%", height: 250 }}>
+              <ArentFlex
+                direction="column"
+                gap={10}
+                align="center"
+                justify="center"
+              ></ArentFlex>
+            </Tile>
+          </ArentGrid>
+        </ArentFlex>
+      </Container>
     </LayoutBase>
   );
 }

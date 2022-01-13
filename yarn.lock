@@ -7121,6 +7121,11 @@ k-choice-sort@^1.0.9:
   resolved "https://registry.yarnpkg.com/k-choice-sort/-/k-choice-sort-1.0.9.tgz#42bdc4ba14343839ec7d8f5d9f5ffa0b3f812b34"
   integrity sha512-gjie6urYoIE0ibWOwqP5qKiV8eKXtjReltAAfhQkEebe3GnrqP9htIK1gi4ZUzR3sIjUBiANMcpYdbjg5a8EbA==
 
+keen-slider@^6.6.3:
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/keen-slider/-/keen-slider-6.6.3.tgz#b99eb61aa2c4f3cae5274a3424e2a010b26b7081"
+  integrity sha512-IDJh3CNeiCY/0N/ht+4/TUUD0plS064ijO8AcQ2sJXS07PhJOnv7kNUVsQdNh+t8Vmmy3sJ+sHNubSGdrEcMlQ==
+
 keyv@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/keyv/-/keyv-3.1.0.tgz#ecc228486f69991e49e9476485a5be1e8fc5c4d9"

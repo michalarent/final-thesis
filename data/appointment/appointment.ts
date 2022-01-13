@@ -2,40 +2,13 @@ import { FormInput, IForm } from "../types";
 
 export const CreateOrUpdateAppointment: FormInput[] = [
   {
-    name: "urgent",
-    label: "Is the visit urgent?",
-    options: [
-      {
-        value: true,
-        label: "Yes",
-      },
-      {
-        value: false,
-        label: "No",
-      },
-    ],
-    value: "urgent",
-    type: "Radio",
-    placeholder: "Urgent",
-    span: 2,
-  },
-  {
-    name: "comment",
-    label: "Additional Comments",
-
-    value: "comment",
-    type: "MultiLineText",
-    placeholder: "Additional Comments",
-    span: 4,
-  },
-  {
     name: "Images",
     label: "Upload Images",
     value: "images",
     type: "MultiImage",
     placeholder: "Upload Images",
     isS3: true,
-    span: 6,
+    span: 2,
   },
   {
     name: "appointmentDay",
@@ -43,7 +16,7 @@ export const CreateOrUpdateAppointment: FormInput[] = [
     value: "appointmentDay",
     type: "ScheduleDay",
     placeholder: "Pick a Day",
-    span: 6,
+    span: 2,
   },
   {
     name: "appointmentTime",
@@ -51,6 +24,6 @@ export const CreateOrUpdateAppointment: FormInput[] = [
     value: "appointmentTime",
     type: "ScheduleTime",
     placeholder: "Pick a Time",
-    span: 6,
+    span: 2,
   },
 ];

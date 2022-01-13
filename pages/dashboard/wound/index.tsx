@@ -17,6 +17,7 @@ export default function Wounds() {
     return <Loading />;
   }
 
+  console.log(wounds);
   const handleModal = (woundId?: any) => {
     setCurrentWound(woundId);
     setOpenModal((val) => !val);

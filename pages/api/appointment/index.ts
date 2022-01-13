@@ -13,16 +13,14 @@ export default apiEndpoint({
     const response = await getAppointments(user);
     return response;
   },
-  POST: async ({ user, woundId, requestedDoctor, data }) => {
-    console.log("xD DAtA:", data);
-
+  POST: async ({ authId, woundId, requestedDoctor, data }) => {
     const response = await addAppointment(
-      user.authId,
-      data["0"].wound,
-      data["0"].requestedDoctor,
+      authId,
+      woundId,
+      requestedDoctor,
       data
     );
-    console.log(response);
+
     return response;
   },
 });

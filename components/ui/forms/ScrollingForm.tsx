@@ -58,30 +58,6 @@ export default function ScrollingForm({
 }) {
   const user = useUser();
 
-  async function fetchMedicalHistory(authId) {
-    try {
-      const medicalHistory = await apiCall(
-        "/api/patient/medical_history?user=" + user.authId,
-        "GET"
-      );
-      setInitialData(medicalHistory);
-      console.log(medicalHistory);
-      Object.keys(medicalHistory).forEach((key) => {
-        console.log(medicalHistory);
-
-        setValue(key, medicalHistory[key]);
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  useEffect(() => {
-    if (user.authId && !initialData) {
-      fetchMedicalHistory(user.authId);
-    }
-  }, [user]);
-
   polyfill();
   //   smoothscroll.polyfill();
 
@@ -108,13 +84,14 @@ export default function ScrollingForm({
     shouldUnregister: false,
   });
 
-  const values: Record<string, string> = { "": "" };
-
   const isLastStep = (step) => {
     return step === data?.length - 1;
   };
 
-  console.log(getValues());
+  if (!user?.authId) {
+    return <Loading />;
+  }
+
   function renderParam(
     param: FormInput,
     step: number,
@@ -204,9 +181,11 @@ export default function ScrollingForm({
     try {
       await apiCall("/api/patient/medical_history", "POST", {
         data,
+        user,
       });
     } catch (e) {
       setError(e.message);
+      setSuccess(false);
     } finally {
       setSubmitLoading(false);
       setSuccess(true);

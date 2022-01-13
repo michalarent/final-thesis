@@ -80,7 +80,6 @@ const options = getDaysInMonthArray(0, 2021).map((day) => ({
 const generateOptions = (month: number, year: number, type: string) => {
   switch (type) {
     case "day":
-      console.log(type);
       return getDaysInMonthArray(month, year).map((day) => {
         return { value: day, label: day.toString() };
       });
@@ -102,25 +101,16 @@ const generateOptions = (month: number, year: number, type: string) => {
         return { value: month.value, label: month.label };
       });
     case "year":
-      return [
-        { value: "2020", label: "2020" },
-        { value: "2021", label: "2021" },
-        { value: "2022", label: "2022" },
-        { value: "2023", label: "2023" },
-        { value: "2024", label: "2024" },
-        { value: "2025", label: "2025" },
-        { value: "2026", label: "2026" },
-        { value: "2027", label: "2027" },
-        { value: "2028", label: "2028" },
-        { value: "2029", label: "2029" },
-        { value: "2030", label: "2030" },
-      ].map((year) => {
-        return { value: year.value, label: year.label };
-      });
+      let years = [];
+      for (let i = 1922; i < 1922 + 100; i++) {
+        years.push({ value: i, label: i.toString() });
+      }
+
+      return years;
   }
 };
 
-export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
+export const RENDERERS = {
   OneLineText: (control, errors, param) => (
     <Controller
       defaultValue={""}
@@ -139,6 +129,7 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
       )}
     />
   ),
+
   MultiLineText: (control, errors, param) => (
     <Controller
       name={param.value}
@@ -149,7 +140,6 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
           labelText={param.label}
           required={param.required}
           onChange={onChange}
-          type="textarea"
         />
       )}
     />
@@ -207,12 +197,6 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
       rules={{ required: true }}
       render={({ field: { onChange, value } }) => (
         <>
-          {console.log(param.name, options)}
-          {console.log(
-            "XDDD",
-            options.find((c) => c.label === value)
-          )}
-
           <label className="bx--label">{param.label}</label>
           <Select
             menuPortalTarget={document.body}
@@ -249,7 +233,7 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
         <RadioButtonGroup
           name={param.name}
           legendText={param.label}
-          defaultSelected={value}
+          defaultSelected={param.default}
           valueSelected={value}
           onChange={onChange}
         >
@@ -302,6 +286,10 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
             required={param.constraints?.required}
             {...field}
             styles={SELECT_STYLES}
+            onChange={(val) => field.onChange(val.label)}
+            value={param.options.find(
+              (c) => c.label.toLowerCase() === field.value?.toLowerCase()
+            )}
             options={param.options.map((option) => ({
               label: option.label,
               value: option.value,
@@ -331,26 +319,16 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
             {...field}
             defaultValue={field.value
               ?.filter((val) => param.options.find((v) => v.label === val))
-              .map(
-                (option) => (
-                  console.log(option),
-                  {
-                    label: option,
-                    value: option,
-                  }
-                )
-              )}
+              .map((option) => ({
+                label: option,
+                value: option,
+              }))}
             value={field.value
               ?.filter((val) => param.options.find((v) => v.label === val))
-              .map(
-                (option) => (
-                  console.log(option),
-                  {
-                    label: option,
-                    value: option,
-                  }
-                )
-              )}
+              .map((option) => ({
+                label: option,
+                value: option,
+              }))}
             onChange={(val) => field.onChange(val.map((v) => v.value))}
             styles={SELECT_STYLES}
             menuPortalTarget={document.body}
@@ -374,8 +352,15 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
       control={control}
       rules={param.constraints}
       render={({ field }) => (
-        <ArentFlex direction="column" align="start" justify="start">
-          <label className="bx--label">{param.label}</label>
+        <ArentFlex
+          direction="column"
+          align="start"
+          justify="start"
+          width="100%"
+        >
+          <label style={{ width: "100%" }} className="bx--label">
+            {param.label}
+          </label>
 
           <FileUploaderDropContainer
             multiple
@@ -384,15 +369,15 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
             onAddFiles={(_, { addedFiles }) => {
               field.onChange(addedFiles);
             }}
+            style={{ width: "100%" }}
             name={field.value}
           />
 
-          {console.log(field.value)}
           {field.value?.length &&
             field.value.map((file: File) => (
               <FileUploaderItem
                 status={"complete"}
-                style={{ height: 60 }}
+                style={{ height: 60, width: "100%" }}
                 name={file.name}
               />
             ))}
@@ -409,7 +394,10 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
         function getFormattedDate(date) {
           let year = date.getFullYear();
           let month = (1 + date.getMonth()).toString().padStart(2, "0");
-          let day = date.getDate().toString().padStart(2, "0");
+          let day = date
+            .getDate()
+            .toString()
+            .padStart(2, "0");
 
           return month + "/" + day + "/" + year;
         }
@@ -418,6 +406,42 @@ export const RENDERERS: Record<InputType, (param: FormInput) => any> = {
             datePickerType="single"
             onChange={field.onChange}
             minDate={getFormattedDate(new Date(Date.now()))}
+            defaultValue={getFormattedDate(new Date(Date.now()))}
+          >
+            <DatePickerInput
+              id="date-picker"
+              placeholder="mm/dd/yyyy"
+              labelText={param.label}
+            />
+          </DatePicker>
+        );
+      }}
+    />
+  ),
+  DatePicker: (control, errors, param) => (
+    <Controller
+      name={param.value}
+      control={control}
+      rules={param.constraints}
+      render={({ field }) => {
+        function getFormattedDate(date) {
+          let year = date.getFullYear();
+          let month = (1 + date.getMonth()).toString().padStart(2, "0");
+          let day = date
+            .getDate()
+            .toString()
+            .padStart(2, "0");
+
+          return month + "/" + day + "/" + year;
+        }
+        return (
+          <DatePicker
+            datePickerType="single"
+            onChange={field.onChange}
+            maxDate={getFormattedDate(new Date(Date.now()))}
+            minDate={getFormattedDate(
+              new Date(Date.now() - 100 * 365 * 24 * 60 * 60 * 1000)
+            )}
             defaultValue={getFormattedDate(new Date(Date.now()))}
           >
             <DatePickerInput

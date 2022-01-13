@@ -5,9 +5,6 @@ export default async function apiCall<TRequest, TResponse>(
   method: HttpMethod,
   body?: TRequest
 ): Promise<TResponse> {
-  console.log(method);
-  console.log(url);
-  console.log(body);
   const response = await fetch(url, {
     method,
     headers: {

@@ -6,31 +6,23 @@ import {
   Collection,
   MikroORM,
 } from "@mikro-orm/core";
-import { IUserProfile } from "../hooks/user";
+
+import { IUser } from "../types/user";
 
 @Entity()
 export default class User {
-  @PrimaryKey({ unique: true, nullable: false })
+  @Property()
   email: string;
 
   @Property()
   name: string;
 
-  @Property({ unique: true })
+  @PrimaryKey({ unique: true })
   authId: string;
 
-  @Property()
-  imageUrl: string;
-
-  @Property({ nullable: false })
-  createdAt: Date = new Date();
-
-  static getEntity(
-    orm: MikroORM<any>,
-    { authId }: IUserProfile
-  ): Promise<User> {
+  static getEntity(orm: MikroORM<any>, { user }: IUser): Promise<User> {
     return orm.em.findOneOrFail(User, {
-      authId,
+      authId: user.authId,
     });
   }
 }

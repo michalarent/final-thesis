@@ -8,6 +8,7 @@ import {
   Property,
 } from "@mikro-orm/core";
 import { Doctor } from "./Doctor";
+import Image from "./Image";
 
 import { Treatment } from "./Treatment";
 import { Wound } from "./Wound";
@@ -26,9 +27,19 @@ export class Appointment {
   @Property({ type: "jsonb" })
   info: Record<string, any>;
 
-  @ManyToMany(() => Treatment, (treatment) => treatment.appointments)
+  @ManyToMany(
+    () => Treatment,
+    (treatment) => treatment.appointments
+  )
   treatments = new Collection<Treatment>(this);
 
   @ManyToOne({ entity: () => Doctor })
   doctor: Doctor;
+
+  @OneToMany(
+    () => Image,
+    (img) => img.appointment,
+    { mappedBy: "appointment", orphanRemoval: true, nullable: true }
+  )
+  images = new Collection<Image>(this);
 }

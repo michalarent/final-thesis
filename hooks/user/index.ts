@@ -8,15 +8,7 @@ import { getMedicalHistory, getPatient } from "../../common/api";
 import { useEffect, useState } from "react";
 import React from "react";
 import _ from "lodash";
-
-export interface IUserProfile {
-  email: string;
-  name: string;
-  new: boolean;
-  createdAt: Date;
-  imageUrl?: string;
-  authId: string;
-}
+import { IUser } from "../../types/user";
 
 const userFetcher = (url) =>
   fetch(url)
@@ -34,10 +26,10 @@ export function useUser(
   }: { redirectIfFound?: string; redirectTo?: string } = {
     redirectTo: "/api/auth/login",
   }
-): IUserProfile {
+): IUser {
   const { data, error } = useSWR("/api/user", userFetcher);
 
-  const user = data?.user as IUserProfile;
+  const user = data?.user as IUser;
 
   return user
     ? {

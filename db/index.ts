@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import config from "./config";
+import "reflect-metadata";
 
 let orm: MikroORM;
 

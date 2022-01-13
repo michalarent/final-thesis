@@ -3,7 +3,7 @@
     "name": "default",
     "type": "postgres",
     "dbName": "wound-healing-app",
-    "host": "db",
+    "host": "localhost",
     "user": "postgres",
     "password": "localdev",
     "entities": ["./db/*.ts"],
