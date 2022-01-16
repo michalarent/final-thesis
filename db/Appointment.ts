@@ -39,7 +39,13 @@ export class Appointment {
   @OneToMany(
     () => Image,
     (img) => img.appointment,
-    { mappedBy: "appointment", orphanRemoval: true, nullable: true }
+    {
+      mappedBy: "appointment",
+      orphanRemoval: true,
+      nullable: false,
+
+      default: [],
+    }
   )
   images = new Collection<Image>(this);
 }

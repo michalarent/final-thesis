@@ -29,6 +29,7 @@
     "carbon-components-react": "^7.48.1",
     "carbon-icons": "^7.0.7",
     "dotenv": "^10.0.0",
+    "etag": "^1.8.1",
     "express": "^4.17.1",
     "express-pino-logger": "^6.0.0",
     "framer-motion": "^4.1.17",

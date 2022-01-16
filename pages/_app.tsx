@@ -18,8 +18,13 @@ export default function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <UserProvider>
-      <AuthComponent {...pageProps} />
-    </UserProvider>
+    <Auth0Provider
+      domain={"http://localhost:3000"}
+      clientId={"lOSQR0BFkBQmpy18SF9FLwW9KtCx9jk1"}
+    >
+      <UserProvider>
+        <AuthComponent {...pageProps} />
+      </UserProvider>
+    </Auth0Provider>
   );
 }

@@ -14,6 +14,11 @@ import { Appointment } from "../../db/Appointment";
 import { MedicalHistoryForm } from "../../data/medical-info";
 import PatientMedicalHistory from "../../db/PatientMedicalHistory";
 import WoundFormData from "../../db/WoundFormData";
+import appointment from "../../pages/api/appointment";
+import { Collection } from "@mikro-orm/core";
+import Image from "../../db/Image";
+import AppointmentId from "../../pages/api/appointment/[appointmentId]";
+import { Annotations } from "../../db/Annotations";
 
 type ApiEndpointEnvironment = {
   req: NextApiRequest;
@@ -373,6 +378,7 @@ export async function getAppointments(authId: string) {
       });
       for (var a in app) {
         appointments.push(app[a]);
+        console.log(a);
       }
     }
     return appointments;
@@ -390,6 +396,10 @@ export async function getAppointment(appointmentId: string) {
       id: appointmentId as any,
     });
 
+    const images = await orm.em.find(Image, {
+      appointment: app,
+    });
+
     const doc = await orm.em.findOne(Doctor, {
       authId: app.doctor as any,
     });
@@ -404,7 +414,9 @@ export async function getAppointment(appointmentId: string) {
       id: wound.woundData as any,
     });
 
-    return { appointment: app, doctor: doc, wound: woundData };
+    console.log(app);
+
+    return { appointment: app, images: images, doctor: doc, wound: woundData };
   }
 }
 
@@ -435,10 +447,19 @@ export async function addAppointment(
         info: {
           urgent: formData.urgent,
           additionalComments: formData.comment,
-          images: formData.images,
         },
       });
-      await orm.em.persistAndFlush(newAppointment);
+
+      const newImages = formData.images.map((image) => {
+        return orm.em.create(Image, {
+          url: image,
+          appointment: newAppointment,
+        });
+      });
+
+      newAppointment.images = newImages;
+
+      await orm.em.persistAndFlush([newAppointment, ...newImages]);
       return newAppointment;
     } catch (e) {
       return null;
@@ -446,22 +467,18 @@ export async function addAppointment(
   }
 }
 
-export async function addImageToAppointmentImages({ appointmendId, data }) {
+export async function addImageToAppointmentImages(appointmentId, imageUrl) {
   const orm = await getOrm();
 
-  console.log(appointmendId);
+  console.log("THIS IS HERE", appointmentId);
 
-  const appointment = await orm.em.findOne(Appointment, {
-    id: appointmendId.appointmentId as any,
+  const newImage = orm.em.create(Image, {
+    url: imageUrl,
+    appointment: appointmentId,
   });
 
-  const images = appointment.info.images;
-  images.push(appointmendId.imageUrl);
-
-  appointment.info.images = images;
-
-  await orm.em.persistAndFlush(appointment);
-  return appointment;
+  await orm.em.persistAndFlush(newImage);
+  return newImage;
 }
 
 export async function removeImageFromAppointmentImages(
@@ -473,29 +490,79 @@ export async function removeImageFromAppointmentImages(
   const id = appointmentId.appointmentId;
   const url = id.imageUrl;
 
-  console.log("appointmentId", id);
-
-  const appointment = await orm.em.findOne(Appointment, {
-    id: id as any,
+  const image = await orm.em.findOne(Image, {
+    url: appointmentId.imageUrl,
   });
 
-  const images = appointment.info.images;
-  images.splice(images.indexOf(url), 1);
+  const annotations = await orm.em.find(Annotations, {
+    image,
+  });
 
-  appointment.info.images = images;
-
-  await orm.em.persistAndFlush(appointment);
-  return appointment;
+  await orm.em.removeAndFlush(annotations);
+  await orm.em.remove(image);
 }
 
-export async function postAnnotations(appointmentId: string, annotations: any) {
+export async function addAnnotationsToImage(imageId: any, annotations: any) {
   const orm = await getOrm();
-  const appointment = await getAppointment(appointmentId);
-  if (!appointment) {
-    return null;
-  } else {
-    appointment.annotations = annotations;
-    await orm.em.persistAndFlush(appointment);
-    return appointment;
+
+  const image = await orm.em.findOne(Image, {
+    id: imageId,
+  });
+
+  const oldAnnotations = await orm.em.findOne(Annotations, {
+    image,
+  });
+
+  if (oldAnnotations) {
+    await orm.em.removeAndFlush(oldAnnotations);
   }
+
+  const _annotations = await orm.em.create(Annotations, {
+    image,
+    data: annotations,
+  });
+
+  await orm.em.persistAndFlush(_annotations);
+
+  return { code: "success" };
+}
+
+export async function removeAnnotationsFromImage(imageId: any) {
+  const orm = await getOrm();
+
+  const image = await orm.em.findOne(Image, {
+    id: imageId,
+  });
+
+  if (!image) {
+    return "Image not found!";
+  }
+
+  const annotations = await orm.em.find(Annotations, {
+    image,
+  });
+
+  if (annotations.length > 0) {
+    await orm.em.remove(annotations);
+  }
+
+  return "success";
+}
+
+export async function getAnnotations(imageId: any) {
+  const orm = await getOrm();
+
+  const image = await orm.em.findOne(Image, {
+    id: imageId,
+  });
+
+  if (!image) {
+    return { error: "Image not found!" };
+  }
+
+  const annotations = await orm.em.findOne(Annotations, {
+    image,
+  });
+
+  return annotations;
 }

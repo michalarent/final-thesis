@@ -3,6 +3,7 @@ import {
   IdentifiedReference,
   OneToOne,
   PrimaryKey,
+  Property,
 } from "@mikro-orm/core";
 import Image from "./Image";
 
@@ -11,8 +12,11 @@ export class Annotations {
   @PrimaryKey()
   id!: number;
 
+  @Property({ type: "jsonb" })
+  data!: Record<string, any>;
+
   @OneToOne({ entity: () => Image }, (image) => image.annotations, {
     wrappedReference: true,
   })
-  patient!: IdentifiedReference<Image>;
+  image!: IdentifiedReference<Image>;
 }

@@ -23,6 +23,7 @@ import {
 } from "carbon-components-react";
 import React from "react";
 import { useRouter } from "next/router";
+import { IoExit } from "react-icons/io5";
 
 export default function Topbar({ title }: { title: string }) {
   const { logout } = useAuth0();
@@ -53,6 +54,14 @@ export default function Topbar({ title }: { title: string }) {
                 onClick={() => {}}
               >
                 <Notification20 />
+              </HeaderGlobalAction>
+
+              <HeaderGlobalAction
+                aria-label="Logout"
+                onClick={() => logout()}
+                tooltipAlignment="end"
+              >
+                <IoExit size="20px" />
               </HeaderGlobalAction>
             </HeaderGlobalBar>
             {/* <SideNav

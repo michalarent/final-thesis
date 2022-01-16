@@ -16,7 +16,7 @@ export default class Image {
   @Property({ type: "string" })
   url!: string;
 
-  @OneToOne({ inversedBy: "patient", orphanRemoval: true, nullable: true })
+  @OneToOne({ inversedBy: "image", orphanRemoval: true, nullable: true })
   annotations: Annotations;
 
   @ManyToOne({ entity: () => Appointment }, { nullable: true })

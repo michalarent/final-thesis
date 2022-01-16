@@ -36,14 +36,28 @@ export default function Home() {
 
   const ready = basicsReady && patientDataReady && doctorDataReady;
   console.log("Consolidated patient info", patientData);
+  console.log("Doctor data:", doctorData);
 
   if (!ready) {
     return <Loading />;
   }
 
-  if (ready) {
+  if (ready && doctorData.value.isDoctor) {
+    <LayoutBase title="Doctor's Dashboard" breadcrumbs={["Dashboard"]}>
+      <Container>
+        <ArentFlex
+          direction="column"
+          height="100%"
+          width="100%"
+          gap={20}
+        ></ArentFlex>
+      </Container>
+    </LayoutBase>;
+  }
+
+  if (ready && patientData.value.isPatient) {
     return (
-      <LayoutBase title="Dashboard" breadcrumbs={["Dashboard"]}>
+      <LayoutBase title="Patient's Dashboard" breadcrumbs={["Dashboard"]}>
         {showModal && allDoctors && (
           <Modal
             passiveModal

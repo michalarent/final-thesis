@@ -3,11 +3,8 @@ import apiEndpoint, {
 } from "../../../../common/api";
 
 export default apiEndpoint({
-  POST: async (appointmendId, imageUrl) => {
-    const response = await addImageToAppointmentImages({
-      appointmendId,
-      data: imageUrl,
-    });
+  POST: async ({ appointmentId, imageUrl }) => {
+    const response = await addImageToAppointmentImages(appointmentId, imageUrl);
 
     return response;
   },

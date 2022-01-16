@@ -2,6 +2,7 @@ import {
   Button,
   FileUploaderDropContainer,
   Loading,
+  TextInput,
   Tile,
 } from "carbon-components-react";
 import { useS3Upload } from "next-s3-upload";
@@ -12,6 +13,7 @@ import { IoAdd } from "react-icons/io5";
 import { RectangleSelector } from "react-image-annotation/lib/selectors";
 import apiCall from "../../../../common/api/ApiCall";
 import AnnotateImageModal from "../../../../components/AnnotateImageModal";
+import ChatBox from "../../../../components/ChatBox";
 import { Avatar } from "../../../../components/DoctorCard";
 import ImageCard, {
   ImageCardContainer,
@@ -24,6 +26,8 @@ import {
 } from "../../../../components/ui/navigation/layout/ArentGrid";
 import WoundSlider from "../../../../components/WoundSlider";
 import { useUser } from "../../../../hooks/user";
+import { colors } from "../../../../theme/colors";
+import appointment from "../../../api/appointment";
 import wound from "../../../api/patient/wound";
 
 export default function EditAppointment() {
@@ -32,7 +36,7 @@ export default function EditAppointment() {
   const { appointmentId } = router.isReady && router.query;
   const [removedUrls, setRemovedUrls] = useState([]);
   const [addedUrls, setAddedUrls] = useState([]);
-  const [currentImage, setCurrentImage] = useState<string>();
+  const [currentImage, setCurrentImage] = useState<any>();
   const [openAnnotationModal, setOpenAnnotationModal] = useState(false);
   const { uploadToS3 } = useS3Upload();
 
@@ -77,13 +81,15 @@ export default function EditAppointment() {
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
       const { url } = await uploadToS3(file);
-      const response = apiCall("/api/appointment/images/add", "POST", {
+      const response = await apiCall("/api/appointment/images/add", "POST", {
         appointmentId: appointment.appointment.id,
         imageUrl: url,
       });
-      urls.push(url);
+      console.log(response);
+      urls.push(response);
     }
     setAddedUrls([...addedUrls, ...urls]);
+    console.log(addedUrls);
 
     return urls;
   };
@@ -103,7 +109,7 @@ export default function EditAppointment() {
     >
       <AnnotateImageModal
         onClose={() => setOpenAnnotationModal(false)}
-        url={currentImage}
+        image={currentImage}
         visible={openAnnotationModal}
       />
       <Container>
@@ -149,19 +155,24 @@ export default function EditAppointment() {
             </Tile>
           </ArentGrid>
           <h2 style={{ marginBottom: -30 }}>Images</h2>
+          <p style={{ marginBottom: -30 }}>
+            Are your images clear? Or perhaps there's something that you would
+            like to highlight on the image? Access the context menu in the
+            top-right corner of the image to annotate it.
+          </p>
           <WoundSlider
             cards={[
-              ...appointment.appointment.info.images
+              ...appointment.images
                 .concat(addedUrls)
-                .filter((img) => !removedUrls.includes(img))
+                .filter((img) => !removedUrls.includes(img.url))
                 .map((img) => (
                   <ImageCard
                     onStartAnnotate={() => {
                       setCurrentImage(img);
                       setOpenAnnotationModal(true);
                     }}
-                    onDelete={() => onDelete(img)}
-                    src={img}
+                    onDelete={() => onDelete(img.url)}
+                    src={img.url}
                   />
                 )),
               <ImageCardContainer>
@@ -190,24 +201,19 @@ export default function EditAppointment() {
             type={"solana"}
           />
           <h2 style={{ marginBottom: -30 }}>Messages</h2>
-          <ArentGrid columns="1fr" gap={20}>
-            <Tile style={{ width: "100%", height: 250 }}>
-              <ArentFlex
-                direction="column"
-                gap={10}
-                align="center"
-                justify="center"
-              ></ArentFlex>
-            </Tile>
-          </ArentGrid>
+          <p style={{ marginBottom: -30 }}>
+            Leave your doctor a message to let them know what you think.
+          </p>
+          <ChatBox
+            sender={user.authId}
+            receiver={appointment.doctor.authId}
+            messages={[]}
+            onSendMessage={() => {
+              console.log("SEND MESSAGE");
+            }}
+          />
         </ArentFlex>
       </Container>
     </LayoutBase>
   );
 }
-
-//{
-//   src: "https://placekitten.com/408/287",
-//   name: "Image 1",
-//   regions: []
-// }

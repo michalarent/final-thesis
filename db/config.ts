@@ -11,6 +11,8 @@ import PatientMedicalHistory from "./PatientMedicalHistory";
 import WoundFormData from "./WoundFormData";
 import Image from "./Image";
 import { Annotations } from "./Annotations";
+import { Chat } from "./Chat";
+import { ChatMessage } from "./ChatMessage";
 
 const { host, user, password, dbName } = ORMCONFIG[0];
 const config: Options = {
@@ -31,12 +33,16 @@ const config: Options = {
     Appointment,
     Image,
     Annotations,
+    Chat,
+    ChatMessage,
   ],
   discovery: {
     disableDynamicFileAccess: false,
     requireEntitiesArray: true,
     warnWhenNoEntities: true,
   },
+  useBatchInserts: false,
+  useBatchUpdates: false,
 
   debug: false, //process.env.NODE_ENV === "development"
 };
