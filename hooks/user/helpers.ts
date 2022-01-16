@@ -38,3 +38,9 @@ export async function deleteWoundFromBackend(
     "DELETE"
   );
 }
+
+export async function getDoctorsAppointmentsFromBackend(
+  authId: string
+): Promise<any> {
+  return await apiCall(`/api/doctor/appointment?user=${authId}`, "GET");
+}

@@ -152,8 +152,10 @@ export async function getPatient(authId: string): Promise<Patient> {
 
 export async function getDoctor(authId: string): Promise<Doctor> {
   if (!authId) return null;
+  console.log("getDoctor", authId);
   const orm = await getOrm();
-  const doctor = await orm.em.findOne(Doctor, { authId });
+  const doctor = await orm.em.findOne(Doctor, { authId: authId });
+  console.log(doctor);
 
   return doctor;
 }

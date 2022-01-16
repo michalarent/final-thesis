@@ -46,8 +46,10 @@ const SentMessage = styled.div`
 `;
 
 const ReceivedMessage = styled.div`
-  background: gray;
-  color: black;
+  line-height: 24px;
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 25px;
   background: ${colors.border};
 
   &:before {
@@ -64,21 +66,21 @@ const ReceivedMessage = styled.div`
     border-bottom-right-radius: 10px;
   }
   & p {
-    
     word-wrap: break-word;
-    margin-bottom: 12px;
+    font-weight: normal;
     line-height: 24px;
     position: relative;
-    padding: 10px 20px;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
     border-radius: 25px;
+    color: black;
 
     &:before,
     &:after {
       content: "";
       position: absolute;
       bottom: 0;
-      height: 25px;
     }
+  }
 `;
 
 const handleWhoIsWho = (messages, sender, receiver) => {
@@ -188,16 +190,20 @@ export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
                   </ArentGrid>
                 ) : (
                   <ArentGrid columns="1fr 1fr">
-                    <div
-                      style={{
-                        width: "100%",
-                        padding: 10,
-                        backgroundColor: colors.border,
-                        borderRadius: 10,
-                      }}
+                    <ArentFlex
+                      direction="column"
+                      gap={4}
+                      align="flex-end"
+                      width="100%"
+                      style={{ margin: "10px 0" }}
                     >
-                      {message.text}
-                    </div>
+                      <span style={{ opacity: 0.5 }}>
+                        Sender | {message.time}
+                      </span>
+                      <ReceivedMessage>
+                        <p>{message.text}</p>
+                      </ReceivedMessage>
+                    </ArentFlex>
                     <div />
                   </ArentGrid>
                 )

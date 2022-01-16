@@ -16,6 +16,7 @@ import {
   getDoctorFromBackend,
   getMedicalHistoryFromBackend,
   getWoundsFromBackend,
+  getDoctorsAppointmentsFromBackend,
 } from "./helpers";
 import { ConsolidatedPatientInfo } from "./types";
 
@@ -26,11 +27,12 @@ async function fetchUserInfo() {
 }
 
 async function fetchPatientInfo(authId): Promise<ConsolidatedPatientInfo> {
-  const patient = await getPatientFromBackend(authId);
+  const parsedId = authId.split("patient_")[1];
+  const patient = await getPatientFromBackend(parsedId);
 
   if (patient && patient.authId) {
-    const medicalHistory = await getMedicalHistoryFromBackend(authId);
-    const wounds = await getWoundsFromBackend(authId);
+    const medicalHistory = await getMedicalHistoryFromBackend(parsedId);
+    const wounds = await getWoundsFromBackend(parsedId);
 
     return {
       isPatient: true,
@@ -50,9 +52,11 @@ async function fetchPatientInfo(authId): Promise<ConsolidatedPatientInfo> {
 }
 
 async function fetchDoctorInfo(authId: string) {
-  const doctor = await getDoctorFromBackend(authId);
+  const parsedId = authId.split("doctor_")[1];
+  const doctor = await getDoctorFromBackend(parsedId);
 
   if (doctor) {
+    const appointments = await getDoctorsAppointmentsFromBackend(parsedId);
     return {
       isDoctor: true,
       doctor: {
@@ -60,7 +64,7 @@ async function fetchDoctorInfo(authId: string) {
         email: doctor.email,
         name: doctor.name,
         authId: doctor.authId,
-        appointments: doctor.appointments,
+        appointments,
       },
     };
   } else {
@@ -73,13 +77,15 @@ async function fetchDoctorInfo(authId: string) {
 export default function useUserInfo() {
   const user = useLoaderSWR(`/api/user`, fetchUserInfo);
   const patient = useLoaderSWR(
-    user.status === "ready" ? `${user.value.user.authId}` : null,
+    user.status === "ready" ? `patient_${user.value.user.authId}` : null,
     fetchPatientInfo
   );
   const doctor = useLoaderSWR(
-    user.status === "ready" ? `${user.value.user.authId}` : null,
+    user.status === "ready" ? `doctor_${user.value.user.authId}` : null,
     fetchDoctorInfo
   );
+
+  console.log(doctor);
 
   return { basics: user, patientData: patient, doctorData: doctor };
 }

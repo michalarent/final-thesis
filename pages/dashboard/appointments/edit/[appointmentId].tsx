@@ -26,12 +26,14 @@ import {
 } from "../../../../components/ui/navigation/layout/ArentGrid";
 import WoundSlider from "../../../../components/WoundSlider";
 import { useUser } from "../../../../hooks/user";
+import usePatientInfo from "../../../../hooks/user/usePatientInfo";
 import { colors } from "../../../../theme/colors";
 import appointment from "../../../api/appointment";
 import wound from "../../../api/patient/wound";
 
 export default function EditAppointment() {
   const user = useUser();
+  const { basics, patientData, doctorData } = usePatientInfo();
   const [appointment, setAppointment] = useState(null);
   const { appointmentId } = router.isReady && router.query;
   const [removedUrls, setRemovedUrls] = useState([]);
@@ -204,14 +206,31 @@ export default function EditAppointment() {
           <p style={{ marginBottom: -30 }}>
             Leave your doctor a message to let them know what you think.
           </p>
-          <ChatBox
-            sender={user.authId}
-            receiver={appointment.doctor.authId}
-            messages={[]}
-            onSendMessage={() => {
-              console.log("SEND MESSAGE");
-            }}
-          />
+          {doctorData &&
+          doctorData.status === "ready" &&
+          doctorData.value.isDoctor &&
+          patientData.status === "ready" &&
+          !patientData.value.isPatient ? (
+            <ChatBox
+              sender={user.authId}
+              receiver={
+                doctorData.value.doctor.appointments.find(
+                  (app) => app.id == appointmentId
+                ).wound.patient.authId
+              }
+              messages={undefined}
+              onSendMessage={undefined}
+            />
+          ) : (
+            <ChatBox
+              sender={user.authId}
+              receiver={appointment.doctor.authId}
+              messages={[]}
+              onSendMessage={() => {
+                console.log("SEND MESSAGE");
+              }}
+            />
+          )}
         </ArentFlex>
       </Container>
     </LayoutBase>

@@ -42,17 +42,99 @@ export default function Home() {
     return <Loading />;
   }
 
-  if (ready && doctorData.value.isDoctor) {
-    <LayoutBase title="Doctor's Dashboard" breadcrumbs={["Dashboard"]}>
-      <Container>
-        <ArentFlex
-          direction="column"
-          height="100%"
-          width="100%"
-          gap={20}
-        ></ArentFlex>
-      </Container>
-    </LayoutBase>;
+  if (ready && !patientData.value.isPatient && doctorData.value.isDoctor) {
+    return (
+      <LayoutBase title="Doctor's Dashboard" breadcrumbs={["Dashboard"]}>
+        <Container>
+          <ArentFlex direction="column" height="100%" width="100%" gap={20}>
+            <Tile>
+              <WoundSlider
+                cards={doctorData.value.doctor.appointments.map((app) => {
+                  return (
+                    <div>
+                      <ArentFlex direction="column" gap={10} height="100%">
+                        <Button
+                          onClick={() =>
+                            router.push(
+                              `/dashboard/appointments/edit/${app.id}`
+                            )
+                          }
+                        >
+                          Go to appointment details
+                        </Button>
+                        <div>{app.date}</div>
+                        <div>Images sent: {app.images.length}</div>
+                        <div>Patient email: {app.wound.patient.email}</div>
+                        <div>
+                          Patient declared name:{" "}
+                          {app.wound.patient.medicalHistory.firstName}{" "}
+                          {app.wound.patient.medicalHistory.lastName}
+                        </div>
+                        <div>
+                          Patient country:{" "}
+                          {app.wound.patient.medicalHistory.country}{" "}
+                        </div>
+                        <div>
+                          {" "}
+                          Gender: {app.wound.patient.medicalHistory.gender}
+                        </div>
+                        <div>
+                          {" "}
+                          Allergies:{" "}
+                          {app.wound.patient.medicalHistory.allergies
+                            ? app.wound.patient.medicalHistory.allergies.map(
+                                (al) => <span>{al} </span>
+                              )
+                            : "None"}
+                        </div>
+
+                        <div>
+                          {" "}
+                          Medications:{" "}
+                          {app.wound.patient.medicalHistory.medications
+                            ? app.wound.patient.medicalHistory.medications.map(
+                                (al) => <span>{al} </span>
+                              )
+                            : "None"}
+                        </div>
+                        <div>
+                          {" "}
+                          Blood type:{" "}
+                          {app.wound.patient.medicalHistory.bloodType
+                            ? app.wound.patient.medicalHistory.bloodType
+                            : "Not provided"}
+                        </div>
+                        <div>
+                          {" "}
+                          Smoker?{" "}
+                          {app.wound.patient.medicalHistory.isSmoker
+                            ? "Yes"
+                            : "No"}
+                        </div>
+                        <div>
+                          {" "}
+                          Diabetic?{" "}
+                          {app.wound.patient.medicalHistory.isDiabetic
+                            ? "Yes"
+                            : "No"}
+                        </div>
+                        <div>
+                          {" "}
+                          Alcoholic?{" "}
+                          {app.wound.patient.medicalHistory.isAlcoholic
+                            ? "Yes"
+                            : "No"}
+                        </div>
+                      </ArentFlex>
+                    </div>
+                  );
+                })}
+              ></WoundSlider>
+            </Tile>
+          </ArentFlex>
+        </Container>
+      </LayoutBase>
+    );
   }
 
   if (ready && patientData.value.isPatient) {
