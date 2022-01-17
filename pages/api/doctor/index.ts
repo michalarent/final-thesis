@@ -1,8 +1,8 @@
 import apiEndpoint, {
   createOrUpdateDoctor,
-  getDoctor,
   updateUser,
 } from "../../../common/api";
+import { getDoctor } from "../../../services/DoctorServices";
 
 export default apiEndpoint({
   GET: async ({ user }) => {

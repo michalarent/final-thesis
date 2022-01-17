@@ -17,6 +17,7 @@ import {
   getMedicalHistoryFromBackend,
   getWoundsFromBackend,
   getDoctorsAppointmentsFromBackend,
+  getDoctorsRelatedToPatientFromBackend,
 } from "./helpers";
 import { ConsolidatedPatientInfo } from "./types";
 
@@ -33,10 +34,13 @@ async function fetchPatientInfo(authId): Promise<ConsolidatedPatientInfo> {
   if (patient && patient.authId) {
     const medicalHistory = await getMedicalHistoryFromBackend(parsedId);
     const wounds = await getWoundsFromBackend(parsedId);
+    const doctors = await getDoctorsRelatedToPatientFromBackend(parsedId);
 
+    console.log(doctors);
     return {
       isPatient: true,
       patient: {
+        doctors: doctors,
         medicalHistory: medicalHistory,
         wounds: wounds,
         email: patient.email,

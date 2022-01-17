@@ -223,7 +223,10 @@ export default function Home() {
                     <br />
                     <br />
                   </ClickableTile>
-                  <ClickableTile style={{ width: "100%", height: 250 }}>
+                  <ClickableTile
+                    onClick={() => router.push("/dashboard/contact")}
+                    style={{ width: "100%", height: 250 }}
+                  >
                     <small>Get in touch with your Doctor</small>
                     <h3>Contact your doctor</h3>
                     <br />

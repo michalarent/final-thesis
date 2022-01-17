@@ -6,7 +6,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export default function ListDoctors({ doctors, href, action }) {
+export default function pListDoctors({ doctors, href, action }) {
   console.log(doctors);
   return (
     <>

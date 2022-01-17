@@ -1,11 +1,25 @@
 import { MikroORM } from "@mikro-orm/core";
 import { EntityManager, PostgreSqlDriver } from "@mikro-orm/postgresql";
-import { getDoctor } from "../common/api";
+
 import { getOrm } from "../db";
 import { Appointment } from "../db/Appointment";
+import { Doctor } from "../db/Doctor";
 import Patient from "../db/Patient";
 import { Wound } from "../db/Wound";
 import WoundFormData from "../db/WoundFormData";
+
+export async function getDoctor(authId: string): Promise<Doctor> {
+  if (!authId) return null;
+  console.log("getDoctor", authId);
+  const orm = await getOrm();
+  const doctor = await orm.em.findOne(Doctor, { authId });
+  console.log(doctor);
+
+  if (!doctor) {
+    return null;
+  }
+  return doctor;
+}
 
 export async function getDoctorAppointments(authId: string) {
   const orm: MikroORM<PostgreSqlDriver> = await getOrm();

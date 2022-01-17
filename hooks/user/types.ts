@@ -8,6 +8,7 @@ import {
   WoundType,
 } from "../../data/types";
 import { Appointment } from "../../db/Appointment";
+import { Doctor } from "../../db/Doctor";
 import PatientMedicalHistory from "../../db/PatientMedicalHistory";
 
 export type ConsolidatedWound = {
@@ -26,6 +27,7 @@ export type ConsolidatedWound = {
 export type ConsolidatedPatientInfo = {
   isPatient: boolean;
   patient?: {
+    doctors: Doctor[];
     authId: string;
     email: string;
     medicalHistory: PatientMedicalHistory;

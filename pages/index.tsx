@@ -13,6 +13,7 @@ import { IDoctor, IPatient, IUser } from "../types/user";
 import { ArrowRight16 } from "@carbon/icons-react/";
 import Link from "next/link";
 import router from "next/router";
+import { colors } from "../theme/colors";
 export type ReadyData =
   | {
       isReady: boolean;
@@ -70,14 +71,25 @@ export default function Home() {
       <LayoutBase title="Home" breadcrumbs={[]}>
         <Await data={{ basics, patientData, doctorData }}>
           <Container>
+            <h1>Welcome to the wound healing app</h1>
+            <p style={{ marginBottom: "3rem" }}>
+              Please select what type of user you are
+            </p>
             <ArentFlex justify="center" width="100%">
               <ArentGrid gap={20} width="100%" columns="1fr 1fr">
                 <ClickableTile
+                  style={{
+                    height: 300,
+                    background: colors.blue,
+                    color: "black",
+                  }}
                   onClick={() => router.push("/dashboard/onboarding/new")}
                   disabled={patientData.value.isPatient}
                 >
                   <small>Medical History</small>
                   <h4>Register as a Patient</h4>
+                  <br />
+                  <br />
                   <br />
                   <br />
                   <br />
@@ -92,15 +104,24 @@ export default function Home() {
                   </ArentFlex>
                 </ClickableTile>
 
-                <ClickableTile disabled={true}>
+                <ClickableTile
+                  style={{
+                    height: 300,
+                    background: colors.mint,
+                    color: "black",
+                  }}
+                  onClick={() => router.push("/dashboard/doctor/new")}
+                >
                   <small>Medical Professional Onboarding</small>
                   <h4>Register as a Doctor</h4>
                   <br />
                   <br />
                   <br />
+                  <br />
+                  <br />
                   <p>
                     You will be guided to a page where you can fill out your
-                    medical history.
+                    medical professional information.
                   </p>
                   <br />
                   <ArentFlex align="center" gap={10} width="100%">

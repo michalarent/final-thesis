@@ -104,16 +104,14 @@ const handleWhoIsWho = (messages, sender, receiver) => {
 };
 
 async function submitChatMessage(message, sender, receiver) {
-  console.log(message, sender, receiver);
   const response = await apiCall("/api/chat", "POST", {
     message,
     sender,
     receiver,
   });
-  console.log(response);
 }
 
-export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
+export default function ChatBox({ sender, receiver }) {
   const [currentMessage, setCurrentMessage] = useState<string>();
   const [counter, setCounter] = useState(0);
   const chatMessages = useSWR(
@@ -129,8 +127,6 @@ export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
     // get capture groups
     const captureGroups = sender.match(/sender=(.*)&receiver=(.*)/);
 
-    console.log(captureGroups);
-
     const response = await apiCall(
       `/api/chat?sender=${captureGroups[1]}&receiver=${captureGroups[2]}`,
       "GET"
@@ -145,8 +141,12 @@ export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
     return _messages;
   }
 
-  console.log(currentMessage);
-  console.log(chatMessages);
+  useEffect(() => {
+    document.getElementById("first-chat-message")?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [chatMessages]);
 
   return (
     <Tile
@@ -172,7 +172,7 @@ export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
           <div style={{ height: "100%", width: "100%" }}>
             {chatMessages &&
               chatMessages?.data &&
-              chatMessages.data.map((message) =>
+              chatMessages.data.map((message, index) =>
                 message.sender ? (
                   <ArentGrid columns="1fr 1fr">
                     <div />
@@ -183,7 +183,7 @@ export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
                       style={{ margin: "10px 0" }}
                     >
                       <span style={{ opacity: 0.5 }}>You | {message.time}</span>
-                      <SentMessage>
+                      <SentMessage id={index === 0 && "first-chat-message"}>
                         <p>{message.text}</p>
                       </SentMessage>
                     </ArentFlex>
@@ -200,7 +200,7 @@ export default function ChatBox({ sender, receiver, messages, onSendMessage }) {
                       <span style={{ opacity: 0.5 }}>
                         Sender | {message.time}
                       </span>
-                      <ReceivedMessage>
+                      <ReceivedMessage id={index === 0 && "first-chat-message"}>
                         <p>{message.text}</p>
                       </ReceivedMessage>
                     </ArentFlex>

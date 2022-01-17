@@ -58,7 +58,7 @@ export default function Topbar({ title }: { title: string }) {
 
               <HeaderGlobalAction
                 aria-label="Logout"
-                onClick={() => logout()}
+                onClick={() => router.push("/api/auth/logout")}
                 tooltipAlignment="end"
               >
                 <IoExit size="20px" />

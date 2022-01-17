@@ -1,6 +1,7 @@
 import { Button } from "carbon-components-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useS3Upload } from "next-s3-upload";
+import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -141,6 +142,7 @@ export default function AutoForm({
       } finally {
         setSubmitLoading(false);
         setSuccess(true);
+        router.push("/dashboard");
       }
     }
   }

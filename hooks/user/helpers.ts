@@ -44,3 +44,9 @@ export async function getDoctorsAppointmentsFromBackend(
 ): Promise<any> {
   return await apiCall(`/api/doctor/appointment?user=${authId}`, "GET");
 }
+
+export async function getDoctorsRelatedToPatientFromBackend(
+  patientId: string
+): Promise<Doctor[]> {
+  return await apiCall(`/api/patient/doctors?user=${patientId}`, "GET");
+}

@@ -19,6 +19,7 @@ import { Collection } from "@mikro-orm/core";
 import Image from "../../db/Image";
 import AppointmentId from "../../pages/api/appointment/[appointmentId]";
 import { Annotations } from "../../db/Annotations";
+import { getDoctor } from "../../services/DoctorServices";
 
 type ApiEndpointEnvironment = {
   req: NextApiRequest;
@@ -148,16 +149,6 @@ export async function getPatient(authId: string): Promise<Patient> {
   const patient = await orm.em.findOne(Patient, { authId });
 
   return patient;
-}
-
-export async function getDoctor(authId: string): Promise<Doctor> {
-  if (!authId) return null;
-  console.log("getDoctor", authId);
-  const orm = await getOrm();
-  const doctor = await orm.em.findOne(Doctor, { authId: authId });
-  console.log(doctor);
-
-  return doctor;
 }
 
 export async function updateUser(authId: string, userInfo: any) {
