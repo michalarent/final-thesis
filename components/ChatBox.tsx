@@ -1,8 +1,16 @@
-import { Tile, TextInput, Button } from "carbon-components-react";
-import { useEffect, useState } from "react";
+import {
+  Tile,
+  TextInput,
+  Button,
+  Loading,
+  InlineLoading,
+} from "carbon-components-react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 import apiCall from "../common/api/ApiCall";
+import useChat from "../hooks/useChat";
+import useLoaderSWR from "../hooks/useLoaderSWR";
 
 import { colors } from "../theme/colors";
 import { ArentFlex, ArentGrid } from "./ui/navigation/layout/ArentGrid";
@@ -113,40 +121,20 @@ async function submitChatMessage(message, sender, receiver) {
 
 export default function ChatBox({ sender, receiver }) {
   const [currentMessage, setCurrentMessage] = useState<string>();
-  const [counter, setCounter] = useState(0);
-  const chatMessages = useSWR(
-    `/api/chat?sender=${sender}&receiver=${receiver}&counter=${counter}`,
-    getChatMessages,
-    {
-      refreshInterval: 2000,
-    }
+  const { chatMessages, isSending, submitChatMessage } = useChat(
+    sender,
+    receiver
   );
-  const [sending, setSending] = useState(false);
 
-  async function getChatMessages(sender, receiver) {
-    // get capture groups
-    const captureGroups = sender.match(/sender=(.*)&receiver=(.*)/);
+  const messagesEndRef = useRef(null);
 
-    const response = await apiCall(
-      `/api/chat?sender=${captureGroups[1]}&receiver=${captureGroups[2]}`,
-      "GET"
-    );
-
-    const _messages = handleWhoIsWho(
-      response,
-      captureGroups[1],
-      captureGroups[2]
-    );
-
-    return _messages;
-  }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView();
+  };
 
   useEffect(() => {
-    document.getElementById("first-chat-message")?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-    });
-  }, [chatMessages]);
+    scrollToBottom();
+  }, [chatMessages, isSending]);
 
   return (
     <Tile
@@ -170,9 +158,11 @@ export default function ChatBox({ sender, receiver }) {
           }}
         >
           <div style={{ height: "100%", width: "100%" }}>
+            {chatMessages.status === "loading" && <Loading />}
+            {chatMessages.status === "error" && <p>Error loading messages</p>}
             {chatMessages &&
-              chatMessages?.data &&
-              chatMessages.data.map((message, index) =>
+              chatMessages.status === "ready" &&
+              chatMessages.value.map((message, index) =>
                 message.sender ? (
                   <ArentGrid columns="1fr 1fr">
                     <div />
@@ -208,6 +198,7 @@ export default function ChatBox({ sender, receiver }) {
                   </ArentGrid>
                 )
               )}
+            <div ref={messagesEndRef} />
           </div>
         </div>
       </div>
@@ -228,7 +219,7 @@ export default function ChatBox({ sender, receiver }) {
               submitChatMessage(currentMessage, sender, receiver);
             }}
           >
-            Send
+            {isSending ? <InlineLoading /> : "Send"}
           </Button>
         </ArentFlex>
       </form>

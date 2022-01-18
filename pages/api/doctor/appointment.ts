@@ -1,6 +1,5 @@
 import apiEndpoint, {
   createOrUpdateDoctor,
-  getDoctor,
   updateUser,
 } from "../../../common/api";
 import { getDoctorAppointments } from "../../../services/DoctorServices";

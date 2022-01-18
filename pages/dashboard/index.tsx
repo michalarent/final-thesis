@@ -32,11 +32,8 @@ export default function Home() {
   const doctorDataReady = basicsReady && doctorData.status === "ready";
 
   const allDoctors = useDoctors();
-  console.log("all doctors", allDoctors);
 
   const ready = basicsReady && patientDataReady && doctorDataReady;
-  console.log("Consolidated patient info", patientData);
-  console.log("Doctor data:", doctorData);
 
   if (!ready) {
     return <Loading />;
@@ -47,22 +44,24 @@ export default function Home() {
       <LayoutBase title="Doctor's Dashboard" breadcrumbs={["Dashboard"]}>
         <Container>
           <ArentFlex direction="column" height="100%" width="100%" gap={20}>
-            <Tile>
+            <Tile style={{ width: "100%" }}>
               <WoundSlider
                 cards={doctorData.value.doctor.appointments.map((app) => {
                   return (
-                    <div>
-                      <ArentFlex direction="column" gap={10} height="100%">
+                    <div style={{ width: "100%" }}>
+                      {console.log(app)}
+                      <ArentFlex direction="column" gap={10} width="100%">
                         <Button
+                          style={{ width: "100%" }}
                           onClick={() =>
                             router.push(
-                              `/dashboard/appointments/edit/${app.id}`
+                              `/dashboard/appointments/edit/${app.appointment.id}`
                             )
                           }
                         >
-                          Go to appointment details
+                          Go to appointment {app.appointment.id} details
                         </Button>
-                        <div>{app.date}</div>
+                        <div style={{ width: "100%" }}>{app.date}</div>
                         <div>Images sent: {app.images.length}</div>
                         <div>Patient email: {app.wound.patient.email}</div>
                         <div>

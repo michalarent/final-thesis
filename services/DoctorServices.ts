@@ -39,13 +39,16 @@ export async function getDoctorAppointments(authId: string) {
       .leftJoinAndSelect("wound.woundData", "woundData")
       .getResultList();
 
-    console.log("ALL", _all);
-
     const appointments = await orm.em.find(Appointment, {
       doctor: doctor,
     });
 
-    return _all;
+    return _all.flatMap((appointment) => ({
+      id: appointment.id,
+      wound: appointment.wound,
+      patient: appointment.wound.patient,
+      images: appointment.images,
+    }));
   }
   return [];
 }

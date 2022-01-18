@@ -8,7 +8,6 @@ import {
 } from "@mikro-orm/core";
 
 import { IUser } from "../types/user";
-import { Chat } from "./Chat";
 
 @Entity()
 export default class User {

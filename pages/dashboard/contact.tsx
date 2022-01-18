@@ -7,6 +7,9 @@ import { Container } from "../../components/ui/Container";
 import LayoutBase from "../../components/ui/navigation/layout";
 import { ArentFlex } from "../../components/ui/navigation/layout/ArentGrid";
 import { Doctor } from "../../db/Doctor";
+import { getLastMessages } from "../../helpers/chat";
+import { getListOfAllUniquePatientsFromAppointments } from "../../helpers/doctor";
+import { ConsolidatedPatient } from "../../helpers/doctor/types";
 import { useDoctors } from "../../hooks/user";
 import { getDoctorsRelatedToPatientFromBackend } from "../../hooks/user/helpers";
 import usePatientInfo from "../../hooks/user/usePatientInfo";
@@ -14,7 +17,9 @@ import patient from "../api/patient";
 
 export default function Contact() {
   const { basics, patientData, doctorData } = usePatientInfo();
-  const [relatedDoctors, setRelatedDoctors] = useState<Doctor>();
+  const [relatedPeople, setRelatedPeople] = useState<
+    Doctor[] | ConsolidatedPatient[]
+  >();
 
   const basicsReady = basics.status === "ready";
   const patientDataReady = basicsReady && patientData.status === "ready";
@@ -22,18 +27,25 @@ export default function Contact() {
 
   const ready = basicsReady && patientDataReady && doctorDataReady;
 
-  async function getRelatedDoctors() {
+  async function getRelatedPeople() {
     if (ready) {
-      const response = await getDoctorsRelatedToPatientFromBackend(
-        basics.value.user.authId
-      );
-      setRelatedDoctors(response);
+      if (patientData.value.isPatient) {
+        const response = await getDoctorsRelatedToPatientFromBackend(
+          basics.value.user.authId
+        );
+        setRelatedPeople(response);
+      } else {
+        const allPeople = getListOfAllUniquePatientsFromAppointments(
+          doctorData.value.doctor.appointments
+        );
+        setRelatedPeople(allPeople);
+      }
     }
   }
 
   useEffect(() => {
-    if (ready && !relatedDoctors) {
-      getRelatedDoctors();
+    if (ready && !relatedPeople) {
+      getRelatedPeople();
     }
   }, [basics]);
 
@@ -41,7 +53,27 @@ export default function Contact() {
     return <Loading />;
   }
 
-  if (ready && relatedDoctors) {
+  if (ready && doctorData.value.isDoctor && relatedPeople) {
+    return (
+      <LayoutBase title="Contact" breadcrumbs={["Dashboard", "Contact"]}>
+        <Container>
+          {relatedPeople.map((d) => {
+            return (
+              <ArentFlex direction="column" gap={10} width="100%">
+                <h3>Chat with {d.name}</h3>
+                <ChatBox
+                  sender={basics.value.user.authId}
+                  receiver={d.authId}
+                />
+              </ArentFlex>
+            );
+          })}
+        </Container>
+      </LayoutBase>
+    );
+  }
+
+  if (ready && relatedPeople) {
     console.log(patientData);
     return (
       <LayoutBase title="Contact" breadcrumbs={["Dashboard", "Contact"]}>

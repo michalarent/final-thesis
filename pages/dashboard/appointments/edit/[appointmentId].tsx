@@ -42,11 +42,6 @@ export default function EditAppointment() {
   const [openAnnotationModal, setOpenAnnotationModal] = useState(false);
   const { uploadToS3 } = useS3Upload();
 
-  console.log(appointmentId);
-  const [currentAnnotation, setCurrentAnnotation] = useState({});
-  const [annotations, setAnnotations] = useState([]);
-  const [annotationType, setAnnotationType] = useState("RECTANGLE");
-
   async function assignAppointment() {
     if (!appointmentId) return null;
     else {
@@ -54,13 +49,11 @@ export default function EditAppointment() {
         `/api/appointment/${appointmentId}`,
         "GET"
       );
-      if (_appointment.appointment) {
+      if (_appointment) {
         setAppointment(_appointment);
       }
     }
   }
-
-  console.log(appointment);
 
   useEffect(() => {
     if (!appointmentId) return null;
@@ -200,7 +193,6 @@ export default function EditAppointment() {
                 </ArentFlex>
               </ImageCardContainer>,
             ]}
-            type={"solana"}
           />
           <h2 style={{ marginBottom: -30 }}>Messages</h2>
           <p style={{ marginBottom: -30 }}>
@@ -216,19 +208,13 @@ export default function EditAppointment() {
               receiver={
                 doctorData.value.doctor.appointments.find(
                   (app) => app.id == appointmentId
-                ).wound.patient.authId
+                ).patient.authId
               }
-              messages={undefined}
-              onSendMessage={undefined}
             />
           ) : (
             <ChatBox
               sender={user.authId}
               receiver={appointment.doctor.authId}
-              messages={[]}
-              onSendMessage={() => {
-                console.log("SEND MESSAGE");
-              }}
             />
           )}
         </ArentFlex>

@@ -83,13 +83,7 @@ const MutationPlugin = (slider) => {
   });
 };
 
-export default function WoundSlider({
-  cards,
-  type,
-}: {
-  cards: React.ReactNode[];
-  type: "solana" | "news";
-}) {
+export default function WoundSlider({ cards }: { cards: React.ReactNode[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [refCallback, instanceRef] = useKeenSlider(
     {
