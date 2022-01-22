@@ -67,7 +67,7 @@ export default function AnnotateImageModal({ visible, image, onClose }) {
       `/api/appointment/images/annotations?imageId=${image.id}`,
       "GET"
     );
-    console.log("REsponse: ", response);
+
     if (response.data) {
       setAnnotations(response.data);
     }

@@ -9,6 +9,7 @@ import {
 } from "@mikro-orm/core";
 import { Appointment } from "./Appointment";
 import Patient from "./Patient";
+import { Treatment } from "./Treatment";
 import WoundFormData from "./WoundFormData";
 
 @Entity()
@@ -24,6 +25,14 @@ export class Wound {
 
   @ManyToOne({ entity: () => Patient }, { nullable: true })
   patient: Patient | any;
+
+  @OneToMany({
+    entity: () => Treatment,
+    mappedBy: "wound",
+    orphanRemoval: true,
+  })
+  treatments = new Collection<Treatment>(this);
+  
 
   @OneToMany(
     () => Appointment,

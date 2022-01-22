@@ -4,16 +4,22 @@ import {
   Loading,
   Modal,
   Tile,
+  CodeSnippet,
 } from "carbon-components-react";
 import router from "next/router";
 import React, { useState } from "react";
+import { ReceivedMessage } from "../../components/ChatBox";
+import DoctorDashboard from "../../components/dashboards/DoctorDashboard";
 import DoctorCard from "../../components/DoctorCard";
+import LastChatMessage from "../../components/LastChatMessage";
 import { Container } from "../../components/ui/Container";
 import LayoutBase from "../../components/ui/navigation/layout";
 import {
   ArentFlex,
   ArentGrid,
 } from "../../components/ui/navigation/layout/ArentGrid";
+import ClientError from "../../components/util/ClientError";
+import ClientLoading from "../../components/util/ClientLoading";
 import { WoundCard } from "../../components/WoundCard";
 import WoundSlider from "../../components/WoundSlider";
 import { useDoctors } from "../../hooks/user";
@@ -21,6 +27,7 @@ import { deleteWoundFromBackend } from "../../hooks/user/helpers";
 import { ConsolidatedWound } from "../../hooks/user/types";
 import useUserInfo from "../../hooks/user/usePatientInfo";
 import { colors } from "../../theme/colors";
+import doctor from "../api/doctor";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -33,104 +40,41 @@ export default function Home() {
 
   const allDoctors = useDoctors();
 
+  if (basics.status === "error") {
+    return (
+      <ClientError>
+        Error loading basic user data from backend. Possible cause: wrong ID
+      </ClientError>
+    );
+  }
+
+  if (basicsReady && doctorData.status === "error") {
+    return (
+      <ClientError>
+        Error loading doctor data from backend. Possible cause: wrong ID
+      </ClientError>
+    );
+  }
+
+  if (basicsReady && patientData.status === "error") {
+    return (
+      <ClientError>
+        Error loading patient data from backend. Possible cause: wrong ID
+      </ClientError>
+    );
+  }
+
   const ready = basicsReady && patientDataReady && doctorDataReady;
 
   if (!ready) {
-    return <Loading />;
+    return <ClientLoading />;
   }
 
-  if (ready && !patientData.value.isPatient && doctorData.value.isDoctor) {
+  if (ready && doctorData.value.isDoctor) {
     return (
       <LayoutBase title="Doctor's Dashboard" breadcrumbs={["Dashboard"]}>
         <Container>
-          <ArentFlex direction="column" height="100%" width="100%" gap={20}>
-            <Tile style={{ width: "100%" }}>
-              <WoundSlider
-                cards={doctorData.value.doctor.appointments.map((app) => {
-                  return (
-                    <div style={{ width: "100%" }}>
-                      {console.log(app)}
-                      <ArentFlex direction="column" gap={10} width="100%">
-                        <Button
-                          style={{ width: "100%" }}
-                          onClick={() =>
-                            router.push(
-                              `/dashboard/appointments/edit/${app.appointment.id}`
-                            )
-                          }
-                        >
-                          Go to appointment {app.appointment.id} details
-                        </Button>
-                        <div style={{ width: "100%" }}>{app.date}</div>
-                        <div>Images sent: {app.images.length}</div>
-                        <div>Patient email: {app.wound.patient.email}</div>
-                        <div>
-                          Patient declared name:{" "}
-                          {app.wound.patient.medicalHistory.firstName}{" "}
-                          {app.wound.patient.medicalHistory.lastName}
-                        </div>
-                        <div>
-                          Patient country:{" "}
-                          {app.wound.patient.medicalHistory.country}{" "}
-                        </div>
-                        <div>
-                          {" "}
-                          Gender: {app.wound.patient.medicalHistory.gender}
-                        </div>
-                        <div>
-                          {" "}
-                          Allergies:{" "}
-                          {app.wound.patient.medicalHistory.allergies
-                            ? app.wound.patient.medicalHistory.allergies.map(
-                                (al) => <span>{al} </span>
-                              )
-                            : "None"}
-                        </div>
-
-                        <div>
-                          {" "}
-                          Medications:{" "}
-                          {app.wound.patient.medicalHistory.medications
-                            ? app.wound.patient.medicalHistory.medications.map(
-                                (al) => <span>{al} </span>
-                              )
-                            : "None"}
-                        </div>
-                        <div>
-                          {" "}
-                          Blood type:{" "}
-                          {app.wound.patient.medicalHistory.bloodType
-                            ? app.wound.patient.medicalHistory.bloodType
-                            : "Not provided"}
-                        </div>
-                        <div>
-                          {" "}
-                          Smoker?{" "}
-                          {app.wound.patient.medicalHistory.isSmoker
-                            ? "Yes"
-                            : "No"}
-                        </div>
-                        <div>
-                          {" "}
-                          Diabetic?{" "}
-                          {app.wound.patient.medicalHistory.isDiabetic
-                            ? "Yes"
-                            : "No"}
-                        </div>
-                        <div>
-                          {" "}
-                          Alcoholic?{" "}
-                          {app.wound.patient.medicalHistory.isAlcoholic
-                            ? "Yes"
-                            : "No"}
-                        </div>
-                      </ArentFlex>
-                    </div>
-                  );
-                })}
-              ></WoundSlider>
-            </Tile>
-          </ArentFlex>
+          <DoctorDashboard doctorData={doctorData} />
         </Container>
       </LayoutBase>
     );
@@ -150,7 +94,7 @@ export default function Home() {
           >
             {allDoctors.map((doctor) => (
               <DoctorCard
-                user={basics.value.user}
+                user={basics.value}
                 currentWound={currentWound}
                 key={doctor.id}
                 doctor={doctor}
@@ -162,23 +106,42 @@ export default function Home() {
           <ArentFlex direction="column" height="100%" width="100%" gap={20}>
             <Tile style={{ width: "100%" }}>
               <WoundSlider
-                cards={patientData.value.patient.wounds.map((wound, index) => {
-                  return (
-                    <WoundCard
-                      setCurrentWound={setCurrentWound}
-                      wound={wound}
-                      setShowModal={setShowModal}
-                      appointments={wound.appointments}
-                      onDelete={() =>
-                        deleteWoundFromBackend(
-                          basics.value.user.authId,
-                          wound.woundId
-                        )
-                      }
-                    ></WoundCard>
-                  );
-                })}
-                type={"solana"}
+                cards={patientData.value.patient.wounds
+                  .filter((wound) =>
+                    wound.appointments.length
+                      ? new Date(wound.appointments[0].date).getTime() >
+                        Date.now()
+                      : true
+                  )
+                  .sort((a, b) => {
+                    if (!a.appointments.length && !b.appointments.length) {
+                      return -1;
+                    }
+                    return (
+                      a.appointments.length &&
+                      b.appointments.length &&
+                      new Date(a.appointments[0].date).getTime() -
+                        new Date(b.appointments[0].date).getTime()
+                    );
+                  })
+                  .map((wound, index) => {
+                    return (
+                      <WoundCard
+                        setCurrentWound={setCurrentWound}
+                        wound={wound}
+                        setShowModal={setShowModal}
+                        appointments={wound.appointments}
+                        onDelete={() =>
+                          deleteWoundFromBackend(
+                            basics.value.authId,
+                            wound.woundId
+                          )
+                        }
+                      >
+                        {" "}
+                      </WoundCard>
+                    );
+                  })}
               />
             </Tile>
             <ArentFlex
@@ -190,8 +153,11 @@ export default function Home() {
               <ArentGrid align="start" gap={20} columns="1fr 1fr" width="100%">
                 <ArentFlex direction="column" width="100%" gap={20}>
                   <Tile style={{ width: "100%", height: 250 }}>
-                    <small>Messages</small>
-                    <h3>No new messages</h3>
+                    <LastChatMessage
+                      currentUserId={basics.value.user.authId}
+                      chats={patientData.value.patient.chats}
+                      isPatient={true}
+                    />
                   </Tile>
 
                   <Tile
@@ -246,5 +212,7 @@ export default function Home() {
         </Container>
       </LayoutBase>
     );
+  } else {
+    return <ClientError>Something went wrong.</ClientError>;
   }
 }

@@ -7,7 +7,6 @@ function capitalizeFirstLetter(string) {
 }
 
 export default function pListDoctors({ doctors, href, action }) {
-  console.log(doctors);
   return (
     <>
       {doctors?.map((doctor) => (

@@ -23,8 +23,8 @@ const handleWhoIsWho = (messages, sender, receiver) => {
   return mappedMessages;
 };
 
-async function getChatMessages(sender, receiver) {
-  const captureGroups = sender.match(/sender=(.*)&receiver=(.*)/);
+async function getChatMessages(queryString: string) {
+  const captureGroups = queryString.match(/sender=(.*)&receiver=(.*)/);
   const response = await apiCall(
     `/api/chat?sender=${captureGroups[1]}&receiver=${captureGroups[2]}`,
     "GET"

@@ -6,4 +6,15 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow: visible;
+
+  // fade in animation
+  animation: fadeIn 0.3s;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;

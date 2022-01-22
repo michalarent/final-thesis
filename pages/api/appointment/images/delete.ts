@@ -1,7 +1,5 @@
-import apiEndpoint, {
-  addImageToAppointmentImages,
-  removeImageFromAppointmentImages,
-} from "../../../../common/api";
+import apiEndpoint from "../../../../common/api";
+import { removeImageFromAppointmentImages } from "../../../../services/ImageServices";
 
 export default apiEndpoint({
   DELETE: async (appointmendId, imageUrl) => {

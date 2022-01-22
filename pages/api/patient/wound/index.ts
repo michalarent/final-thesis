@@ -1,11 +1,9 @@
-import apiEndpoint, {
-  addWound,
-  createOrUpdateDoctor,
-  deleteWound,
-  getDoctor,
+import apiEndpoint from "../../../../common/api";
+import {
   getWounds,
-  updateUser,
-} from "../../../../common/api";
+  addWound,
+  deleteWound,
+} from "../../../../services/WoundServices";
 
 export default apiEndpoint({
   GET: async ({ user }) => {
@@ -18,8 +16,6 @@ export default apiEndpoint({
     return response;
   },
   DELETE: async ({ authId, woundId }) => {
-    console.log(woundId);
-    console.log(authId);
     await deleteWound(authId, woundId);
   },
 });

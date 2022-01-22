@@ -1,13 +1,10 @@
+import { Chat } from "../../db/Chat";
+import { getChatMessages } from "../../services/ChatServices";
 import {
-  getDoctor,
-  getMedicalHistory,
-  getPatient,
-  getWounds,
-} from "../../common/api";
-import apiCall from "../../common/api/ApiCall";
-import { Doctor } from "../../db/Doctor";
-import Patient from "../../db/Patient";
-import User from "../../db/User";
+  getAllPatientsByDoctor,
+  getDoctorChats,
+} from "../../services/DoctorServices";
+import { getPatientChats } from "../../services/PatientServices";
 import { IUser } from "../../types/user";
 import useLoaderSWR from "../useLoaderSWR";
 import {
@@ -18,12 +15,19 @@ import {
   getWoundsFromBackend,
   getDoctorsAppointmentsFromBackend,
   getDoctorsRelatedToPatientFromBackend,
+  getAllPatientsByDoctorFromBackend,
+  getPatientChatsFromBackend,
+  getDoctorChatsFromBackend,
+  getDoctorTreatmentsFromBackend,
 } from "./helpers";
-import { ConsolidatedPatientInfo } from "./types";
+import { ConsolidatedDoctorInfo, ConsolidatedPatientInfo } from "./types";
 
-async function fetchUserInfo() {
+async function fetchUserInfo(): Promise<IUser> {
   const user = await getUserFromBackend();
+  // @ts-ignore
 
+  console.log(user);
+  //@ts-ignore
   return user;
 }
 
@@ -32,20 +36,30 @@ async function fetchPatientInfo(authId): Promise<ConsolidatedPatientInfo> {
   const patient = await getPatientFromBackend(parsedId);
 
   if (patient && patient.authId) {
-    const medicalHistory = await getMedicalHistoryFromBackend(parsedId);
-    const wounds = await getWoundsFromBackend(parsedId);
-    const doctors = await getDoctorsRelatedToPatientFromBackend(parsedId);
+    const _medicalHistory = getMedicalHistoryFromBackend(parsedId);
+    const _wounds = getWoundsFromBackend(parsedId);
+    const _doctors = getDoctorsRelatedToPatientFromBackend(parsedId);
+    const _chats = getPatientChatsFromBackend(parsedId);
 
-    console.log(doctors);
+    const [medicalHistory, wounds, doctors, chats] = await Promise.all([
+      _medicalHistory,
+      _wounds,
+      _doctors,
+      _chats,
+    ]);
+
+    const { email, name, authId } = patient;
+
     return {
       isPatient: true,
       patient: {
         doctors: doctors,
         medicalHistory: medicalHistory,
         wounds: wounds,
-        email: patient.email,
-        name: patient.name,
-        authId: patient.authId,
+        chats,
+        email,
+        name,
+        authId,
       },
     };
   } else {
@@ -55,20 +69,37 @@ async function fetchPatientInfo(authId): Promise<ConsolidatedPatientInfo> {
   }
 }
 
-async function fetchDoctorInfo(authId: string) {
+async function fetchDoctorInfo(
+  authId: string
+): Promise<ConsolidatedDoctorInfo> {
   const parsedId = authId.split("doctor_")[1];
   const doctor = await getDoctorFromBackend(parsedId);
 
-  if (doctor) {
-    const appointments = await getDoctorsAppointmentsFromBackend(parsedId);
+  if (doctor.authId) {
+    const _appointments = getDoctorsAppointmentsFromBackend(parsedId);
+    const _patients = getAllPatientsByDoctorFromBackend(parsedId);
+    const _chats = getDoctorChatsFromBackend(parsedId);
+    const _treatments = getDoctorTreatmentsFromBackend(parsedId);
+
+    const [appointments, patients, chats, treatments] = await Promise.all([
+      _appointments,
+      _patients,
+      _chats,
+      _treatments,
+    ]);
+
+    const { doctorData, email, name, authId } = doctor;
     return {
       isDoctor: true,
       doctor: {
-        doctorData: doctor.doctorData,
-        email: doctor.email,
-        name: doctor.name,
-        authId: doctor.authId,
+        doctorData,
+        email,
+        name,
+        authId,
+        chats,
         appointments,
+        patients,
+        treatments,
       },
     };
   } else {
@@ -79,7 +110,8 @@ async function fetchDoctorInfo(authId: string) {
 }
 
 export default function useUserInfo() {
-  const user = useLoaderSWR(`/api/user`, fetchUserInfo);
+  const user = useLoaderSWR(`/api/user/2`, fetchUserInfo);
+
   const patient = useLoaderSWR(
     user.status === "ready" ? `patient_${user.value.user.authId}` : null,
     fetchPatientInfo
@@ -88,8 +120,6 @@ export default function useUserInfo() {
     user.status === "ready" ? `doctor_${user.value.user.authId}` : null,
     fetchDoctorInfo
   );
-
-  console.log(doctor);
 
   return { basics: user, patientData: patient, doctorData: doctor };
 }

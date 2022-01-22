@@ -1,8 +1,9 @@
-import apiEndpoint, { getAppointment } from "../../../common/api";
+import apiEndpoint from "../../../common/api";
+import { getAppointment } from "../../../services/AppointmentServices";
 
 export default apiEndpoint({
-  GET: async (appointmentId: string) => {
-    const response = await getAppointment(appointmentId.appointmentId);
+  GET: async ({ appointmentId }: { appointmentId: string }) => {
+    const response = await getAppointment(appointmentId);
     return response;
   },
 });

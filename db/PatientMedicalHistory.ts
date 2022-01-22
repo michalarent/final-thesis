@@ -14,10 +14,8 @@ export default class PatientMedicalHistory {
   @PrimaryKey()
   id!: number;
 
-  @OneToOne({ entity: () => Patient }, (user) => user.medicalHistory, {
-    wrappedReference: true,
-  })
-  patient!: IdentifiedReference<Patient>;
+  @OneToOne({ entity: () => Patient }, (user) => user.medicalHistory)
+  patient!: Patient | any;
 
   @Property()
   firstName!: string;

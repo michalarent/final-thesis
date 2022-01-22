@@ -1,12 +1,9 @@
-import apiEndpoint, {
+import apiEndpoint from "../../../common/api";
+import {
   addAppointment,
-  addWound,
-  createOrUpdateDoctor,
+  deleteAppointment,
   getAppointments,
-  getDoctor,
-  getWounds,
-  updateUser,
-} from "../../../common/api";
+} from "../../../services/AppointmentServices";
 
 export default apiEndpoint({
   GET: async ({ user }) => {
@@ -21,6 +18,10 @@ export default apiEndpoint({
       data
     );
 
+    return response;
+  },
+  DELETE: async ({ appointmentId }) => {
+    const response = await deleteAppointment(appointmentId);
     return response;
   },
 });

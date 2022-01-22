@@ -21,4 +21,7 @@ export default class Image {
 
   @ManyToOne({ entity: () => Appointment }, { nullable: true })
   appointment: Appointment | any;
+
+  @Property({ type: "date", nullable: true })
+  createdAt!: Date;
 }

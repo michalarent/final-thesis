@@ -15,7 +15,7 @@ import useLoaderSWR from "../hooks/useLoaderSWR";
 import { colors } from "../theme/colors";
 import { ArentFlex, ArentGrid } from "./ui/navigation/layout/ArentGrid";
 
-const SentMessage = styled.div`
+export const SentMessage = styled.div`
   line-height: 24px;
   position: relative;
   padding: 10px 20px;
@@ -53,7 +53,7 @@ const SentMessage = styled.div`
   }
 `;
 
-const ReceivedMessage = styled.div`
+export const ReceivedMessage = styled.div`
   line-height: 24px;
   position: relative;
   padding: 10px 20px;
@@ -91,35 +91,15 @@ const ReceivedMessage = styled.div`
   }
 `;
 
-const handleWhoIsWho = (messages, sender, receiver) => {
-  const mappedMessages = messages.map((message) => {
-    if (message.user_auth_id === sender) {
-      return {
-        ...message,
-        sender: true,
-        time: new Date(+message.createdAt).toLocaleTimeString(),
-      };
-    } else {
-      return {
-        ...message,
-        sender: false,
-        time: new Date(+message.createdAt).toLocaleTimeString(),
-      };
-    }
-  });
-
-  return mappedMessages;
-};
-
-async function submitChatMessage(message, sender, receiver) {
-  const response = await apiCall("/api/chat", "POST", {
-    message,
-    sender,
-    receiver,
-  });
-}
-
-export default function ChatBox({ sender, receiver }) {
+export default function ChatBox({
+  height,
+  sender,
+  receiver,
+}: {
+  height?: number;
+  sender: string;
+  receiver: string;
+}) {
   const [currentMessage, setCurrentMessage] = useState<string>();
   const { chatMessages, isSending, submitChatMessage } = useChat(
     sender,
@@ -127,102 +107,93 @@ export default function ChatBox({ sender, receiver }) {
   );
 
   const messagesEndRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (document.activeElement === inputRef.current) {
+      scrollToBottom();
+    }
   }, [chatMessages, isSending]);
 
   return (
-    <Tile
-      style={{
-        width: "100%",
-        marginBottom: 100,
-        padding: 0,
-      }}
-    >
-      <div style={{ height: 300, overflow: "hidden" }}>
-        <div
-          style={{
-            overflowY: "scroll",
-            height: "100%",
-            width: "100%",
-            borderBottom: `1px solid ${colors.border}`,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <div style={{ height: "100%", width: "100%" }}>
-            {chatMessages.status === "loading" && <Loading />}
-            {chatMessages.status === "error" && <p>Error loading messages</p>}
-            {chatMessages &&
-              chatMessages.status === "ready" &&
-              chatMessages.value.map((message, index) =>
-                message.sender ? (
-                  <ArentGrid columns="1fr 1fr">
-                    <div />
-                    <ArentFlex
-                      direction="column"
-                      gap={4}
-                      width="100%"
-                      style={{ margin: "10px 0" }}
-                    >
-                      <span style={{ opacity: 0.5 }}>You | {message.time}</span>
-                      <SentMessage id={index === 0 && "first-chat-message"}>
-                        <p>{message.text}</p>
-                      </SentMessage>
-                    </ArentFlex>
-                  </ArentGrid>
-                ) : (
-                  <ArentGrid columns="1fr 1fr">
-                    <ArentFlex
-                      direction="column"
-                      gap={4}
-                      align="flex-end"
-                      width="100%"
-                      style={{ margin: "10px 0" }}
-                    >
-                      <span style={{ opacity: 0.5 }}>
-                        Sender | {message.time}
-                      </span>
-                      <ReceivedMessage id={index === 0 && "first-chat-message"}>
-                        <p>{message.text}</p>
-                      </ReceivedMessage>
-                    </ArentFlex>
-                    <div />
-                  </ArentGrid>
-                )
-              )}
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-      </div>
+    <>
+      <div
+        style={{
+          width: "100%",
+          borderBottom: `1px solid ${colors.border}`,
+          display: "flex",
 
-      <form
-        onChange={(e) => setCurrentMessage(e.target.value)}
-        style={{ width: "100%", maxWidth: "100%" }}
+          flexDirection: "column",
+          justifyContent: "start",
+          alignItems: "center",
+        }}
       >
-        <ArentFlex width="100%" align="flex-end" gap={10}>
-          <TextInput
-            style={{ height: 50, width: "100%", minWidth: "100%" }}
-            id={""}
-            labelText={""}
-          />
-          <Button
-            style={{ height: 50 }}
-            onClick={() => {
-              submitChatMessage(currentMessage, sender, receiver);
-            }}
-          >
-            {isSending ? <InlineLoading /> : "Send"}
-          </Button>
-        </ArentFlex>
-      </form>
-    </Tile>
+        {chatMessages.status === "loading" && <InlineLoading />}
+        {chatMessages.status === "error" && <p>Error loading messages</p>}
+        {chatMessages &&
+          chatMessages.status === "ready" &&
+          chatMessages.value.map((message, index) =>
+            message.sender ? (
+              <ArentGrid columns="1fr 1fr">
+                <div />
+                <ArentFlex
+                  direction="column"
+                  gap={4}
+                  width="100%"
+                  style={{ margin: "10px 0" }}
+                >
+                  <span style={{ opacity: 0.5 }}>You | {message.time}</span>
+                  <SentMessage id={index === 0 && "first-chat-message"}>
+                    <p>{message.text}</p>
+                  </SentMessage>
+                </ArentFlex>
+              </ArentGrid>
+            ) : (
+              <ArentGrid columns="1fr 1fr">
+                <ArentFlex
+                  direction="column"
+                  gap={4}
+                  align="flex-end"
+                  width="100%"
+                  style={{ margin: "10px 0" }}
+                >
+                  <span style={{ opacity: 0.5 }}>Sender | {message.time}</span>
+                  <ReceivedMessage id={index === 0 && "first-chat-message"}>
+                    <p>{message.text}</p>
+                  </ReceivedMessage>
+                </ArentFlex>
+                <div />
+              </ArentGrid>
+            )
+          )}
+
+        <form
+          onChange={(e: any) => setCurrentMessage(e.target.value)}
+          style={{ width: "100%", maxWidth: "100%", height: "100%" }}
+        >
+          <ArentFlex width="100%" align="start" gap={10}>
+            <TextInput
+              style={{ height: 50, width: "100%", minWidth: "100%" }}
+              id={""}
+              labelText={""}
+              ref={inputRef}
+            />
+            <Button
+              style={{ height: 50 }}
+              onClick={() => {
+                submitChatMessage(currentMessage, sender, receiver);
+                setCurrentMessage("");
+              }}
+            >
+              {isSending ? <InlineLoading /> : "Send"}
+            </Button>
+          </ArentFlex>
+        </form>
+      </div>
+    </>
   );
 }

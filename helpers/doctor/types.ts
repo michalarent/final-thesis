@@ -11,6 +11,8 @@ export type ConsolidatedPatient = {
 };
 
 export type ConsolidatedAppointment = {
+  id: number;
+  date: string;
   wound: ConsolidatedWound;
   patient: ConsolidatedPatient;
   images: Image[];

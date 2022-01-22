@@ -1,4 +1,6 @@
 import "../styles/globals.scss";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-calendar/dist/Calendar.css";
 
 import { AnimatePresence } from "framer-motion";
 import { useEffect } from "react";

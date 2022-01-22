@@ -1,13 +1,16 @@
+import User from "./User";
 import {
   Collection,
   Entity,
+  ManyToMany,
   OneToMany,
   OneToOne,
   Property,
 } from "@mikro-orm/core";
 import PatientMedicalHistory from "./PatientMedicalHistory";
-import User from "./User";
+
 import { Wound } from "./Wound";
+import { Chat } from "./Chat";
 
 @Entity()
 export default class Patient extends User {
@@ -22,4 +25,7 @@ export default class Patient extends User {
 
   @OneToOne({ inversedBy: "patient", orphanRemoval: true, nullable: true })
   medicalHistory: PatientMedicalHistory;
+
+  @OneToMany({ entity: () => Chat, mappedBy: "patient" })
+  chats = new Collection<Chat>(this);
 }

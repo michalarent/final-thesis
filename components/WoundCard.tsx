@@ -9,6 +9,7 @@ import {
 import { ArentFlex, ArentGrid } from "./ui/navigation/layout/ArentGrid";
 import appointment from "../pages/api/appointment";
 import router from "next/router";
+import { getStandardDate } from "../common/util/dates";
 
 export const Container = styled.div`
   display: flex;
@@ -83,8 +84,7 @@ export function WoundCard({
         </DeleteIcon>
         <ArentFlex direction="column" align="start" gap={10} width="100%">
           <h5 style={{ width: "90%" }}>
-            Appointment at{" "}
-            {new Date(wound.appointments[0].date).toLocaleString()}
+            {getStandardDate(new Date(wound.appointments[0].date).getTime())}
           </h5>
           <ArentGrid columns="1fr 1fr" gap={2} justify="start">
             <small>Severity</small>

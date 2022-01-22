@@ -2,36 +2,56 @@ import _ from "lodash";
 import { getOrm } from "../db";
 import { Chat } from "../db/Chat";
 import { ChatMessage } from "../db/ChatMessage";
+import { Doctor } from "../db/Doctor";
+import Patient from "../db/Patient";
 import User from "../db/User";
+import { isPatient } from "./PatientServices";
 
 async function createChat(sender, receiver) {
   const orm = await getOrm();
   const chat = new Chat();
   chat.user_1 = sender;
   chat.user_2 = receiver;
+
+  let patient = await orm.em.findOne(Patient, { authId: sender });
+  if (!patient) {
+    patient = await orm.em.findOne(Patient, { authId: receiver });
+    chat.patient = patient;
+    chat.doctor = await orm.em.findOne(Doctor, { authId: sender });
+
+    await orm.em.persistAndFlush(chat);
+    return chat;
+  }
+
+  chat.patient = patient;
+  chat.doctor = await orm.em.findOne(Doctor, { authId: receiver });
   await orm.em.persistAndFlush(chat);
   return chat;
 }
 
 async function getChat(sender, receiver) {
   const orm = await getOrm();
-  const [chat, chat_inverse] = await Promise.all([
-    orm.em.findOne(Chat, {
-      user_1: sender,
-      user_2: receiver,
-    }),
-    orm.em.findOne(Chat, {
-      user_1: receiver,
-      user_2: sender,
-    }),
-  ]);
+
+  const _isPatient = await isPatient(sender);
+  let chat: Chat;
+  if (_isPatient) {
+    chat = await orm.em.findOne(Chat, {
+      patient: sender,
+      doctor: receiver,
+    });
+  } else {
+    chat = await orm.em.findOne(Chat, {
+      patient: receiver,
+      doctor: sender,
+    });
+  }
   if (chat) return chat;
-  if (chat_inverse) return chat_inverse;
 }
 
 export async function getChatMessages(sender, receiver) {
   const orm = await getOrm();
   const chat = await getChat(sender, receiver);
+  if (chat === undefined) return [];
   const messages = await orm.em.find(ChatMessage, {
     chat: chat.id,
   });

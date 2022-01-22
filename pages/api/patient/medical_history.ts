@@ -1,7 +1,10 @@
-import apiEndpoint, {
+import apiEndpoint from "../../../common/api";
+import failwith from "../../../common/util/failwith";
+import {
   getMedicalHistory,
+  isPatient,
   updateOrCreateMedicalHistory,
-} from "../../../common/api";
+} from "../../../services/PatientServices";
 
 export default apiEndpoint({
   POST: async (formData: any, { user }) => {
@@ -11,8 +14,14 @@ export default apiEndpoint({
     return response;
   },
   GET: async ({ user }) => {
-    const response = await getMedicalHistory(user);
-
-    return response;
+    const _isPatient = await isPatient(user);
+    if (_isPatient) {
+      const response = await getMedicalHistory(user);
+      return response;
+    } else {
+      failwith(
+        `Error @ /api/patient/medical_history || getMedicalHistory() || Props: ${user} `
+      );
+    }
   },
 });

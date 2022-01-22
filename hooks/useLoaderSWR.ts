@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
-import useSWR, { SWRConfiguration } from "swr";
+import useSWR from "swr";
 
 export type ReadyLoader<T> = {
   status: "ready";
@@ -27,7 +26,7 @@ const immutableOpts = {
 };
 
 const mutableOpts = {
-  refreshInterval: 10000,
+  refreshInterval: 1000,
 };
 
 export default function useLoaderSWR<T>(

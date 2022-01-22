@@ -27,14 +27,8 @@ export class Appointment {
   @Property({ type: "jsonb" })
   info: Record<string, any>;
 
-  @ManyToMany(
-    () => Treatment,
-    (treatment) => treatment.appointments
-  )
-  treatments = new Collection<Treatment>(this);
-
   @ManyToOne({ entity: () => Doctor })
-  doctor: Doctor;
+  doctor: Doctor | any;
 
   @OneToMany(
     () => Image,

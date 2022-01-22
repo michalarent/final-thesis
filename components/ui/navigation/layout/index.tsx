@@ -6,7 +6,13 @@ import Topbar from "../topbar";
 import { colors } from "../../../../theme/colors";
 import { useEffect } from "react";
 import { ArentGrid } from "./ArentGrid";
-import { Breadcrumb, BreadcrumbItem } from "carbon-components-react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  SkeletonText,
+} from "carbon-components-react";
+import Link from "next/link";
+import Head from "next/head";
 
 const Grid = styled(motion.div)`
   display: grid;
@@ -15,7 +21,8 @@ const Grid = styled(motion.div)`
 `;
 
 const AppCanvas = styled.div`
-  min-height: calc(100vh - 45px);
+  position: relative;
+  height: calc(100vh - 48px);
 
   padding: 25px 25px 0 25px;
   margin-top: 80px;
@@ -25,10 +32,12 @@ export default function LayoutBase({
   children,
   title,
   breadcrumbs,
+  loading,
 }: {
   children: React.ReactNode;
   title: string;
   breadcrumbs: string[];
+  loading?: boolean;
 }) {
   const joinBreadcrumbs = (depth: number) =>
     breadcrumbs
@@ -37,17 +46,22 @@ export default function LayoutBase({
       .join("/");
 
   return (
-    <AnimatePresence initial={false}>
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+
       <Breadcrumb style={{ top: 60, left: 65, position: "fixed" }}>
         {breadcrumbs.map((b, index) => (
-          <BreadcrumbItem href={`/${joinBreadcrumbs(index)}`}>
-            {b}
-          </BreadcrumbItem>
+          <Link href={`/${joinBreadcrumbs(index)}`}>
+            <BreadcrumbItem>{loading ? <SkeletonText /> : b}</BreadcrumbItem>
+          </Link>
         ))}
       </Breadcrumb>
 
       <Topbar key="topbar" title={title} />
+
       <AppCanvas>{children}</AppCanvas>
-    </AnimatePresence>
+    </>
   );
 }

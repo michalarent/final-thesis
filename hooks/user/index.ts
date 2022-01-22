@@ -60,7 +60,7 @@ export function useDoctor(authId: string): any {
 
   async function fetchData(url) {
     const response = await apiCall(url, "GET");
-    console.log("Response:", response);
+
     setDoctor(!_.isEmpty(response) ? (response as Doctor) : null);
     return response;
   }

@@ -1,4 +1,4 @@
-import apiEndpoint, { getAppointment } from "../../../common/api";
+import apiEndpoint from "../../../common/api";
 import { getChatMessages, sendMessage } from "../../../services/ChatServices";
 
 export default apiEndpoint({

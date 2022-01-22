@@ -62,7 +62,7 @@ export default function Home() {
     return <Loading />;
   }
 
-  if (ready && patientData.value.isPatient) {
+  if ((ready && basics.value.isPatient) || basics.value.isDoctor) {
     router.push("/dashboard");
   }
 

@@ -1,3 +1,4 @@
+import failwith from "../util/failwith";
 import { HttpMethod, HttpResponseCode } from "./types";
 
 export default async function apiCall<TRequest, TResponse>(

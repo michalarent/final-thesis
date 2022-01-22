@@ -9,7 +9,7 @@ import { ArentFlex } from "./ui/navigation/layout/ArentGrid";
 
 export const OverflowContainer = styled.div`
   transition: none;
-
+  width: 100%;
   max-width: 100%;
 `;
 
@@ -83,7 +83,13 @@ const MutationPlugin = (slider) => {
   });
 };
 
-export default function WoundSlider({ cards }: { cards: React.ReactNode[] }) {
+export default function WoundSlider({
+  cards,
+  perView,
+}: {
+  cards: React.ReactNode[];
+  perView?: number;
+}) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [refCallback, instanceRef] = useKeenSlider(
     {
@@ -102,7 +108,7 @@ export default function WoundSlider({ cards }: { cards: React.ReactNode[] }) {
 
       slides: {
         spacing: 24,
-        perView: 3.4,
+        perView: perView || 2.5,
       },
 
       breakpoints: {
@@ -131,20 +137,21 @@ export default function WoundSlider({ cards }: { cards: React.ReactNode[] }) {
             style={{
               overflow: "visible",
               height: "300px",
+              width: "100%",
             }}
           >
             {card}
           </div>
         ))}
       </OverflowContainer>
-      <ArentFlex style={{ marginTop: 30 }} gap={20}>
+      {/* <ArentFlex style={{ marginTop: 30 }} gap={20}>
         <ArrowButton onClick={() => instanceRef.current?.prev()}>
           <Arrow left />
         </ArrowButton>
         <ArrowButton onClick={() => instanceRef.current?.next()}>
           <Arrow />
         </ArrowButton>
-      </ArentFlex>
+      </ArentFlex> */}
     </>
   );
 }
