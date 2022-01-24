@@ -4,10 +4,12 @@ import { isPatient } from "../../../services/PatientServices";
 
 export default apiEndpoint({
   GET: async (_: void, { user }) => {
-    //@ts-ignore
-    const _isDoctor = await isDoctor(user.authId);
-    //@ts-ignore
-    const _isPatient = await isPatient(user.authId);
+    const [_isDoctor, _isPatient] = await Promise.all([
+      //@ts-ignore
+      isDoctor(user.authId),
+      //@ts-ignore
+      isPatient(user.authId),
+    ]);
 
     if (_isDoctor) {
       return {
@@ -23,7 +25,6 @@ export default apiEndpoint({
         isDoctor: false,
       };
     }
-
     return { user, isPatient: false, isDoctor: false };
   },
 });

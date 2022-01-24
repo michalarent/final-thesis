@@ -121,7 +121,7 @@ export default function MedicationPage() {
                     }}
                     size="small"
                   >
-                    Add +
+                    Add
                   </Button>
                 </TableCell>
                 <TableCell key="name">
@@ -183,7 +183,6 @@ export default function MedicationPage() {
             </TableBody>
           </Table>
         </TableContainer>
-        <div>hey there what'sup</div>
       </Container>
     </LayoutBase>
   );

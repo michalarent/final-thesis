@@ -14,6 +14,7 @@ import { ArrowRight16 } from "@carbon/icons-react/";
 import Link from "next/link";
 import router from "next/router";
 import { colors } from "../theme/colors";
+import ClientLoading from "../components/util/ClientLoading";
 export type ReadyData =
   | {
       isReady: boolean;
@@ -51,6 +52,7 @@ const everythingReady = (data: Record<string, Loader<any>>): ReadyData => {
 
 export default function Home() {
   const { basics, patientData, doctorData } = useUserInfo();
+  return <ClientLoading />;
 
   const basicsReady = basics.status === "ready";
   const patientDataReady = basicsReady && patientData.status === "ready";

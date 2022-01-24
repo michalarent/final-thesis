@@ -24,15 +24,21 @@ import UpdateMedicationForm from "./UpdateMedication";
 import TreatmentMedication from "../../db/TreatmentMedication";
 import { ArentFlex } from "../ui/navigation/layout/ArentGrid";
 import apiCall from "../../common/api/ApiCall";
+import ClientError from "../util/ClientError";
 
 export default function MedicationsListWithAdd({
   medications,
   treatmentId,
   isDoctor,
+}: {
+  medications: TreatmentMedication[];
+  treatmentId: number;
+  isDoctor: boolean;
 }) {
   const allMedications = useMedications();
-  const [selection, setSelection] = useState<any>();
   const [stateMedications, setStateMedications] = useState<any>(medications);
+
+  const [selection, setSelection] = useState<any>();
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [description, setDescription] = useState<string>("");
   const [newDosage, setNewDosage] = useState<number>(0);
@@ -41,11 +47,12 @@ export default function MedicationsListWithAdd({
     TreatmentMedication
   >();
 
-  if (
-    allMedications.status === "loading" ||
-    allMedications.status === "error"
-  ) {
+  if (allMedications.status === "loading") {
     return <ClientLoading />;
+  }
+
+  if (allMedications.status === "error") {
+    return <ClientError>Error loading medications.</ClientError>;
   }
 
   async function postMedicationToTreatment() {
