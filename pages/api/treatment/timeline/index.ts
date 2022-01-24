@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import apiEndpoint from "../../../../common/api";
 import failwith from "../../../../common/util/failwith";
 import { isDoctor } from "../../../../services/DoctorServices";
@@ -12,7 +14,7 @@ export default apiEndpoint({
       const response = await addTimelineEvent(treatmentId, event);
       return response;
     } else {
-      failwith("You are not a doctor");
+      failwith(new Error("NOT A DOCTOR!"));
     }
   },
 });

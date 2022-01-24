@@ -8,7 +8,7 @@ import {
 import Image from "./Image";
 
 @Entity()
-export class Annotations {
+export class Annotation {
   @PrimaryKey()
   id!: number;
 

@@ -178,7 +178,6 @@ export default function ModifiableCalendar({
                                   ? event.comments
                                   : HandleEventTypeString[event.type]}
                               </strong>
-                              {/* <SmallDot color={HandleDotColor[event.type]} /> */}
                             </ArentFlex>
                           </div>
                         );

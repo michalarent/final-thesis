@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "selection": {
+        "mode": "EDITING",
+        "anchorX": 11.71413966104488,
+        "anchorY": 26.81764694158271,
+        "showEditor": true
+      },
+      "geometry": {
+        "type": "OVAL",
+        "x": 11.71413966104488,
+        "y": 26.81764694158271,
+        "width": 31.281922425990693,
+        "height": 44.01826141318247
+      },
+      "data": {
+        "text": "Hey"
+      }
+    }
+  ]
+}

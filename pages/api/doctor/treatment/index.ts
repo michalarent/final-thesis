@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import apiEndpoint from "../../../../common/api";
 import apiCall from "../../../../common/api/ApiCall";
 import User from "../../../../db/User";

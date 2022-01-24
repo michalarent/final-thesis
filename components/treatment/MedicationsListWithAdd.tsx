@@ -35,7 +35,6 @@ export default function MedicationsListWithAdd({
   treatmentId: number;
   isDoctor: boolean;
 }) {
-  const allMedications = useMedications();
   const [stateMedications, setStateMedications] = useState<any>(medications);
 
   const [selection, setSelection] = useState<any>();
@@ -47,6 +46,10 @@ export default function MedicationsListWithAdd({
     TreatmentMedication
   >();
 
+  const allMedications = useMedications();
+
+  console.log(allMedications.value);
+
   if (allMedications.status === "loading") {
     return <ClientLoading />;
   }
@@ -54,6 +57,8 @@ export default function MedicationsListWithAdd({
   if (allMedications.status === "error") {
     return <ClientError>Error loading medications.</ClientError>;
   }
+
+  console.log(allMedications.value);
 
   async function postMedicationToTreatment() {
     setRequestLoading(true);

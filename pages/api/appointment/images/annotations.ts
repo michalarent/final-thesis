@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import apiEndpoint from "../../../../common/api";
 import failwith from "../../../../common/util/failwith";
 import {
