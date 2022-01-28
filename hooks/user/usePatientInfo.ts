@@ -6,7 +6,7 @@ import {
 } from "../../services/DoctorServices";
 import { getPatientChats } from "../../services/PatientServices";
 import { IUser } from "../../types/user";
-import useLoaderSWR from "../useLoaderSWR";
+import useLoaderSWR, { Loader } from "../useLoaderSWR";
 import {
   getUserFromBackend,
   getPatientFromBackend,
@@ -26,7 +26,6 @@ async function fetchUserInfo(): Promise<IUser> {
   const user = await getUserFromBackend();
   // @ts-ignore
 
-  console.log(user);
   //@ts-ignore
   return user;
 }
@@ -123,3 +122,9 @@ export default function useUserInfo() {
 
   return { basics: user, patientData: patient, doctorData: doctor };
 }
+
+export type UserInfo = {
+  basics: Loader<IUser>;
+  patientData: Loader<ConsolidatedPatientInfo>;
+  doctorData: Loader<ConsolidatedDoctorInfo>;
+};

@@ -13,6 +13,7 @@ import {
 } from "carbon-components-react";
 import Link from "next/link";
 import Head from "next/head";
+import { IUser } from "../../../../types/user";
 
 const Grid = styled(motion.div)`
   display: grid;
@@ -33,11 +34,13 @@ export default function LayoutBase({
   title,
   breadcrumbs,
   loading,
+  basics,
 }: {
   children: React.ReactNode;
   title: string;
   breadcrumbs: string[];
   loading?: boolean;
+  basics: IUser;
 }) {
   const joinBreadcrumbs = (depth: number) =>
     breadcrumbs

@@ -20,14 +20,22 @@ import {
   SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
+  HeaderNavigation,
+  HeaderMenuItem,
+  HeaderMenu,
+  SkeletonText,
 } from "carbon-components-react";
 import React from "react";
 import { useRouter } from "next/router";
 import { IoExit } from "react-icons/io5";
+import usePatientInfo from "../../../../hooks/user/usePatientInfo";
+import { useInfoContext } from "../../../../hooks/context/UserInfoContext";
+import Link from "next/link";
 
 export default function Topbar({ title }: { title: string }) {
   const { logout } = useAuth0();
   const router = useRouter();
+  const { basics } = useInfoContext();
 
   return (
     <HeaderContainer
@@ -44,6 +52,57 @@ export default function Topbar({ title }: { title: string }) {
             <HeaderName href="/" prefix="Wound Healing">
               [PJATK]
             </HeaderName>
+            {basics.status === "ready" ? (
+              basics.value.isDoctor && (
+                <HeaderNavigation>
+                  <Link href="/dashboard/doctor/patients">
+                    <HeaderMenuItem
+                      isCurrentPage={
+                        router.pathname === "/dashboard/doctor/patients"
+                      }
+                      href="#"
+                    >
+                      Patients
+                    </HeaderMenuItem>
+                  </Link>
+                  <Link href="/dashboard/doctor/treatments">
+                    <HeaderMenuItem
+                      isCurrentPage={
+                        router.pathname === "/dashboard/doctor/treatments"
+                      }
+                      href="#"
+                    >
+                      Treatments
+                    </HeaderMenuItem>
+                  </Link>
+                  <Link href="/dashboard">
+                    <HeaderMenuItem
+                      isCurrentPage={router.pathname === "/dashboard"}
+                      href="#"
+                    >
+                      Appointments
+                    </HeaderMenuItem>
+                  </Link>
+
+                  <Link href="/dashboard/medications">
+                    <HeaderMenuItem href="#">All Medications</HeaderMenuItem>
+                  </Link>
+                </HeaderNavigation>
+              )
+            ) : (
+              <>
+                <HeaderMenuItem href="#">
+                  <SkeletonText />
+                </HeaderMenuItem>
+                <HeaderMenuItem href="#">
+                  <SkeletonText />
+                </HeaderMenuItem>
+                <HeaderMenuItem href="#">
+                  <SkeletonText />
+                </HeaderMenuItem>
+              </>
+            )}
+
             <HeaderGlobalBar>
               <HeaderGlobalAction aria-label="Search" onClick={() => {}}>
                 <Search20 />

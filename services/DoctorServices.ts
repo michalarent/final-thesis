@@ -2,12 +2,14 @@ import { MikroORM } from "@mikro-orm/core";
 import { EntityManager, PostgreSqlDriver } from "@mikro-orm/postgresql";
 import _ from "lodash";
 import failwith from "../common/util/failwith";
+import { FormInput } from "../data/types";
 
 import { getOrm } from "../db";
 import { Appointment } from "../db/Appointment";
 import { Chat } from "../db/Chat";
 import { ChatMessage } from "../db/ChatMessage";
 import { Doctor } from "../db/Doctor";
+import ExaminationFormTemplate from "../db/ExaminationFormTemplate";
 import Patient from "../db/Patient";
 import { Treatment } from "../db/Treatment";
 import TreatmentMedication from "../db/TreatmentMedication";
@@ -165,4 +167,43 @@ export async function getAllPatientsByDoctor(
   const _patients = await Promise.all(patients);
 
   return _.uniqBy(_patients, (p) => p.patient.authId);
+}
+
+export async function getAllExaminationTemplates(authId: string) {
+  const orm = await getOrm();
+  const doctor = await orm.em.findOne(Doctor, {
+    authId,
+  });
+  if (!doctor) failwith("Doctor not found");
+
+  const templates = await orm.em.find(ExaminationFormTemplate, {
+    doctor: doctor,
+    title: { $ne: "" },
+  });
+
+  return templates;
+}
+
+export async function createExaminationTemplate(
+  title: string,
+  description: string,
+  data: FormInput[],
+  authId: string
+) {
+  const orm = await getOrm();
+  const doctor = await orm.em.findOne(Doctor, {
+    authId,
+  });
+  if (!doctor) failwith("Doctor not found");
+
+  const formTemplate = orm.em.create(ExaminationFormTemplate, {
+    doctor: doctor,
+    title: title,
+    description: description || "",
+    inputs: data,
+    createdAt: new Date(),
+  });
+
+  await orm.em.persistAndFlush(formTemplate);
+  return formTemplate;
 }

@@ -20,6 +20,7 @@ import Medication from "./Medication";
 import Prescription from "./Prescription";
 import Timeline from "./Timeline";
 import TimelineEvent from "./TimelineEvent";
+import ExaminationFormTemplate from "./ExaminationFormTemplate";
 
 const { host, user, password, dbName } = ORMCONFIG[0];
 const config: Options = {
@@ -36,6 +37,7 @@ const config: Options = {
     Patient,
     PatientMedicalHistory,
     Doctor,
+    ExaminationFormTemplate,
     Treatment,
     Timeline,
     TimelineSection,

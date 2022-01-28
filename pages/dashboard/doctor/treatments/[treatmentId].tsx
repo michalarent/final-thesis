@@ -7,6 +7,8 @@ import styled from "styled-components";
 import apiCall from "../../../../common/api/ApiCall";
 import AnnotateImageModal from "../../../../components/AnnotateImageModal";
 import ChatBox from "../../../../components/ChatBox";
+import DoctorExaminationsTab from "../../../../components/examination/DoctorExaminationsTab";
+import ExaminationItem from "../../../../components/examination/ExaminationItem";
 import { modalStyles } from "../../../../components/modal_styles";
 import ModifiableCalendar from "../../../../components/treatment/calendar/ModifiableCalendar";
 import MedicationsListWithAdd from "../../../../components/treatment/MedicationsListWithAdd";
@@ -178,7 +180,12 @@ export default function TreatmentPage() {
                       />
                     </ArentFlex>
                   </Tab>
-
+                  <Tab id="tab-6" label="Examination">
+                    <DoctorExaminationsTab
+                      basics={basics.value}
+                      treatmentId={treatmentId}
+                    />
+                  </Tab>
                   <Tab disabled id="tab-4" label="Appointments"></Tab>
                   <Tab disabled id="tab-5" label="Notes"></Tab>
                 </Tabs>

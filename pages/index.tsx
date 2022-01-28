@@ -52,7 +52,7 @@ const everythingReady = (data: Record<string, Loader<any>>): ReadyData => {
 
 export default function Home() {
   const { basics, patientData, doctorData } = useUserInfo();
-  return <ClientLoading />;
+  // return <ClientLoading />;
 
   const basicsReady = basics.status === "ready";
   const patientDataReady = basicsReady && patientData.status === "ready";

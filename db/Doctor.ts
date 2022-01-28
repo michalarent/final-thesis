@@ -7,6 +7,7 @@ import {
 } from "@mikro-orm/core";
 import { Appointment } from "./Appointment";
 import { Chat } from "./Chat";
+import ExaminationFormTemplate from "./ExaminationFormTemplate";
 import { Treatment } from "./Treatment";
 
 import User from "./User";
@@ -29,4 +30,7 @@ export class Doctor extends User {
 
   @OneToMany({ entity: () => Treatment, mappedBy: "doctor" })
   treatments = new Collection<Treatment>(this);
+
+  @OneToMany({ entity: () => ExaminationFormTemplate, mappedBy: "doctor" })
+  examinationFormTemplates = new Collection<ExaminationFormTemplate>(this);
 }
