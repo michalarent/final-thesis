@@ -54,5 +54,5 @@ export default function TypeForm({
     Checkbox: CHECKBOX_INPUT,
   };
 
-  return <AutoForm data={FORM_INPUTS[type]} />;
+  return ;
 }

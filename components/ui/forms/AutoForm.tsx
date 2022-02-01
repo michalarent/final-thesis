@@ -68,7 +68,7 @@ export default function AutoForm({
   step?: number;
   formType?: FormType;
   multi?: boolean;
-  data?: any;
+  data?: FormInput[];
   initialData?: any;
   submitUrl?: string;
 }) {
