@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { DateTime } from "luxon";
+import { EventType } from "../../common/util/icons";
 import { ReadyLoader } from "../../hooks/useLoaderSWR";
 import { ConsolidatedTreatment } from "../../hooks/user/types";
 import { ConsolidatedAppointment } from "./types";
@@ -47,7 +48,7 @@ export function getListOfAllEvents(
 export type CalendarEventType = {
   date: DateTime | string | number;
   id: number;
-  type: "video" | "request" | "chat" | "checkup" | "appointment";
+  type: EventType;
   name: string;
   comments?: string;
 };

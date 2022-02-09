@@ -49,7 +49,7 @@ export default function ModifiableCalendar({
           }
           const event = allEvents.find((event) => {
             return eqCalendarDate(
-              new Date(event.date).getTime(),
+              new Date(event.date.toString()).getTime(),
               date.getTime()
             );
           });
@@ -75,7 +75,7 @@ export default function ModifiableCalendar({
 
           const event = allEvents.find((event) => {
             return eqCalendarDate(
-              new Date(event.date).getTime(),
+              new Date(event.date.toString()).getTime(),
               tile.date.getTime()
             );
           });
@@ -92,7 +92,7 @@ export default function ModifiableCalendar({
         tileContent={(tile) => {
           const event = allEvents.filter((event) => {
             return eqCalendarDate(
-              new Date(event.date).getTime(),
+              new Date(event.date.toString()).getTime(),
               tile.date.getTime()
             );
           });
@@ -119,9 +119,9 @@ export default function ModifiableCalendar({
               .map((exam) => {
                 console.log("EXAMINATION IN TIMELINE", exam);
                 event.push({
-                  date: DateTime.fromISO(exam.date),
+                  date: DateTime.fromISO(exam.date.toString()),
                   id: exam.id,
-                  name: exam.name,
+                  name: exam.title,
                   type:
                     exam.status === "completed"
                       ? "completedExamination"

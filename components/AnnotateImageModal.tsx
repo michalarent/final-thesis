@@ -28,6 +28,8 @@ import { modalStyles } from "./modal_styles";
 import { BsPlusCircle, BsX } from "react-icons/bs";
 import { BiCircle, BiRectangle } from "react-icons/bi";
 import { FaRegDotCircle } from "react-icons/fa";
+import { Annotations } from "../db/Annotations";
+import { Loader } from "../hooks/useLoaderSWR";
 
 const ModalContainer = styled.div`
   & .bx--modal-container {
@@ -78,7 +80,7 @@ export default function AnnotateImageModal({
 
   async function getAnnotationsForImage() {
     setAnnotationsLoading(true);
-    const response = await apiCall(
+    const response: any = await apiCall(
       `/api/appointment/images/annotations?imageId=${image.id}`,
       "GET"
     );
@@ -256,7 +258,8 @@ export default function AnnotateImageModal({
                 <Loading />
               ) : (
                 <Annotation
-                  src={image.url}
+                  //@ts-ignore
+                  src={image.url as string}
                   type={annotationType}
                   value={currentAnnotation}
                   annotations={annotations}

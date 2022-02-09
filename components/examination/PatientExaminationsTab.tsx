@@ -56,7 +56,7 @@ export default function PatientExaminationsTab({ basics, treatmentId }) {
   const soonestExamination = scheduledExaminations.value.reduce((acc, curr) => {
     if (acc.date) {
       if (
-        DateTime.fromISO(curr.date)
+        DateTime.fromISO(curr.date.toString())
           .diff(DateTime.fromJSDate(acc.date))
           .as("days") < 0
       ) {
@@ -70,7 +70,7 @@ export default function PatientExaminationsTab({ basics, treatmentId }) {
 
   const todaysExaminations = scheduledExaminations.value.filter(
     (exam) =>
-      DateTime.fromISO(exam.date).toFormat("yyyy-MM-dd") ===
+      DateTime.fromISO(exam.date.toString()).toFormat("yyyy-MM-dd") ===
       DateTime.local().toFormat("yyyy-MM-dd")
   );
 

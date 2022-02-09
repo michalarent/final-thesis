@@ -5,6 +5,7 @@ import { useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import apiCall from "../../../../common/api/ApiCall";
+import { EventType } from "../../../../common/util/icons";
 import AnnotateImageModal from "../../../../components/AnnotateImageModal";
 import ChatBox from "../../../../components/ChatBox";
 import DoctorExaminationsTab from "../../../../components/examination/DoctorExaminationsTab";
@@ -25,7 +26,10 @@ import ClientError from "../../../../components/util/ClientError";
 import ClientLoading from "../../../../components/util/ClientLoading";
 import { Divider } from "../../../../components/util/Divider";
 import ScheduledExaminationForm from "../../../../db/ScheduledExaminationForm";
-import { getListOfAllEvents } from "../../../../helpers/doctor";
+import {
+  CalendarEventType,
+  getListOfAllEvents,
+} from "../../../../helpers/doctor";
 import useLoaderSWR, { Loader } from "../../../../hooks/useLoaderSWR";
 import { ConsolidatedTreatment } from "../../../../hooks/user/types";
 import usePatientInfo from "../../../../hooks/user/usePatientInfo";
@@ -103,6 +107,7 @@ export default function TreatmentPage() {
         <AnnotateImageModal
           image={currentImage}
           visible={openAnnotationModal}
+          setVisible={setOpenAnnotationModal}
           onClose={() => setOpenAnnotationModal(false)}
         />
 
@@ -163,7 +168,7 @@ export default function TreatmentPage() {
                           fullScreen
                           isDoctor={basics.value.isDoctor}
                           createdAt={treatmentData.value.createdAt}
-                          allEvents={allEvents}
+                          allEvents={allEvents as CalendarEventType[]}
                           currentDate={currentDate}
                           setCurrentDate={setCurrentDate}
                           setCurrentEvent={setCurrentEvent}

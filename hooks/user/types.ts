@@ -21,15 +21,15 @@ export type ConsolidatedWound = {
   woundId: number;
   woundDataId: number;
   appointments: ConsolidatedAppointment[];
-  woundData: {
-    woundLocation: WoundLocation;
-    woundSize: WoundSize;
-    woundStage: WoundStage;
-    woundStatus: WoundStatus;
-    woundSeverity: WoundSeverity;
-    woundSource: WoundSource;
-    woundType: WoundType;
-  };
+
+  woundLocation: WoundLocation;
+  woundSize: WoundSize;
+  woundStage: WoundStage;
+  woundStatus: WoundStatus;
+  woundSeverity: WoundSeverity;
+  woundSource: WoundSource;
+  woundType: WoundType;
+
   patient: Patient;
 };
 

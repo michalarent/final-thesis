@@ -58,7 +58,7 @@ export const WoundTypeIcon: Record<WoundType, any> = {
   Other: <FcFlashOn />,
 };
 
-type EventType =
+export type EventType =
   | "video"
   | "request"
   | "chat"

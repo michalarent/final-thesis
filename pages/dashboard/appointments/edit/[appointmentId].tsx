@@ -184,7 +184,7 @@ export default function EditAppointment() {
               sender={user.authId}
               receiver={
                 doctorData.value.doctor.appointments.find(
-                  (app) => app.id == appointmentId
+                  (app) => app.id.toString() == appointmentId.toString()
                 ).patient.authId
               }
             />

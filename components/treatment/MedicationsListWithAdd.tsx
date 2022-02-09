@@ -31,8 +31,8 @@ export default function MedicationsListWithAdd({
   treatmentId,
   isDoctor,
 }: {
-  medications: TreatmentMedication[];
-  treatmentId: number;
+  medications: TreatmentMedication[] | any;
+  treatmentId: number | string | string[];
   isDoctor: boolean;
 }) {
   const [stateMedications, setStateMedications] = useState<any>(medications);
@@ -47,8 +47,6 @@ export default function MedicationsListWithAdd({
   >();
 
   const allMedications = useMedications();
-
-  console.log(allMedications.value);
 
   if (allMedications.status === "loading") {
     return <ClientLoading />;
