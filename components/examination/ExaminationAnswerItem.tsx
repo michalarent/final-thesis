@@ -1,20 +1,35 @@
-import { SkeletonText, Tooltip } from "carbon-components-react";
+import {
+  OverflowMenu,
+  OverflowMenuItem,
+  SkeletonText,
+  Tooltip,
+} from "carbon-components-react";
 import { DateTime } from "luxon";
+import { useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import styled from "styled-components";
+import apiCall from "../../common/api/ApiCall";
+import { colors } from "../../theme/colors";
 import { ArentFlex } from "../ui/navigation/layout/ArentGrid";
+import AnswerModal from "./AnswerModal";
 
-export default function ExaminationItem({
+export default function ExaminationAnswerItem({
+  onClick,
+  examinationId,
   title,
   date,
   empty,
-  onClick,
+  examination,
 }: {
+  onClick: () => void;
+  examinationId: number;
   title?: string;
   date?: any;
   empty?: boolean;
-  onClick?: () => void;
+  examination?: any;
 }) {
+  console.log(examinationId);
+  const [answerModalOpen, setAnswerModalOpen] = useState(false);
   if (empty) {
     return (
       <Container style={{ background: "transparent" }}>
@@ -32,8 +47,37 @@ export default function ExaminationItem({
     );
   }
 
+  const handleRemove = async () => {
+    onClick();
+    await apiCall("/api/treatment/examinations", "DELETE", {
+      examinationId,
+    });
+  };
+
+  console.log(examination);
   return (
-    <Container onClick={onClick}>
+    <Container
+      style={{ background: title === "completed" && colors.lightaquamarine }}
+    >
+      <AnswerModal
+        visible={answerModalOpen}
+        setVisible={setAnswerModalOpen}
+        examination={examination}
+        treatmentId={undefined}
+      />
+      <OverflowMenu
+        style={{ position: "absolute", top: 10, right: 10, zIndex: 40 }}
+      >
+        <OverflowMenuItem onClick={handleRemove} itemText="Remove">
+          {" "}
+        </OverflowMenuItem>
+        {title === "completed" && (
+          <OverflowMenuItem
+            onClick={() => setAnswerModalOpen(true)}
+            itemText="View answer"
+          />
+        )}
+      </OverflowMenu>
       <ArentFlex direction="column" justify="space-between" height="100%">
         <p style={{ height: "100%" }}>{title}</p>
         <code>{DateTime.fromISO(date).toLocaleString(DateTime.DATE_HUGE)}</code>

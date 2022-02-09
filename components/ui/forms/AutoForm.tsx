@@ -64,6 +64,7 @@ export default function AutoForm({
   data,
   initialData,
   submitUrl,
+  onComplete,
 }: {
   step?: number;
   formType?: FormType;
@@ -71,6 +72,7 @@ export default function AutoForm({
   data?: FormInput[];
   initialData?: any;
   submitUrl?: string;
+  onComplete: () => void;
 }) {
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -111,6 +113,7 @@ export default function AutoForm({
       const { url } = await uploadToS3(file);
       urls.push(url);
     }
+    console.log(urls);
     return urls;
   };
 
@@ -142,7 +145,7 @@ export default function AutoForm({
       } finally {
         setSubmitLoading(false);
         setSuccess(true);
-        router.push("/dashboard");
+        // onComplete;
       }
     }
   }

@@ -1,9 +1,9 @@
 import apiEndpoint from "../../../../common/api";
-import { addImageToAppointmentImages } from "../../../../services/ImageServices";
+import { addImageToWoundImages } from "../../../../services/ImageServices";
 
 export default apiEndpoint({
-  POST: async ({ appointmentId, imageUrl }) => {
-    const response = await addImageToAppointmentImages(appointmentId, imageUrl);
+  POST: async ({ woundId, imageUrl }) => {
+    const response = await addImageToWoundImages(woundId, imageUrl);
     return response;
   },
 });

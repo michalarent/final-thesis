@@ -22,7 +22,6 @@ export async function isDoctor(authId: string): Promise<boolean> {
   const doctor = await orm.em.findOne(Doctor, { authId });
 
   if (!doctor?.authId) {
-    console.log("is no doctore");
     return false;
   }
   return true;
@@ -102,7 +101,7 @@ export async function getDoctorAppointments(authId: string) {
       .select("*")
       .where({ doctor })
       .leftJoinAndSelect("appointment.wound", "wound")
-      .leftJoinAndSelect("images", "images")
+
       .leftJoinAndSelect("wound.patient", "patient")
       .leftJoinAndSelect("patient.medicalHistory", "medicalHistory")
       .leftJoinAndSelect("wound.woundData", "woundData")
@@ -117,7 +116,6 @@ export async function getDoctorAppointments(authId: string) {
       date: appointment.date,
       wound: appointment.wound,
       patient: appointment.wound.patient,
-      images: appointment.images,
     }));
   }
 }

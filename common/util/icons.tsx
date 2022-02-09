@@ -65,7 +65,9 @@ type EventType =
   | "checkup"
   | "appointment"
   | "start"
-  | "treatment";
+  | "treatment"
+  | "pendingExamination"
+  | "completedExamination";
 
 export const HandleDotColor: Record<EventType, string> = {
   video: colors.lightmint,
@@ -75,6 +77,8 @@ export const HandleDotColor: Record<EventType, string> = {
   appointment: colors.limette,
   start: colors.blue,
   treatment: "red",
+  pendingExamination: colors.lightmint,
+  completedExamination: colors.mint,
 };
 
 export const HandleEventTypeString: Record<EventType, string> = {
@@ -85,6 +89,8 @@ export const HandleEventTypeString: Record<EventType, string> = {
   appointment: "Appointment",
   start: "Start Date",
   treatment: "Treatment!",
+  pendingExamination: "Examination: Pending",
+  completedExamination: "Examination: Completed",
 };
 
 export const HandleEventTypeIcon: Record<EventType, any> = {
@@ -95,4 +101,6 @@ export const HandleEventTypeIcon: Record<EventType, any> = {
   checkup: <FcIdea />,
   start: <FcDisclaimer />,
   treatment: <FcDisclaimer />,
+  pendingExamination: <FcDisclaimer />,
+  completedExamination: <FcDisclaimer />,
 };

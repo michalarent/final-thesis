@@ -2,6 +2,7 @@ import failwith from "../common/util/failwith";
 import { getOrm } from "../db";
 import { Annotations } from "../db/Annotations";
 import Image from "../db/Image";
+import { Treatment } from "../db/Treatment";
 
 export async function removeImageFromAppointmentImages(
   appointmentId,
@@ -30,12 +31,59 @@ export async function removeImageFromAppointmentImages(
   return image;
 }
 
-export async function addImageToAppointmentImages(appointmentId, imageUrl) {
+export async function addManyImages(woundId: number, imageUrls: string[]) {
+  const orm = await getOrm();
+
+  const images = imageUrls.map((url) => {
+    const img = orm.em.create(Image, {
+      url: url,
+      wound: woundId,
+    });
+    return img;
+  });
+
+  const dbImages = await orm.em.persistAndFlush(images);
+
+  return dbImages;
+}
+
+export async function getImagesForTreatment(treatmentId) {
+  const orm = await getOrm();
+
+  const treatment = await orm.em.findOne(Treatment, {
+    id: treatmentId,
+  });
+
+  if (!treatment) {
+    failwith("Treatment not found");
+  }
+
+  // get images with annotations
+
+  const images = await orm.em.find(Image, {
+    wound: treatment.wound,
+  });
+
+  // join annotations
+
+  const qb = orm.em.createQueryBuilder(Image, "image");
+
+  const imagesWithAnnotations = await qb
+    .select("*")
+    .where({ id: images.map((i) => i.id) })
+    .leftJoinAndSelect("image.annotations", "annotations")
+    .getResult();
+
+  return imagesWithAnnotations;
+  return images;
+}
+
+export async function addImageToWoundImages(woundId, imageUrl) {
   const orm = await getOrm();
 
   const newImage = orm.em.create(Image, {
     url: imageUrl,
-    appointment: appointmentId,
+    wound: woundId,
   });
 
   await orm.em.persistAndFlush(newImage);

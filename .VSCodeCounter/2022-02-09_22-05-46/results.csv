@@ -1,0 +1,213 @@
+"filename", "language", "TypeScript", "JSON", "TypeScript React", "JavaScript", "JSON with Comments", "Markdown", "CSS", "SCSS", "XML", "Log", "comment", "blank", "total"
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/.eslintrc.json", "JSON", 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/README.md", "Markdown", 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 15, 35
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/a.json", "JSON", 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 23
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/api/ApiCall.ts", "TypeScript", 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 45
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/api/PermissionError.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/api/index.ts", "TypeScript", 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 76
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/api/types.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/util/dates.ts", "TypeScript", 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 38
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/util/failwith.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 39
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/util/icons.tsx", "TypeScript React", 0, 0, 98, 0, 0, 0, 0, 0, 0, 0, 0, 9, 107
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/util/sleep.ts", "TypeScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/common/util/strings.ts", "TypeScript", 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/AnnotateImageModal.tsx", "TypeScript React", 0, 0, 263, 0, 0, 0, 0, 0, 0, 0, 0, 16, 279
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/Arrow.tsx", "TypeScript React", 0, 0, 39, 0, 0, 0, 0, 0, 0, 0, 0, 4, 43
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ChatBox.tsx", "TypeScript React", 0, 0, 183, 0, 0, 0, 0, 0, 0, 0, 0, 17, 200
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/DoctorCard.tsx", "TypeScript React", 0, 0, 118, 0, 0, 0, 0, 0, 0, 0, 0, 13, 131
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ImageCard.tsx", "TypeScript React", 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 6, 55
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/LastChatMessage.tsx", "TypeScript React", 0, 0, 171, 0, 0, 0, 0, 0, 0, 0, 0, 8, 179
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ListDoctors.tsx", "TypeScript React", 0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 4, 40
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/WoundCard.tsx", "TypeScript React", 0, 0, 139, 0, 0, 0, 0, 0, 0, 0, 0, 10, 149
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/WoundSlider.tsx", "TypeScript React", 0, 0, 132, 0, 0, 0, 0, 0, 0, 0, 6, 20, 158
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/dashboards/DoctorDashboard.tsx", "TypeScript React", 0, 0, 102, 0, 0, 0, 0, 0, 0, 0, 0, 4, 106
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/dashboards/cards/AppointmentCard.tsx", "TypeScript React", 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 3, 45
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/AddedFormItem.tsx", "TypeScript React", 0, 0, 82, 0, 0, 0, 0, 0, 0, 0, 0, 3, 85
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/AnswerModal.tsx", "TypeScript React", 0, 0, 53, 0, 0, 0, 0, 0, 0, 0, 0, 3, 56
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/CompleteExaminationModal.tsx", "TypeScript React", 0, 0, 145, 0, 0, 0, 0, 0, 0, 0, 0, 14, 159
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/DoctorExaminationsTab.tsx", "TypeScript React", 0, 0, 82, 0, 0, 0, 0, 0, 0, 0, 0, 8, 90
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/ExaminationAnswerItem.tsx", "TypeScript React", 0, 0, 129, 0, 0, 0, 0, 0, 0, 0, 0, 5, 134
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/ExaminationItem.tsx", "TypeScript React", 0, 0, 86, 0, 0, 0, 0, 0, 0, 0, 0, 4, 90
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/FormItem.tsx", "TypeScript React", 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 4, 55
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/PatientExaminationsTab.tsx", "TypeScript React", 0, 0, 169, 0, 0, 0, 0, 0, 0, 0, 0, 9, 178
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/ScheduledExaminationItem.tsx", "TypeScript React", 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 2, 26
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/ScheduledExaminationsList.tsx", "TypeScript React", 0, 0, 78, 0, 0, 0, 0, 0, 0, 0, 0, 5, 83
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/SelectOptionMaker.tsx", "TypeScript React", 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 1, 3, 83
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/SetupExaminationModal.tsx", "TypeScript React", 0, 0, 175, 0, 0, 0, 0, 0, 0, 0, 0, 9, 184
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/TypeForm.tsx", "TypeScript React", 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 7, 59
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/examination/TypeFormStep.tsx", "TypeScript React", 0, 0, 201, 0, 0, 0, 0, 0, 0, 0, 1, 15, 217
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/helpers.tsx", "TypeScript React", 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 2, 30
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/medication/Add.tsx", "TypeScript React", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/medication/EditModal.tsx", "TypeScript React", 0, 0, 77, 0, 0, 0, 0, 0, 0, 0, 0, 5, 82
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/modal_styles.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 18
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/patient/MedicalHIstoryTable.tsx", "TypeScript React", 0, 0, 99, 0, 0, 0, 0, 0, 0, 0, 0, 2, 101
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/MedicationsListWithAdd.tsx", "TypeScript React", 0, 0, 248, 0, 0, 0, 0, 0, 0, 0, 0, 16, 264
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/TImelineSlider.tsx", "TypeScript React", 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 7, 71
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/Timeline.tsx", "TypeScript React", 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 2, 64
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/TreatmentCard.tsx", "TypeScript React", 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 6, 58
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/TreatmentImagesTab.tsx", "TypeScript React", 0, 0, 74, 0, 0, 0, 0, 0, 0, 0, 0, 8, 82
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/TreatmentPatientCard.tsx", "TypeScript React", 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 7, 123
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/UpdateMedication.tsx", "TypeScript React", 0, 0, 95, 0, 0, 0, 0, 0, 0, 0, 0, 6, 101
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/VerticalTimelineStick.tsx", "TypeScript React", 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 4, 54
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/calendar/ModifiableCalendar.tsx", "TypeScript React", 0, 0, 312, 0, 0, 0, 0, 0, 0, 0, 0, 21, 333
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/treatment/timeline/NewEvent.tsx", "TypeScript React", 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 5, 133
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/Card.tsx", "TypeScript React", 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 3, 32
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/Container.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/Scrollable.ts", "TypeScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/AutoForm.tsx", "TypeScript React", 0, 0, 154, 0, 0, 0, 0, 0, 0, 0, 3, 21, 178
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/ButtonGrid.tsx", "TypeScript React", 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 6, 63
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/Inputs.tsx", "TypeScript React", 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 7, 57
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/MeetingForm.tsx", "TypeScript React", 0, 0, 113, 0, 0, 0, 0, 0, 0, 0, 0, 14, 127
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/ScrollingForm.tsx", "TypeScript React", 0, 0, 251, 0, 0, 0, 0, 0, 0, 0, 9, 32, 292
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/countries.ts", "TypeScript", 258, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 259
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/date.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 15
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/forms/renderers/renderers.tsx", "TypeScript React", 0, 0, 495, 0, 0, 0, 0, 0, 0, 0, 10, 18, 523
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/navigation/layout/ArentGrid.tsx", "TypeScript React", 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 6, 69
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/navigation/layout/index.tsx", "TypeScript React", 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 11, 71
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/navigation/topbar/TopbarUserInfo.tsx", "TypeScript React", 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 4, 25
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/ui/navigation/topbar/index.tsx", "TypeScript React", 0, 0, 137, 0, 0, 0, 0, 0, 0, 0, 54, 9, 200
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/util/ClientError.tsx", "TypeScript React", 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 2, 19
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/util/ClientLoading.tsx", "TypeScript React", 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 2, 17
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/util/Divider.tsx", "TypeScript React", 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/util/Only.tsx", "TypeScript React", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/video/Lobby.tsx", "TypeScript React", 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 5, 46
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/video/Participant.tsx", "TypeScript React", 0, 0, 43, 0, 0, 0, 0, 0, 0, 0, 3, 12, 58
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/video/Room.tsx", "TypeScript React", 0, 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 8, 52
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/video/VideoChat.tsx", "TypeScript React", 0, 0, 92, 0, 0, 0, 0, 0, 0, 0, 0, 9, 101
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/components/wound/WoundDataList.tsx", "TypeScript React", 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 2, 26
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/config/default.json", "JSON", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/appointment/appointment.ts", "TypeScript", 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 30
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/doctor/doctor.ts", "TypeScript", 135, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 137
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/general/account.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 15
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/general/general.ts", "TypeScript", 306, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 309
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/general/woundform.ts", "TypeScript", 94, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 97
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/medical-info/index.ts", "TypeScript", 138, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 3, 154
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/data/types.ts", "TypeScript", 190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 206
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Annotations.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 23
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Appointment.ts", "TypeScript", 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 33
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Chat.ts", "TypeScript", 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 40
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/ChatMessage.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Doctor.ts", "TypeScript", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 37
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/ExaminationFormAnswer.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/ExaminationFormTemplate.ts", "TypeScript", 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 25
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Image.ts", "TypeScript", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 29
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Medication.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Patient.ts", "TypeScript", 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 32
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/PatientMedicalHistory.ts", "TypeScript", 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 53
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Prescription.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 23
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/ScheduledExaminationForm.ts", "TypeScript", 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 39
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Timeline.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 30
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/TimelineEvent.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 24
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/TimelineSection.ts", "TypeScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 17
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Treatment.ts", "TypeScript", 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 43
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/TreatmentMedication.ts", "TypeScript", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 36
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/User.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 31
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/Wound.ts", "TypeScript", 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 57
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/WoundFormData.ts", "TypeScript", 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/config.ts", "TypeScript", 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 70
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/db/index.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 18
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/helpers/chat/index.ts", "TypeScript", 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/helpers/doctor/index.ts", "TypeScript", 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 54
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/helpers/doctor/types.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 20
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/context/UserInfoContext.tsx", "TypeScript React", 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 5, 20
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/doctor/useDoctorsPatients.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 18
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/useChat.ts", "TypeScript", 59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 67
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/useKeyPress.ts", "TypeScript", 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 34
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/useLoaderSWR.ts", "TypeScript", 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 50
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/useMedications.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 22
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/user/Await.tsx", "TypeScript React", 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 3, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/user/helpers.ts", "TypeScript", 74, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 88
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/user/index.ts", "TypeScript", 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 118
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/user/types.ts", "TypeScript", 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 84
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/hooks/user/usePatientInfo.ts", "TypeScript", 113, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 16, 131
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/mikro-orm.config.ts", "TypeScript", 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 6
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/next-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 2, 6
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/next.config.js", "JavaScript", 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/ormconfig.json", "JSON", 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 15
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/package-lock.json", "JSON", 0, 21147, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 21148
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/package.json", "JSON", 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 81
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/_app.tsx", "TypeScript React", 0, 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 5, 36
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/[appointmentId].ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/images/add.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/images/annotations.ts", "TypeScript", 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 42
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/images/delete.ts", "TypeScript", 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 14
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/images/multi.ts", "TypeScript", 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 18
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/index.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 28
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/appointment/wound.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 15
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/auth/[...auth0].ts", "TypeScript", 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/chat/all.ts", "TypeScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/chat/index.ts", "TypeScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 14
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/all.ts", "TypeScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 9
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/appointment.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 22
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/chats.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/index.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/patients.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 16
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/templates/index.ts", "TypeScript", 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 15
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/treatment/all.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 11
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/doctor/treatment/index.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/hello.js", "JavaScript", 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 2, 6
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/medication/all.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/medication/index.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 28
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/patient/chats.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 11
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/patient/doctors.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/patient/index.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 11
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/patient/medical_history.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 28
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/patient/wound/index.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 22
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/s3-upload.ts", "TypeScript", 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/treatment/[appointmentId].ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 19
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/treatment/examinations/[id].ts", "TypeScript", 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 30
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/treatment/examinations/index.ts", "TypeScript", 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 56
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/treatment/index.ts", "TypeScript", 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 23
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/treatment/medication/index.ts", "TypeScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 23
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/treatment/timeline/index.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 21
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/user/index.ts", "TypeScript", 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 31
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/api/video/token.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 38
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/account/index.tsx", "TypeScript React", 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 3, 20
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/appointments/[woundId].tsx", "TypeScript React", 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 6, 47
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/appointments/edit/[appointmentId].tsx", "TypeScript React", 0, 0, 189, 0, 0, 0, 0, 0, 0, 0, 2, 11, 202
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/appointments/index.tsx", "TypeScript React", 0, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 5, 63
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/appointments/new.tsx", "TypeScript React", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/contact.tsx", "TypeScript React", 0, 0, 92, 0, 0, 0, 0, 0, 0, 0, 0, 9, 101
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/edit.tsx", "TypeScript React", 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 4, 28
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/examinations/new.tsx", "TypeScript React", 0, 0, 230, 0, 0, 0, 0, 0, 0, 0, 5, 13, 248
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/new.tsx", "TypeScript React", 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 2, 15
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/patients/index.tsx", "TypeScript React", 0, 0, 272, 0, 0, 0, 0, 0, 0, 0, 0, 14, 286
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/treatments.tsx", "TypeScript React", 0, 0, 73, 0, 0, 0, 0, 0, 0, 0, 1, 9, 83
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/treatments/[treatmentId].tsx", "TypeScript React", 0, 0, 256, 0, 0, 0, 0, 0, 0, 0, 1, 15, 272
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/treatments/[treatmentId]/events.tsx", "TypeScript React", 0, 0, 115, 0, 0, 0, 0, 0, 0, 0, 1, 10, 126
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/doctor/treatments/new.tsx", "TypeScript React", 0, 0, 410, 0, 0, 0, 0, 0, 0, 0, 0, 22, 432
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/index.tsx", "TypeScript React", 0, 0, 206, 0, 0, 0, 0, 0, 0, 0, 0, 13, 219
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/medications/index.tsx", "TypeScript React", 0, 0, 180, 0, 0, 0, 0, 0, 0, 0, 1, 9, 190
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/medications/view.tsx", "TypeScript React", 0, 0, 176, 0, 0, 0, 0, 0, 0, 0, 4, 8, 188
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/onboarding/new.tsx", "TypeScript React", 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 6, 35
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/treatments/index.tsx", "TypeScript React", 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 3, 25
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/wound/[id].tsx", "TypeScript React", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/wound/index.tsx", "TypeScript React", 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 5, 59
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/dashboard/wound/new.tsx", "TypeScript React", 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 3, 25
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/index.tsx", "TypeScript React", 0, 0, 129, 0, 0, 0, 0, 0, 0, 0, 1, 12, 142
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/meetings.tsx", "TypeScript React", 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 3, 37
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/pages/woundform.tsx", "TypeScript React", 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/public/vercel.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/server/index.ts", "TypeScript", 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 10
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/AnnotationServices.ts", "TypeScript", 54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 65
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/AppointmentServices.ts", "TypeScript", 98, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 118
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/ChatServices.ts", "TypeScript", 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 117
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/DoctorServices.ts", "TypeScript", 175, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 208
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/ExaminationServices.ts", "TypeScript", 129, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 151
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/ImageServices.ts", "TypeScript", 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 24, 92
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/MedicationServices.ts", "TypeScript", 83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 104
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/PatientServices.ts", "TypeScript", 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 130
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/TimelineServices.ts", "TypeScript", 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 37
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/TreatmentMedicationServices.ts", "TypeScript", 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 81
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/TreatmentServices.ts", "TypeScript", 204, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 49, 254
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/UserServices.ts", "TypeScript", 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9, 61
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/services/WoundServices.ts", "TypeScript", 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 25, 133
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/styles/Home.module.css", "CSS", 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 17, 122
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/styles/globals.scss", "SCSS", 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 2, 5, 18
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/theme/colors.ts", "TypeScript", 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 36
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/tsconfig.json", "JSON with Comments", 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/tsconfig.orm.json", "JSON", 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 8
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/types/medication.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/types/user.ts", "TypeScript", 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 28
+"/Users/michalarent/Documents/School/FINAL/wound-healing-app/yarn-error.log", "Log", 0, 0, 0, 0, 0, 0, 0, 0, 0, 6355, 0, 1018, 7373
+"Total", "-", 4543, 21277, 8621, 6, 21, 20, 105, 11, 4, 6355, 150, 2453, 43566

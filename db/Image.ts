@@ -7,6 +7,7 @@ import {
 } from "@mikro-orm/core";
 import { Annotations } from "./Annotations";
 import { Appointment } from "./Appointment";
+import { Wound } from "./Wound";
 
 @Entity()
 export default class Image {
@@ -19,8 +20,8 @@ export default class Image {
   @OneToOne({ inversedBy: "image", orphanRemoval: true, nullable: true })
   annotations: Annotations;
 
-  @ManyToOne({ entity: () => Appointment }, { nullable: true })
-  appointment: Appointment | any;
+  @ManyToOne({ entity: () => Wound }, { nullable: true })
+  wound: Wound | any;
 
   @Property({ type: "date", nullable: true })
   createdAt!: Date;

@@ -13,6 +13,7 @@ import {
   DatePickerInput,
   TimePicker,
   TimePickerSelect,
+  Select as SelectComponent,
 } from "carbon-components-react";
 import Select from "react-select";
 import React from "react";
@@ -48,13 +49,16 @@ const SELECT_STYLES = {
     borderRadius: 0,
     border: 0,
     borderBottom: "1px solid #8d8d8d",
+    overflow: "visible",
     minHeight: 40,
+    zIndex: 10000,
     // boxShadow: `0px 0px 2px ${colors.aquamarine}`
   }),
-  menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
-  menu: (provided) => ({ ...provided, zIndex: 9999 }),
+  menuPortal: (provided) => ({ ...provided, zIndex: 999900000 }),
+  menu: (provided) => ({ ...provided, zIndex: 1000000000 }),
   valueContainer: (provided, state) => ({
     ...provided,
+    zIndex: 10000,
     // maxWidth: "90%",
     // whiteSpace: "nowrap",
     // overflow: "scroll",
@@ -110,6 +114,8 @@ const generateOptions = (month: number, year: number, type: string) => {
   }
 };
 
+//al
+
 export const RENDERERS = {
   OneLineText: (control, errors, param) => (
     <Controller
@@ -117,7 +123,7 @@ export const RENDERERS = {
       name={param?.name}
       control={control}
       rules={param.constraints}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextInput
           id={param.name}
           defaultValue=""
@@ -125,6 +131,17 @@ export const RENDERERS = {
           labelText={param.label}
           onChange={onChange}
           value={value}
+          invalid={!!error}
+          invalidText={error?.message}
+          onInput={(e) => {
+            if (param.constraints?.inputType === "number")
+              e.currentTarget.value = e.currentTarget.value.replace(
+                /[^0-9.]/g,
+                ""
+              );
+          }}
+          maxLength={param.constraints?.maxLength}
+          inputMode={param.constraints?.inputType === "number" ? "tel" : "text"}
         />
       )}
     />
@@ -169,6 +186,7 @@ export const RENDERERS = {
       render={({ field: { onChange, value } }) => (
         <>
           <label className="bx--label">{param.label}</label>
+
           <Select
             label={param.label}
             placeholder={param.label}
@@ -280,6 +298,7 @@ export const RENDERERS = {
       render={({ field }) => (
         <>
           <label className="bx--label">{param.label}</label>
+          {console.log(param.options)}
           <Select
             label={param.label}
             placeholder={param.label}

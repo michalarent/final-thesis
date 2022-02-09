@@ -1,19 +1,39 @@
 import { InlineLoading, Link } from "carbon-components-react";
+import { useState } from "react";
 import apiCall from "../../common/api/ApiCall";
 import ExaminationFormTemplate from "../../db/ExaminationFormTemplate";
-import useLoaderSWR from "../../hooks/useLoaderSWR";
+import ScheduledExaminationForm from "../../db/ScheduledExaminationForm";
+import useLoaderSWR, { Loader } from "../../hooks/useLoaderSWR";
 import { ArentFlex, ArentGrid } from "../ui/navigation/layout/ArentGrid";
 import { Divider } from "../util/Divider";
+import ExaminationAnswerItem from "./ExaminationAnswerItem";
 import ExaminationItem from "./ExaminationItem";
+import ScheduledExaminationsList from "./ScheduledExaminationsList";
+import SetupExaminationModal from "./SetupExaminationModal";
 
 async function getTemplates(): Promise<ExaminationFormTemplate[]> {
   return await apiCall("/api/doctor/templates", "GET");
 }
 
 export default function DoctorExaminationsTab({ basics, treatmentId }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentTemplate, setCurrentTemplate] = useState<
+    ExaminationFormTemplate
+  >();
+
   const templates = useLoaderSWR(
     `${basics.user.authId}-templates`,
     getTemplates
+  );
+
+  const scheduledExaminations: Loader<ScheduledExaminationForm[]> = useLoaderSWR(
+    `${basics.user.authId}-scheduled-examinations`,
+    async () => {
+      return await apiCall(
+        `/api/treatment/examinations?treatmentId=${treatmentId}`,
+        "GET"
+      );
+    }
   );
 
   if (templates.status === "loading") {
@@ -25,6 +45,12 @@ export default function DoctorExaminationsTab({ basics, treatmentId }) {
 
   return (
     <div style={{ padding: 20 }}>
+      <SetupExaminationModal
+        treatmentId={treatmentId}
+        visible={modalOpen}
+        setVisible={setModalOpen}
+        examinationTemplate={currentTemplate}
+      />
       <ArentFlex
         style={{ overflow: "visible" }}
         direction="column"
@@ -37,6 +63,10 @@ export default function DoctorExaminationsTab({ basics, treatmentId }) {
             <ExaminationItem
               title={template.title}
               date={new Date(Date.now()).toISOString()}
+              onClick={() => {
+                setCurrentTemplate(template);
+                setModalOpen(true);
+              }}
             />
           ))}
 
@@ -50,7 +80,9 @@ export default function DoctorExaminationsTab({ basics, treatmentId }) {
           </Link>
         </ArentGrid>
         <Divider />
-        <h2>There are no examinations currently scheduled</h2>
+        <ScheduledExaminationsList
+          scheduledExaminations={scheduledExaminations}
+        />
       </ArentFlex>
     </div>
   );

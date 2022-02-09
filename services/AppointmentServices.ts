@@ -8,6 +8,7 @@ import { getDoctor } from "./DoctorServices";
 import { getPatient } from "./PatientServices";
 import { getWound, getWounds } from "./WoundServices";
 import Image from "../db/Image";
+import { getTreatmentForAppointment } from "./TreatmentServices";
 
 export async function addAppointment(
   authId: string,
@@ -39,16 +40,7 @@ export async function addAppointment(
         },
       });
 
-      const newImages = formData.images.map((image) => {
-        return orm.em.create(Image, {
-          url: image,
-          appointment: newAppointment,
-        });
-      });
-
-      newAppointment.images = newImages;
-
-      await orm.em.persistAndFlush([newAppointment, ...newImages]);
+      await orm.em.persistAndFlush(newAppointment);
       return newAppointment;
     } catch (e) {
       failwith(e);
@@ -88,12 +80,7 @@ export async function getAppointment(appointmentId: number) {
       id: appointmentId as any,
     });
 
-    console.log(appointment);
-
-    const [images, doctor, wound] = await Promise.all([
-      orm.em.find(Image, {
-        appointment,
-      }),
+    const [doctor, wound] = await Promise.all([
       orm.em.findOneOrFail(Doctor, {
         authId: appointment.doctor,
       }),
@@ -107,7 +94,9 @@ export async function getAppointment(appointmentId: number) {
       wound,
     });
 
-    return { appointment, images, doctor, wound: woundData };
+    const treatment = await getTreatmentForAppointment(appointment.id);
+
+    return { appointment, doctor, wound: woundData, treatment };
   }
 }
 
@@ -123,12 +112,6 @@ export async function deleteAppointment(appointmentId) {
   const appointment = await orm.em.findOneOrFail(Appointment, {
     id: appointmentId as any,
   });
-
-  const images = await orm.em.find(Image, {
-    appointment,
-  });
-
-  await orm.em.removeAndFlush([appointment, ...images]);
 
   await orm.em.removeAndFlush(appointment);
 }

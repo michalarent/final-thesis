@@ -29,17 +29,4 @@ export class Appointment {
 
   @ManyToOne({ entity: () => Doctor })
   doctor: Doctor | any;
-
-  @OneToMany(
-    () => Image,
-    (img) => img.appointment,
-    {
-      mappedBy: "appointment",
-      orphanRemoval: true,
-      nullable: false,
-
-      default: [],
-    }
-  )
-  images = new Collection<Image>(this);
 }

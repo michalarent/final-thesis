@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import config from "./config";
-import "reflect-metadata";
+
 import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 
 let orm: MikroORM;

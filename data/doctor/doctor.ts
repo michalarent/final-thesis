@@ -78,7 +78,9 @@ export const CreateUpdateDoctor: FormInput[] = [
     span: 3,
     constraints: {
       required: true,
+      minLength: 11,
       maxLength: 11,
+      inputType: "number",
     },
   },
   {
@@ -109,6 +111,9 @@ export const CreateUpdateDoctor: FormInput[] = [
     placeholder: "",
     name: "specialization",
     label: "Specialization",
+    constraints: {
+      required: true,
+    },
     options: [
       {
         value: "neurologist",

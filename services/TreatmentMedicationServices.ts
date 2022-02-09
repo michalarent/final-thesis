@@ -36,14 +36,6 @@ export async function AddTreatmentMedication(
 
   console.log(data);
 
-  const treatmentMedication = await orm.em.findOne(TreatmentMedication, {
-    treatment: { id: treatmentId },
-  });
-
-  if (!treatmentMedication) {
-    failwith("TreatmentMedication not found!");
-  }
-
   try {
     const _medication = await orm.em.findOne(Medication, {
       id: +data.medication,
@@ -53,7 +45,7 @@ export async function AddTreatmentMedication(
       dosage: data.dosage.toString(),
       instructions: data.instructions,
       medication: _medication,
-      treatment: treatmentMedication.treatment,
+      treatment: treatmentId,
     });
 
     await orm.em.persistAndFlush(_treatmentMedication);

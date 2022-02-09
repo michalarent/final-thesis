@@ -19,6 +19,9 @@ export const WoundFormInput: FormInput[] = [
     type: "Select",
     placeholder: "Select the type of wound that applies",
     span: 2,
+    constraints: {
+      required: true,
+    },
   },
 
   {
@@ -29,6 +32,9 @@ export const WoundFormInput: FormInput[] = [
     type: "Select",
     placeholder: "Select the location of the wound",
     span: 2,
+    constraints: {
+      required: true,
+    },
   },
   {
     name: "woundSize",
@@ -38,6 +44,9 @@ export const WoundFormInput: FormInput[] = [
     type: "Select",
     placeholder: "Select the location of the wound",
     span: 2,
+    constraints: {
+      required: true,
+    },
   },
   {
     name: "woundStage",
@@ -56,6 +65,9 @@ export const WoundFormInput: FormInput[] = [
     type: "Select",
     placeholder: "Select the location of the wound",
     span: 3,
+    constraints: {
+      required: true,
+    },
   },
   {
     name: "woundSeverity",
@@ -65,6 +77,9 @@ export const WoundFormInput: FormInput[] = [
     type: "Select",
     placeholder: "Select the location of the wound",
     span: 3,
+    constraints: {
+      required: true,
+    },
   },
   {
     name: "woundSource",
@@ -74,5 +89,8 @@ export const WoundFormInput: FormInput[] = [
     type: "Select",
     placeholder: "Select the location of the wound",
     span: 3,
+    constraints: {
+      required: true,
+    },
   },
 ];

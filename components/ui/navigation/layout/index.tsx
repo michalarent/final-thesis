@@ -37,10 +37,10 @@ export default function LayoutBase({
   basics,
 }: {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   breadcrumbs: string[];
   loading?: boolean;
-  basics: IUser;
+  basics?: IUser;
 }) {
   const joinBreadcrumbs = (depth: number) =>
     breadcrumbs

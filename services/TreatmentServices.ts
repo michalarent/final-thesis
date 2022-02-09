@@ -1,5 +1,6 @@
 import failwith from "../common/util/failwith";
 import { getOrm } from "../db";
+import { Appointment } from "../db/Appointment";
 import { Doctor } from "../db/Doctor";
 import Timeline from "../db/Timeline";
 import TimelineEvent from "../db/TimelineEvent";
@@ -129,7 +130,7 @@ export async function addTreatment(
   }
 }
 
-export async function removeTreatment(authId: string, id: number) {
+export async function removeTreatment(id: number, authId: string) {
   const orm = await getOrm();
 
   const treatment = await orm.em.findOne(Treatment, {
@@ -200,4 +201,53 @@ export async function addMedicationToTreatment(
   } catch (e) {
     failwith(e);
   }
+}
+
+export async function startTreatmentForAppointment(appointmentId: number) {
+  const orm = await getOrm();
+
+  const appointment = await orm.em.findOne(Appointment, {
+    id: appointmentId,
+  });
+
+  if (!appointment) {
+    failwith("Appointment not found!");
+  }
+
+  const treatment = await orm.em.findOne(Treatment, {
+    wound: { id: appointment.wound.id },
+  });
+
+  if (!treatment) {
+    const treatment = new Treatment();
+    treatment.wound = appointment.wound;
+    treatment.doctor = appointment.doctor;
+    treatment.timeline = new Timeline();
+    treatment.createdAt = new Date();
+
+    try {
+      await orm.em.persistAndFlush(treatment);
+      return treatment;
+    } catch (e) {
+      failwith(e);
+    }
+  }
+}
+
+export async function getTreatmentForAppointment(appointmentId: number) {
+  const orm = await getOrm();
+
+  const appointment = await orm.em.findOne(Appointment, {
+    id: appointmentId,
+  });
+
+  if (!appointment) {
+    failwith("Appointment not found!");
+  }
+
+  const treatment = await orm.em.findOne(Treatment, {
+    wound: { id: appointment.wound.id },
+  });
+
+  return treatment;
 }

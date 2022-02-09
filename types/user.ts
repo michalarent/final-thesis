@@ -2,11 +2,13 @@ import { Doctor } from "../db/Doctor";
 import Patient from "../db/Patient";
 import { Loader } from "../hooks/useLoaderSWR";
 
-export type IUser = {
-  user: { email: string; name: string; authId: string };
-  isPatient: boolean;
-  isDoctor: boolean;
-};
+export type IUser =
+  | {
+      user: { email: string; name: string; authId: string };
+      isPatient: boolean;
+      isDoctor: boolean;
+    }
+  | any;
 
 export type IPatient = {
   patient?: Patient;

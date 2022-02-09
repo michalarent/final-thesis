@@ -1,7 +1,12 @@
 import {
   Button,
+  Header,
+  HeaderGlobalAction,
+  HeaderGlobalBar,
+  HeaderMenuButton,
+  HeaderMenuItem,
+  HeaderName,
   Loading,
-  Modal,
   ModalBody,
   OverflowMenu,
   OverflowMenuItem,
@@ -13,11 +18,16 @@ import {
   RectangleSelector,
   OvalSelector,
 } from "react-image-annotation/lib/selectors";
+import Modal from "react-modal";
 import { useEffect, useState } from "react";
 import { Container } from "./ui/Container";
 import styled from "styled-components";
 import { DeleteIcon } from "./WoundCard";
 import apiCall from "../common/api/ApiCall";
+import { modalStyles } from "./modal_styles";
+import { BsPlusCircle, BsX } from "react-icons/bs";
+import { BiCircle, BiRectangle } from "react-icons/bi";
+import { FaRegDotCircle } from "react-icons/fa";
 
 const ModalContainer = styled.div`
   & .bx--modal-container {
@@ -53,7 +63,12 @@ const Annotation = dynamic(() => import("react-image-annotation"), {
   loading: () => <Loading />,
 });
 
-export default function AnnotateImageModal({ visible, image, onClose }) {
+export default function AnnotateImageModal({
+  visible,
+  setVisible,
+  image,
+  onClose,
+}) {
   const [annotationType, setAnnotationType] = useState(OvalSelector.TYPE);
   const [currentAnnotation, setCurrentAnnotation] = useState({});
   const [annotations, setAnnotations] = useState([]);
@@ -67,18 +82,23 @@ export default function AnnotateImageModal({ visible, image, onClose }) {
       `/api/appointment/images/annotations?imageId=${image.id}`,
       "GET"
     );
-
-    if (response.data) {
-      setAnnotations(response.data);
+    if (visible) {
+      if (response.data) {
+        setAnnotations(response.data);
+      }
     }
     setAnnotationsLoading(false);
   }
 
   useEffect(() => {
+    setAnnotations([]);
+  }, []);
+
+  useEffect(() => {
     if (image && image.id) {
       getAnnotationsForImage();
     }
-  }, [image, visible, onClose]);
+  }, [image]);
 
   console.log(image);
 
@@ -100,58 +120,138 @@ export default function AnnotateImageModal({ visible, image, onClose }) {
   return (
     <ModalContainer>
       <Modal
-        style={{ width: "100%", height: "100%" }}
-        passiveModal
-        open={visible}
+        preventScroll
+        style={{
+          content: {
+            width: "95vw",
+            height: "calc(95vh - 64px)",
+            position: "fixed",
+            top: "calc(64px + 2.5vh)",
+
+            left: "2.5vw",
+            overflow: "hidden",
+
+            padding: 0,
+            zIndex: 5,
+          },
+          overlay: {
+            zIndex: 1000,
+          },
+        }}
+        isOpen={visible}
+        shouldCloseOnEsc={false}
         onRequestClose={() => handleClose()}
       >
+        <Header style={{ position: "sticky" }}>
+          <HeaderMenuItem
+            style={{ height: "100%" }}
+            isCurrentPage={annotationType === OvalSelector.TYPE}
+            onClick={() => setAnnotationType(OvalSelector.TYPE)}
+          >
+            <ArentFlex
+              direction="column"
+              width="100%"
+              height={"45px"}
+              justify="center"
+              align="center"
+            >
+              <BiCircle color="white" />
+              <small style={{ fontSize: 10, margin: 0, lineHeight: 1 }}>
+                Oval
+              </small>
+            </ArentFlex>
+          </HeaderMenuItem>
+          <HeaderMenuItem
+            isCurrentPage={annotationType === RectangleSelector.TYPE}
+            onClick={() => setAnnotationType(RectangleSelector.TYPE)}
+          >
+            <ArentFlex
+              direction="column"
+              width="100%"
+              height={"45px"}
+              justify="center"
+              align="center"
+            >
+              <BiRectangle color="white" />
+              <small style={{ fontSize: 10, margin: 0, lineHeight: 1 }}>
+                Rectangle
+              </small>
+            </ArentFlex>
+          </HeaderMenuItem>
+          <HeaderMenuItem
+            isCurrentPage={annotationType === PointSelector.TYPE}
+            onClick={() => setAnnotationType(PointSelector.TYPE)}
+          >
+            <ArentFlex
+              direction="column"
+              width="100%"
+              height={"45px"}
+              justify="center"
+              align="center"
+            >
+              <FaRegDotCircle color="white" />
+              <small style={{ fontSize: 10, margin: 0, lineHeight: 1 }}>
+                Point
+              </small>
+            </ArentFlex>
+          </HeaderMenuItem>
+          <HeaderGlobalBar>
+            <HeaderGlobalAction
+              aria-label="Remove All Annotations"
+              style={{
+                width: "fit-content",
+                paddingRight: 20,
+                paddingLeft: 20,
+              }}
+              onClick={() => removeAnnotationsFromBackend(image.id)}
+            >
+              Remove All
+            </HeaderGlobalAction>
+            <HeaderGlobalAction
+              aria-label="Submit"
+              style={{
+                width: "fit-content",
+                paddingRight: 20,
+                paddingLeft: 20,
+              }}
+              disabled={!annotations.length}
+              onClick={() => sendAnnotationsToBackend(image.id, annotations)}
+            >
+              Submit
+            </HeaderGlobalAction>
+            <HeaderGlobalAction
+              aria-label="Submit"
+              style={{
+                width: "fit-content",
+                paddingRight: 20,
+                paddingLeft: 20,
+              }}
+              onClick={() => {
+                document.body.style.overflow = "auto";
+                setVisible(false);
+              }}
+            >
+              <BsX />
+            </HeaderGlobalAction>
+          </HeaderGlobalBar>
+        </Header>
         <ArentFlex
-          style={{ overflow: "visible" }}
           direction="column"
           width="100%"
-          height="100%"
           align="center"
           justify="center"
-          padding="50px"
+          style={{ overflow: "visible" }}
         >
-          <DeleteIcon style={{ zIndex: 50, right: 150, top: 50, width: 100 }}>
-            <OverflowMenu>
-              <OverflowMenuItem
-                onClick={() => setAnnotationType(RectangleSelector.TYPE)}
-                itemText="Rectangle Annotation"
-              />
-              <OverflowMenuItem
-                onClick={() => setAnnotationType(OvalSelector.TYPE)}
-                itemText="Oval Annotation"
-              />
-              <OverflowMenuItem
-                onClick={() => setAnnotationType(PointSelector.TYPE)}
-                itemText="Point Annotation"
-              />
-            </OverflowMenu>
-            <ArentFlex direction="column" width="100%" gap={20}>
-              <Button onClick={() => removeAnnotationsFromBackend(image.id)}>
-                Remove All
-              </Button>
-              <Button
-                disabled={!annotations.length}
-                onClick={() => sendAnnotationsToBackend(image.id, annotations)}
-              >
-                Submit
-              </Button>
-            </ArentFlex>
-          </DeleteIcon>
           <div
             style={{
-              width: "80%",
+              width: "100%",
               height: "100%",
               objectFit: "cover",
               overflow: "visible",
-              position: "relative",
               zIndex: 10,
             }}
           >
-            <div style={{ height: "100%" }}>
+            <div>
               {annotationsLoading ? (
                 <Loading />
               ) : (

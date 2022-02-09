@@ -9,10 +9,12 @@ import AnnotateImageModal from "../../../../components/AnnotateImageModal";
 import ChatBox from "../../../../components/ChatBox";
 import DoctorExaminationsTab from "../../../../components/examination/DoctorExaminationsTab";
 import ExaminationItem from "../../../../components/examination/ExaminationItem";
+import PatientExaminationsTab from "../../../../components/examination/PatientExaminationsTab";
 import { modalStyles } from "../../../../components/modal_styles";
 import ModifiableCalendar from "../../../../components/treatment/calendar/ModifiableCalendar";
 import MedicationsListWithAdd from "../../../../components/treatment/MedicationsListWithAdd";
 import NewTimelineEvent from "../../../../components/treatment/timeline/NewEvent";
+import TreatmentImagesTab from "../../../../components/treatment/TreatmentImagesTab";
 import TreatmentPatientCard from "../../../../components/treatment/TreatmentPatientCard";
 import {
   ArentFlex,
@@ -22,8 +24,9 @@ import Topbar from "../../../../components/ui/navigation/topbar";
 import ClientError from "../../../../components/util/ClientError";
 import ClientLoading from "../../../../components/util/ClientLoading";
 import { Divider } from "../../../../components/util/Divider";
+import ScheduledExaminationForm from "../../../../db/ScheduledExaminationForm";
 import { getListOfAllEvents } from "../../../../helpers/doctor";
-import useLoaderSWR from "../../../../hooks/useLoaderSWR";
+import useLoaderSWR, { Loader } from "../../../../hooks/useLoaderSWR";
 import { ConsolidatedTreatment } from "../../../../hooks/user/types";
 import usePatientInfo from "../../../../hooks/user/usePatientInfo";
 
@@ -42,6 +45,18 @@ export default function TreatmentPage() {
   const treatmentData = useLoaderSWR(
     treatmentId && `${treatmentId}`,
     getTreatmentData
+  );
+
+  const scheduledExaminations: Loader<ScheduledExaminationForm[]> = useLoaderSWR(
+    `${
+      basics.status !== "ready" ? null : basics.value.user.authId
+    }-scheduled-examinations`,
+    async () => {
+      return await apiCall(
+        `/api/treatment/examinations?treatmentId=${treatmentId}`,
+        "GET"
+      );
+    }
   );
 
   const [currentEvent, setCurrentEvent] = useState<any>();
@@ -63,7 +78,11 @@ export default function TreatmentPage() {
 
   const allEvents = getListOfAllEvents(treatmentData);
 
-  console.log(basics);
+  async function handleRemoveTreatment() {
+    const res = await apiCall(`/api/treatment?id=${treatmentId}`, "DELETE");
+
+    router.push("/dashboard/doctor/treatments");
+  }
 
   return (
     <>
@@ -149,6 +168,7 @@ export default function TreatmentPage() {
                           setCurrentDate={setCurrentDate}
                           setCurrentEvent={setCurrentEvent}
                           setModalOpen={setModalOpen}
+                          scheduledExaminations={scheduledExaminations}
                         />
                       </CalendarFullScreenWrapper>
                       <Link
@@ -181,13 +201,32 @@ export default function TreatmentPage() {
                     </ArentFlex>
                   </Tab>
                   <Tab id="tab-6" label="Examination">
-                    <DoctorExaminationsTab
-                      basics={basics.value}
-                      treatmentId={treatmentId}
-                    />
+                    {basics.value.isDoctor && (
+                      <DoctorExaminationsTab
+                        basics={basics.value}
+                        treatmentId={treatmentId}
+                      />
+                    )}
+                    {basics.value.isPatient && (
+                      <PatientExaminationsTab
+                        treatmentId={treatmentId}
+                        basics={basics.value}
+                      />
+                    )}
                   </Tab>
-                  <Tab disabled id="tab-4" label="Appointments"></Tab>
-                  <Tab disabled id="tab-5" label="Notes"></Tab>
+                  <Tab id="tab-4" label="Images">
+                    <TreatmentImagesTab treatmentId={treatmentId} />
+                  </Tab>
+                  {basics.value.isDoctor && (
+                    <Tab id="tab-5" label="Settings">
+                      <ArentFlex direction="column" padding="20px" gap={20}>
+                        <h3>Settings</h3>
+                        <Button onClick={() => handleRemoveTreatment()}>
+                          Remove treatment
+                        </Button>
+                      </ArentFlex>
+                    </Tab>
+                  )}
                 </Tabs>
               </TabsWrapper>
             </ArentFlex>

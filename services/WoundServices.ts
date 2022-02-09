@@ -124,8 +124,7 @@ export async function getAppointmentsForWound(woundId: number) {
     .createQueryBuilder(Appointment, "appointment")
     .select("*")
     .where({ wound: { id: woundId } })
-    .join("images", "i")
-    .where("i.appointment_id = appointment.id")
+
     .select("*")
     .getResultList();
 

@@ -21,6 +21,8 @@ import Prescription from "./Prescription";
 import Timeline from "./Timeline";
 import TimelineEvent from "./TimelineEvent";
 import ExaminationFormTemplate from "./ExaminationFormTemplate";
+import ExaminationFormAnswer from "./ExaminationFormAnswer";
+import ScheduledExaminationForm from "./ScheduledExaminationForm";
 
 const { host, user, password, dbName } = ORMCONFIG[0];
 const config: Options = {
@@ -38,6 +40,8 @@ const config: Options = {
     PatientMedicalHistory,
     Doctor,
     ExaminationFormTemplate,
+    ScheduledExaminationForm,
+    ExaminationFormAnswer,
     Treatment,
     Timeline,
     TimelineSection,
@@ -56,6 +60,7 @@ const config: Options = {
     requireEntitiesArray: true,
     warnWhenNoEntities: true,
   },
+
   useBatchInserts: false,
   useBatchUpdates: false,
 

@@ -11,6 +11,7 @@ import { Appointment } from "./Appointment";
 import Patient from "./Patient";
 import { Treatment } from "./Treatment";
 import WoundFormData from "./WoundFormData";
+import Image from "./Image";
 
 @Entity()
 export class Wound {
@@ -32,7 +33,19 @@ export class Wound {
     orphanRemoval: true,
   })
   treatments = new Collection<Treatment>(this);
-  
+
+  @OneToMany(
+    () => Image,
+    (img) => img.wound,
+    {
+      mappedBy: "wound",
+      orphanRemoval: true,
+      nullable: false,
+
+      default: [],
+    }
+  )
+  images = new Collection<Image>(this);
 
   @OneToMany(
     () => Appointment,

@@ -7,7 +7,9 @@ import {
   HandleEventTypeString,
   HandleDotColor,
 } from "../../../common/util/icons";
+import ScheduledExaminationForm from "../../../db/ScheduledExaminationForm";
 import { CalendarEventType } from "../../../helpers/doctor";
+import { Loader } from "../../../hooks/useLoaderSWR";
 import { colors } from "../../../theme/colors";
 import { ArentFlex } from "../../ui/navigation/layout/ArentGrid";
 
@@ -20,6 +22,7 @@ export default function ModifiableCalendar({
   createdAt,
   fullScreen,
   isDoctor,
+  scheduledExaminations,
 }: {
   allEvents: CalendarEventType[];
   setModalOpen: any;
@@ -29,6 +32,7 @@ export default function ModifiableCalendar({
   currentDate: DateTime;
   fullScreen?: boolean;
   isDoctor: boolean;
+  scheduledExaminations: Loader<ScheduledExaminationForm[]>;
 }) {
   return (
     <CalendarWrapper>
@@ -102,6 +106,28 @@ export default function ModifiableCalendar({
               name: "Start date",
               type: "start",
             });
+          }
+
+          if (
+            scheduledExaminations &&
+            scheduledExaminations.status === "ready"
+          ) {
+            scheduledExaminations.value
+              .filter(
+                (exam) => exam.date.toString() === tile.date.toISOString()
+              )
+              .map((exam) => {
+                console.log("EXAMINATION IN TIMELINE", exam);
+                event.push({
+                  date: DateTime.fromISO(exam.date),
+                  id: exam.id,
+                  name: exam.name,
+                  type:
+                    exam.status === "completed"
+                      ? "completedExamination"
+                      : "pendingExamination",
+                });
+              });
           }
 
           if (event[0]) {
@@ -243,6 +269,9 @@ const CalendarWrapper = styled.div`
   & * {
     transition: all 0.2s;
   }
+  & strong {
+    font-size: 10px;
+  }
   & button {
     position: relative;
   }
@@ -251,7 +280,12 @@ const CalendarWrapper = styled.div`
     border: none;
     width: 100%;
     border-radius: 10px;
+    font-size: 10px !important;
     background: #f4f4f4;
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   & .calendar-event {
@@ -259,7 +293,8 @@ const CalendarWrapper = styled.div`
     color: black;
     font-size: 10px !important;
     & strong {
-      color: black;
+      font-size: 10px !important;
+      color: black !important;
     }
   }
 

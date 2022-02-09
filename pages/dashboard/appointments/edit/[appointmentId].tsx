@@ -24,6 +24,7 @@ import {
   ArentFlex,
   ArentGrid,
 } from "../../../../components/ui/navigation/layout/ArentGrid";
+import ClientLoading from "../../../../components/util/ClientLoading";
 import WoundSlider from "../../../../components/WoundSlider";
 import { useUser } from "../../../../hooks/user";
 import usePatientInfo from "../../../../hooks/user/usePatientInfo";
@@ -55,6 +56,19 @@ export default function EditAppointment() {
     }
   }
 
+  async function handleStartTreatment() {
+    const newId: any = await apiCall("/api/treatment/" + appointmentId, "POST");
+    if (newId) {
+      router.push(`/dashboard/doctor/treatments/${newId.id}`);
+    }
+  }
+
+  async function handleGoToTreatment() {
+    if (appointment.treatment) {
+      router.push(`/dashboard/doctor/treatments/${appointment.treatment.id}`);
+    }
+  }
+
   useEffect(() => {
     if (!appointmentId) return null;
     else {
@@ -66,36 +80,9 @@ export default function EditAppointment() {
     return <Loading />;
   }
 
-  const onSubmit = () => {
-    console.log("SUBMIT");
-  };
-
-  const onAddFile = async (files) => {
-    const urls = [];
-
-    for (let index = 0; index < files.length; index++) {
-      const file = files[index];
-      const { url } = await uploadToS3(file);
-      const response = await apiCall("/api/appointment/images/add", "POST", {
-        appointmentId: appointment.appointment.id,
-        imageUrl: url,
-      });
-      console.log(response);
-      urls.push(response);
-    }
-    setAddedUrls([...addedUrls, ...urls]);
-    console.log(addedUrls);
-
-    return urls;
-  };
-
-  const onDelete = async (file) => {
-    setRemovedUrls([...removedUrls, file]);
-    const response = await apiCall("/api/appointment/images/delete", "DELETE", {
-      appointmentId: appointment.appointment.id,
-      imageUrl: file,
-    });
-  };
+  if (basics.status !== "ready") {
+    return <ClientLoading />;
+  }
 
   return (
     <LayoutBase
@@ -106,6 +93,7 @@ export default function EditAppointment() {
         onClose={() => setOpenAnnotationModal(false)}
         image={currentImage}
         visible={openAnnotationModal}
+        setVisible={setOpenAnnotationModal}
       />
       <Container>
         <ArentFlex direction="column" width="100%" gap={50}>
@@ -125,11 +113,25 @@ export default function EditAppointment() {
                     Consultation for{" "}
                     <b>{appointment.wound.woundLocation} wound</b> treatment{" "}
                   </small>
-                  <h3>{appointment.doctor.name}</h3>
-                  <h4>
-                    {appointment.doctor.doctorData.specialization.label} |{" "}
-                    {appointment.doctor.doctorData.country}
-                  </h4>
+                  {basics.value.isPatient && (
+                    <>
+                      <h3>{appointment.doctor.name}</h3>
+                      <h4>
+                        {basics.value.isPatient &&
+                          appointment.doctor.doctorData.specialization
+                            .label}{" "}
+                        |{" "}
+                        {basics.value.isPatient &&
+                          appointment.doctor.doctorData.country}
+                      </h4>
+                      {appointment.treatment && (
+                        <Button onClick={() => handleGoToTreatment()}>
+                          Go to treatment
+                        </Button>
+                      )}
+                    </>
+                  )}
+
                   <ArentGrid
                     align="center"
                     columns="auto 1fr"
@@ -141,6 +143,19 @@ export default function EditAppointment() {
                       {new Date(appointment.appointment.date).toLocaleString()}
                     </h4>
                   </ArentGrid>
+                  {basics.value.isDoctor && (
+                    <Button
+                      onClick={() => {
+                        appointment.treatment
+                          ? handleGoToTreatment()
+                          : handleStartTreatment();
+                      }}
+                    >
+                      {appointment.treatment
+                        ? "Go to treatment"
+                        : "Setup a treatment for this appointment"}
+                    </Button>
+                  )}
                 </ArentFlex>
               </ArentGrid>
               {/* <small>
@@ -155,45 +170,7 @@ export default function EditAppointment() {
             like to highlight on the image? Access the context menu in the
             top-right corner of the image to annotate it.
           </p>
-          <WoundSlider
-            cards={[
-              ...appointment.images
-                .concat(addedUrls)
-                .filter((img) => !removedUrls.includes(img.url))
-                .map((img) => (
-                  <ImageCard
-                    onStartAnnotate={() => {
-                      setCurrentImage(img);
-                      setOpenAnnotationModal(true);
-                    }}
-                    onDelete={() => onDelete(img.url)}
-                    src={img.url}
-                  />
-                )),
-              <ImageCardContainer>
-                <ArentFlex
-                  width="100%"
-                  height="100%"
-                  align="center"
-                  justify="center"
-                  direction="column"
-                  gap={20}
-                >
-                  <IoAdd size="50px" />
-                  <FileUploaderDropContainer
-                    multiple
-                    accept={[".jpg", ".png"]}
-                    labelText="Drag and drop"
-                    onAddFiles={(_, { addedFiles }) => {
-                      onAddFile(addedFiles);
-                    }}
-                    style={{ width: "100%" }}
-                    // name={field.value}
-                  />
-                </ArentFlex>
-              </ImageCardContainer>,
-            ]}
-          />
+
           <h2 style={{ marginBottom: -30 }}>Messages</h2>
           <p style={{ marginBottom: -30 }}>
             Leave your doctor a message to let them know what you think.
